@@ -7,7 +7,10 @@ from django.shortcuts import render
 
 
 
+import resend
+from django.conf import settings
 
+resend.api_key = settings.RESEND_API_KEY
 
 
 
@@ -208,59 +211,105 @@ def contactus(request):
         # -------------------------
 
         try:
-
-            admin_email = EmailMessage(
-                subject=f"Contact Us: {subject}",
-                body=f"""
-New Contact Us Message
-
-Full Name:
-{full_name}
-
-Email:
-{email}
-
-Phone Number:
-{phone_number}
-
-Subject:
-{subject}
-
-Message:
-{message}
-""",
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                to=[settings.DEFAULT_FROM_EMAIL],
-                reply_to=[email],
-            )
-
-            admin_email.send(fail_silently=False)
+            
 
             # -------------------------
-            # Confirmation email
+            # Admin email
             # -------------------------
+            admin_html = f"""
+            <h2>New Contact Us Message</h2>
+            <p><strong>Full Name:</strong> {full_name}</p>
+            <p><strong>Email:</strong> {email}</p>
+            <p><strong>Phone Number:</strong> {phone_number}</p>
+            <p><strong>Subject:</strong> {subject}</p>
+            <p><strong>Message:</strong><br>{message}</p>
+            """
 
-            customer_email = EmailMessage(
-                subject="We received your message - Rajanna Dairy Farm",
-                body=f"""
-Dear {full_name},
+            resend.Emails.send({
+                "from": "Rajanna Dairy Farm <rajannadairyfarm@gmail.com>",
+                "to": [settings.DEFAULT_FROM_EMAIL],
+                "subject": f"Contact Us: {subject}",
+                "html": admin_html,
+                "reply_to": [email],
+            })
 
-Thank you for contacting Rajanna Dairy Farm.
+            # -------------------------
+            # Customer confirmation email
+            # -------------------------
+            customer_html = f"""
+            <p>Dear {full_name},</p>
 
-We have received your message successfully.
+            <p>Thank you for contacting <strong>Rajanna Dairy Farm</strong>.</p>
 
-Our team will review your message and contact you soon.
+            <p>We have received your message successfully.<br>
+            Our team will review your message and contact you soon.</p>
 
-Thank you for choosing Rajanna Dairy Farm.
+            <p>Thank you for choosing Rajanna Dairy Farm.</p>
 
-Regards,
-Rajanna Dairy Farm
-""",
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                to=[email],
-            )
+            <p>Regards,<br>
+            Rajanna Dairy Farm</p>
+            """
 
-            customer_email.send(fail_silently=False)
+            resend.Emails.send({
+                "from": "Rajanna Dairy Farm <rajannadairyfarm@gmail.com>",
+                "to": [email],
+                "subject": "We received your message - Rajanna Dairy Farm",
+                "html": customer_html,
+            })
+
+
+#             admin_email = EmailMessage(
+#                 subject=f"Contact Us: {subject}",
+#                 body=f"""
+# New Contact Us Message
+
+# Full Name:
+# {full_name}
+
+# Email:
+# {email}
+
+# Phone Number:
+# {phone_number}
+
+# Subject:
+# {subject}
+
+# Message:
+# {message}
+# """,
+#                 from_email=settings.DEFAULT_FROM_EMAIL,
+#                 to=[settings.DEFAULT_FROM_EMAIL],
+#                 reply_to=[email],
+#             )
+
+#             admin_email.send(fail_silently=False)
+
+#             # -------------------------
+#             # Confirmation email
+#             # -------------------------
+
+#             customer_email = EmailMessage(
+#                 subject="We received your message - Rajanna Dairy Farm",
+#                 body=f"""
+# Dear {full_name},
+
+# Thank you for contacting Rajanna Dairy Farm.
+
+# We have received your message successfully.
+
+# Our team will review your message and contact you soon.
+
+# Thank you for choosing Rajanna Dairy Farm.
+
+# Regards,
+# Rajanna Dairy Farm
+# """,
+#                 from_email=settings.DEFAULT_FROM_EMAIL,
+#                 to=[email],
+#             )
+
+#             customer_email.send(fail_silently=False)
 
             messages.success(
                 request,
@@ -575,21 +624,29 @@ def register(request):
     try:
         print("6666667777777777777")
 
-        email_message = EmailMultiAlternatives(
-            subject=subject,
-            body=text_message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[user.email],
-        )
+        # email_message = EmailMultiAlternatives(
+        #     subject=subject,
+        #     body=text_message,
+        #     from_email=settings.DEFAULT_FROM_EMAIL,
+        #     to=[user.email],
+        # )
 
-        email_message.attach_alternative(
-            html_message,
-            "text/html"
-        )
+        # email_message.attach_alternative(
+        #     html_message,
+        #     "text/html"
+        # )
 
-        email_message.send(
-            fail_silently=False
-        )
+        # email_message.send(
+        #     fail_silently=False
+        # )
+        
+        resend.Emails.send({
+            "from": "Rajanna Dairy Farm <rajannadairyfarm@gmail.com>",
+            "to": [user.email],
+            "subject": subject,
+            "text": text_message,   # plain text fallback
+            "html": html_message,   # HTML version
+        })
 
     except Exception as e:
 
@@ -1112,21 +1169,29 @@ def resend_verification_email(request):
 
     try:
 
-        email_message = EmailMultiAlternatives(
-            subject=subject,
-            body=text_message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[user.email],
-        )
+        # email_message = EmailMultiAlternatives(
+        #     subject=subject,
+        #     body=text_message,
+        #     from_email=settings.DEFAULT_FROM_EMAIL,
+        #     to=[user.email],
+        # )
 
-        email_message.attach_alternative(
-            html_message,
-            "text/html"
-        )
+        # email_message.attach_alternative(
+        #     html_message,
+        #     "text/html"
+        # )
 
-        email_message.send(
-            fail_silently=False
-        )
+        # email_message.send(
+        #     fail_silently=False
+        # )
+        
+        resend.Emails.send({
+    "from": "Rajanna Dairy Farm <rajannadairyfarm@gmail.com>",
+    "to": [user.email],
+    "subject": subject,
+    "text": text_message,   # plain text fallback
+    "html": html_message,   # HTML version
+})
 
     except Exception:
 
@@ -1391,21 +1456,28 @@ def resend_verification_by_email(request):
 
     try:
 
-        email_message = EmailMultiAlternatives(
-            subject=subject,
-            body=text_message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[user.email],
-        )
+        # email_message = EmailMultiAlternatives(
+        #     subject=subject,
+        #     body=text_message,
+        #     from_email=settings.DEFAULT_FROM_EMAIL,
+        #     to=[user.email],
+        # )
 
-        email_message.attach_alternative(
-            html_message,
-            "text/html"
-        )
+        # email_message.attach_alternative(
+        #     html_message,
+        #     "text/html"
+        # )
 
-        email_message.send(
-            fail_silently=False
-        )
+        # email_message.send(
+        #     fail_silently=False
+        # )
+        resend.Emails.send({
+    "from": "Rajanna Dairy Farm <rajannadairyfarm@gmail.com>",  # replace with your verified sender
+    "to": [user.email],
+    "subject": subject,
+    "text": text_message,   # plain text fallback
+    "html": html_message,   # HTML version
+})
 
     except Exception:
 
@@ -1691,21 +1763,28 @@ def forgot_password(request):
 
     try:
 
-        email_message = EmailMultiAlternatives(
-            subject=subject,
-            body=text_message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[user.email],
-        )
+        # email_message = EmailMultiAlternatives(
+        #     subject=subject,
+        #     body=text_message,
+        #     from_email=settings.DEFAULT_FROM_EMAIL,
+        #     to=[user.email],
+        # )
 
-        email_message.attach_alternative(
-            html_message,
-            "text/html"
-        )
+        # email_message.attach_alternative(
+        #     html_message,
+        #     "text/html"
+        # )
 
-        email_message.send(
-            fail_silently=False
-        )
+        # email_message.send(
+        #     fail_silently=False
+        # )
+        resend.Emails.send({
+    "from": "Rajanna Dairy Farm <rajannadairyfarm@gmail.com>",  # replace with your verified sender
+    "to": [user.email],
+    "subject": subject,
+    "text": text_message,   # plain text fallback
+    "html": html_message,   # HTML version
+})
 
     except Exception:
 
@@ -5043,132 +5122,318 @@ def send_order_confirmation_emails(order_id):
                 f"- ₹{item.total_price:.2f}\n"
             )
 
+#         # --------------------------------------------------
+#         # CUSTOMER EMAIL
+#         # --------------------------------------------------
+
+#         customer_subject = (
+#             f"Order Confirmed - {order.order_number}"
+#         )
+
+#         customer_message = f"""
+# Hello {order.user.full_name},
+
+# Thank you for ordering from Rajanna Dairy Farm!
+
+# Your order has been successfully placed.
+
+# ORDER DETAILS
+# ------------------------------
+# Order Number: {order.order_number}
+
+# Items:
+# {customer_items}
+
+# Subtotal: ₹{order.subtotal:.2f}
+# Delivery Charge: ₹{order.delivery_charge:.2f}
+# Total Amount: ₹{order.total_amount:.2f}
+
+# Payment Method: {order.get_payment_method_display()}
+# Payment Status: {order.get_payment_status_display()}
+# Order Status: {order.get_status_display()}
+
+# DELIVERY ADDRESS
+# ------------------------------
+# {order.full_name}
+# {order.address_line1}
+# {order.address_line2 or ""}
+# {order.landmark or ""}
+# {order.city}, {order.state} - {order.pincode}
+# Phone: {order.phone_number}
+
+# View your order:
+# {order_url}
+
+# Thank you for choosing Rajanna Dairy Farm.
+
+# Regards,
+# Rajanna Dairy Farm
+# """
+
+#         customer_email = EmailMultiAlternatives(
+#             subject=customer_subject,
+#             body=customer_message,
+#             from_email=settings.DEFAULT_FROM_EMAIL,
+#             to=[order.user.email],
+#         )
+
+#         customer_email.send(
+#             fail_silently=False
+#         )
+
+#         # --------------------------------------------------
+#         # ADMIN EMAIL
+#         # --------------------------------------------------
+
+#         admin_subject = (
+#             f"🛒 New Order Received - "
+#             f"{order.order_number}"
+#         )
+
+#         admin_message = f"""
+# NEW ORDER RECEIVED
+# ==============================
+
+# Order Number:
+# {order.order_number}
+
+# CUSTOMER
+# ------------------------------
+# Name: {order.user.full_name}
+# Email: {order.user.email}
+# Phone: {order.phone_number}
+
+# ORDER ITEMS
+# ------------------------------
+# {customer_items}
+
+# ORDER AMOUNT
+# ------------------------------
+# Subtotal: ₹{order.subtotal:.2f}
+# Delivery Charge: ₹{order.delivery_charge:.2f}
+# Total: ₹{order.total_amount:.2f}
+
+# PAYMENT
+# ------------------------------
+# Method: {order.get_payment_method_display()}
+# Status: {order.get_payment_status_display()}
+
+# ORDER STATUS
+# ------------------------------
+# {order.get_status_display()}
+
+# DELIVERY ADDRESS
+# ------------------------------
+# {order.full_name}
+# {order.address_line1}
+# {order.address_line2 or ""}
+# {order.landmark or ""}
+# {order.city}, {order.state} - {order.pincode}
+
+# Phone: {order.phone_number}
+
+# Please check the Django admin panel
+# for complete order information.
+
+# Rajanna Dairy Farm
+# """
+
+#         admin_email = EmailMultiAlternatives(
+#             subject=admin_subject,
+#             body=admin_message,
+#             from_email=settings.DEFAULT_FROM_EMAIL,
+#             to=[settings.ADMIN_EMAIL],
+#         )
+
+#         admin_email.send(
+#             fail_silently=False
+#         )
+
+
+
         # --------------------------------------------------
         # CUSTOMER EMAIL
         # --------------------------------------------------
+        customer_subject = f"Order Confirmed - {order.order_number}"
 
-        customer_subject = (
-            f"Order Confirmed - {order.order_number}"
-        )
+        customer_text = f"""
+        Hello {order.user.full_name},
 
-        customer_message = f"""
-Hello {order.user.full_name},
+        Thank you for ordering from Rajanna Dairy Farm!
 
-Thank you for ordering from Rajanna Dairy Farm!
+        Your order has been successfully placed.
 
-Your order has been successfully placed.
+        ORDER DETAILS
+        ------------------------------
+        Order Number: {order.order_number}
 
-ORDER DETAILS
-------------------------------
-Order Number: {order.order_number}
+        Items:
+        {customer_items}
 
-Items:
-{customer_items}
+        Subtotal: ₹{order.subtotal:.2f}
+        Delivery Charge: ₹{order.delivery_charge:.2f}
+        Total Amount: ₹{order.total_amount:.2f}
 
-Subtotal: ₹{order.subtotal:.2f}
-Delivery Charge: ₹{order.delivery_charge:.2f}
-Total Amount: ₹{order.total_amount:.2f}
+        Payment Method: {order.get_payment_method_display()}
+        Payment Status: {order.get_payment_status_display()}
+        Order Status: {order.get_status_display()}
 
-Payment Method: {order.get_payment_method_display()}
-Payment Status: {order.get_payment_status_display()}
-Order Status: {order.get_status_display()}
+        DELIVERY ADDRESS
+        ------------------------------
+        {order.full_name}
+        {order.address_line1}
+        {order.address_line2 or ""}
+        {order.landmark or ""}
+        {order.city}, {order.state} - {order.pincode}
+        Phone: {order.phone_number}
 
-DELIVERY ADDRESS
-------------------------------
-{order.full_name}
-{order.address_line1}
-{order.address_line2 or ""}
-{order.landmark or ""}
-{order.city}, {order.state} - {order.pincode}
-Phone: {order.phone_number}
+        View your order:
+        {order_url}
 
-View your order:
-{order_url}
+        Thank you for choosing Rajanna Dairy Farm.
 
-Thank you for choosing Rajanna Dairy Farm.
+        Regards,
+        Rajanna Dairy Farm
+        """
 
-Regards,
-Rajanna Dairy Farm
-"""
+        customer_html = f"""
+        <p>Hello {order.user.full_name},</p>
+        <p>Thank you for ordering from <strong>Rajanna Dairy Farm</strong>!</p>
+        <p>Your order has been successfully placed.</p>
 
-        customer_email = EmailMultiAlternatives(
-            subject=customer_subject,
-            body=customer_message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[order.user.email],
-        )
+        <h3>Order Details</h3>
+        <ul>
+        <li><strong>Order Number:</strong> {order.order_number}</li>
+        <li><strong>Items:</strong><br>{customer_items}</li>
+        <li><strong>Subtotal:</strong> ₹{order.subtotal:.2f}</li>
+        <li><strong>Delivery Charge:</strong> ₹{order.delivery_charge:.2f}</li>
+        <li><strong>Total Amount:</strong> ₹{order.total_amount:.2f}</li>
+        <li><strong>Payment Method:</strong> {order.get_payment_method_display()}</li>
+        <li><strong>Payment Status:</strong> {order.get_payment_status_display()}</li>
+        <li><strong>Order Status:</strong> {order.get_status_display()}</li>
+        </ul>
 
-        customer_email.send(
-            fail_silently=False
-        )
+        <h3>Delivery Address</h3>
+        <p>
+        {order.full_name}<br>
+        {order.address_line1}<br>
+        {order.address_line2 or ""}<br>
+        {order.landmark or ""}<br>
+        {order.city}, {order.state} - {order.pincode}<br>
+        Phone: {order.phone_number}
+        </p>
+
+        <p><a href="{order_url}">View your order</a></p>
+
+        <p>Thank you for choosing Rajanna Dairy Farm.</p>
+        <p>Regards,<br>Rajanna Dairy Farm</p>
+        """
+
+        resend.Emails.send({
+            "from": "Rajanna Dairy Farm <rajannadairyfarm@gmail.com>",
+            "to": [order.user.email],
+            "subject": customer_subject,
+            "text": customer_text,
+            "html": customer_html,
+        })
 
         # --------------------------------------------------
         # ADMIN EMAIL
         # --------------------------------------------------
+        admin_subject = f"🛒 New Order Received - {order.order_number}"
 
-        admin_subject = (
-            f"🛒 New Order Received - "
-            f"{order.order_number}"
-        )
+        admin_text = f"""
+        NEW ORDER RECEIVED
+        ==============================
 
-        admin_message = f"""
-NEW ORDER RECEIVED
-==============================
+        Order Number: {order.order_number}
 
-Order Number:
-{order.order_number}
+        CUSTOMER
+        ------------------------------
+        Name: {order.user.full_name}
+        Email: {order.user.email}
+        Phone: {order.phone_number}
 
-CUSTOMER
-------------------------------
-Name: {order.user.full_name}
-Email: {order.user.email}
-Phone: {order.phone_number}
+        ORDER ITEMS
+        ------------------------------
+        {customer_items}
 
-ORDER ITEMS
-------------------------------
-{customer_items}
+        ORDER AMOUNT
+        ------------------------------
+        Subtotal: ₹{order.subtotal:.2f}
+        Delivery Charge: ₹{order.delivery_charge:.2f}
+        Total: ₹{order.total_amount:.2f}
 
-ORDER AMOUNT
-------------------------------
-Subtotal: ₹{order.subtotal:.2f}
-Delivery Charge: ₹{order.delivery_charge:.2f}
-Total: ₹{order.total_amount:.2f}
+        PAYMENT
+        ------------------------------
+        Method: {order.get_payment_method_display()}
+        Status: {order.get_payment_status_display()}
 
-PAYMENT
-------------------------------
-Method: {order.get_payment_method_display()}
-Status: {order.get_payment_status_display()}
+        ORDER STATUS
+        ------------------------------
+        {order.get_status_display()}
 
-ORDER STATUS
-------------------------------
-{order.get_status_display()}
+        DELIVERY ADDRESS
+        ------------------------------
+        {order.full_name}
+        {order.address_line1}
+        {order.address_line2 or ""}
+        {order.landmark or ""}
+        {order.city}, {order.state} - {order.pincode}
+        Phone: {order.phone_number}
 
-DELIVERY ADDRESS
-------------------------------
-{order.full_name}
-{order.address_line1}
-{order.address_line2 or ""}
-{order.landmark or ""}
-{order.city}, {order.state} - {order.pincode}
+        Please check the Django admin panel
+        for complete order information.
 
-Phone: {order.phone_number}
+        Rajanna Dairy Farm
+        """
 
-Please check the Django admin panel
-for complete order information.
+        admin_html = f"""
+        <h2>New Order Received</h2>
+        <p><strong>Order Number:</strong> {order.order_number}</p>
 
-Rajanna Dairy Farm
-"""
+        <h3>Customer</h3>
+        <p>Name: {order.user.full_name}<br>
+        Email: {order.user.email}<br>
+        Phone: {order.phone_number}</p>
 
-        admin_email = EmailMultiAlternatives(
-            subject=admin_subject,
-            body=admin_message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[settings.ADMIN_EMAIL],
-        )
+        <h3>Order Items</h3>
+        <p>{customer_items}</p>
 
-        admin_email.send(
-            fail_silently=False
-        )
+        <h3>Order Amount</h3>
+        <p>Subtotal: ₹{order.subtotal:.2f}<br>
+        Delivery Charge: ₹{order.delivery_charge:.2f}<br>
+        Total: ₹{order.total_amount:.2f}</p>
+
+        <h3>Payment</h3>
+        <p>Method: {order.get_payment_method_display()}<br>
+        Status: {order.get_payment_status_display()}</p>
+
+        <h3>Order Status</h3>
+        <p>{order.get_status_display()}</p>
+
+        <h3>Delivery Address</h3>
+        <p>
+        {order.full_name}<br>
+        {order.address_line1}<br>
+        {order.address_line2 or ""}<br>
+        {order.landmark or ""}<br>
+        {order.city}, {order.state} - {order.pincode}<br>
+        Phone: {order.phone_number}
+        </p>
+
+        <p>Please check the Django admin panel for complete order information.</p>
+        <p>Rajanna Dairy Farm</p>
+        """
+
+        resend.Emails.send({
+            "from": "Rajanna Dairy Farm <rajannadairyfarm@gmail.com>",
+            "to": [settings.ADMIN_EMAIL],
+            "subject": admin_subject,
+            "text": admin_text,
+            "html": admin_html,
+        })
+
 
     except Exception:
         logger.exception(

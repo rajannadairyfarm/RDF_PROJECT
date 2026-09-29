@@ -169,6 +169,10 @@ AUTH_USER_MODEL = 'rdf_app.User'
 
 
 
+RESEND_API_KEY = os.getenv("RESEND_API_KEY")
+
+
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
