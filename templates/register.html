@@ -1,0 +1,637 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en"  class="overflow-x-hidden">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Rajanna Dairy Farm</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Create a Rajanna Dairy Farm account to start receiving pure, farm-fresh milk and dairy products straight to your home.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons (Phosphor Icons for clean UI) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0f3d26',    
+                            primary: '#145c3a', 
+                            light: '#2a7a50',   
+                            milk: '#fdfdfc',    // Fresh milk white
+                            cream: '#f4f4ec',   // Soft creamy off-white
+                            sage: '#e6ede9',    // Very pale, fresh pasture green
+                            gold: '#d4af37',    
+                            earth: '#5c4a3d',   // Warm earth tone for secondary text
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['Lato', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+            background-color: #59db8d; /* Deeper, muted earthy-sage base from user config */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Custom Theme Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f4f4ec; /* brand-cream */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2a7a50; /* brand-light */
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #145c3a; /* brand-primary */
+        }
+
+        /* Fresh Morning ambient background */
+        .ambient-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(135deg, #9fd58d 0%, #dce3de 50%, #d4af37 100%);
+        }
+        
+        @keyframes floatOrbSlow {
+            0% { transform: translateY(0px) scale(1); opacity: 0.15; }
+            50% { transform: translateY(-20px) scale(1.05); opacity: 0.3; }
+            100% { transform: translateY(0px) scale(1); opacity: 0.15; }
+        }
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: -1;
+        }
+
+        /* Form entrance animation */
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-up {
+            animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Header Link Underline Animation */
+        .nav-link {
+            position: relative;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #145c3a; /* brand-primary */
+            transform-origin: bottom right;
+            transition: transform 0.3s ease-out;
+        }
+        .nav-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* Social Media Brand Colors */
+        .social-fb:hover { background-color: #1877F2 !important; color: white !important; }
+        .social-ig:hover { 
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%) !important; 
+            color: white !important; 
+        }
+        .social-tw:hover { background-color: #1DA1F2 !important; color: white !important; }
+        .social-yt:hover { background-color: #FF0000 !important; color: white !important; }
+
+        /* Input field autofill styling fix */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active{
+            -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
+            -webkit-text-fill-color: #0f3d26 !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+    </style>
+</head>
+<body class="text-brand-dark font-sans antialiased relative selection:bg-brand-primary selection:text-brand-milk">
+
+    <!-- Background Orbs for subtle texture -->
+    <div class="ambient-bg"></div>
+    <div class="bg-orb w-96 h-96 bg-brand-light/20 top-0 left-0" style="animation: floatOrbSlow 12s ease-in-out infinite;"></div>
+    <div class="bg-orb w-[30rem] h-[30rem] bg-brand-gold/15 bottom-0 right-0" style="animation: floatOrbSlow 15s ease-in-out infinite reverse;"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-brand-sage shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo & Brand -->
+                <a href="{% url 'shop' %}" class="flex items-center gap-3 group">
+                    <div class="w-12 h-12 rounded-full bg-white border border-brand-sage shadow-sm flex items-center justify-center overflow-hidden transition-transform group-hover:scale-105">
+                        <img src="{% static 'images/Logo.jpeg' %}" alt="Rajanna Dairy Farm Logo" class="w-[90%] h-[90%] object-contain mix-blend-multiply" onerror="this.src='https://placehold.co/100x100/145c3a/ffffff?text=Logo'">
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-serif text-xl md:text-2xl font-bold tracking-wide text-brand-primary leading-tight">RAJANNA</span>
+                        <span class="font-sans text-[0.65rem] md:text-xs tracking-[0.2em] uppercase font-bold text-brand-dark/80">Dairy Farm</span>
+                    </div>
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <!-- Desktop Navigation -->
+<nav class="hidden lg:flex items-center gap-8">
+    {% if user.is_authenticated %}
+        <a href="{% url 'shop' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url 'aboutus' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url 'contactus' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url 'user_profile' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+        <a href="{% url 'orders' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-package"></i> My Orders
+        </a>  
+        <a href=" {% url 'addresses' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-map-pin"></i> My Address
+        </a>
+         <a href="{% url 'my-milk-subscription' %}" 
+   class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+    <i class="ph ph-crown"></i> My Subscriptions
+</a>
+
+    {% else %}
+        <!-- Active Link -->
+        <a href="{% url 'shop' %}" class="flex items-center gap-2 text-sm font-bold text-brand-primary bg-brand-sage/40 px-3 py-1.5 rounded-lg">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url "aboutus" %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url "contactus" %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url "user_profile" %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+       
+    {% endif %}
+</nav>
+
+
+                <!-- Mobile Menu Button & Cart -->
+                <div class="lg:hidden flex items-center gap-4">
+                    <a href="{% url "cart" %}" class="text-brand-dark hover:text-brand-primary transition-colors relative">
+                        <i class="ph ph-shopping-cart text-2xl"></i>
+                          <span class="absolute -top-1 -right-1 w-4 h-4 bg-brand-gold text-brand-dark text-[0.65rem] font-bold rounded-full flex items-center justify-center border border-white">{{ cart_count }}</span>
+                    </a>
+                    <button id="mobile-menu-btn" class="text-brand-dark hover:text-brand-primary focus:outline-none p-2 transition-colors">
+                        <i class="ph ph-list text-2xl" id="mobile-menu-icon"></i>
+                    </button>
+                </div>
+                
+                
+                <!-- Desktop Cart + Auth -->
+<div class="hidden lg:flex items-center gap-4">
+    <!-- Cart -->
+    <a href="{% url "cart" %}" class="w-10 h-10 rounded-full bg-brand-sage/50 flex items-center justify-center text-brand-dark hover:bg-brand-primary hover:text-white transition-all relative">
+        <i class="ph ph-shopping-cart text-xl"></i>
+        <span class="absolute -top-1 -right-1 w-4 h-4 bg-brand-gold text-brand-dark text-[0.65rem] font-bold rounded-full flex items-center justify-center border border-white">{{ cart_count }}</span>
+    </a>
+
+    {% if user.is_authenticated %}
+        <!-- Logout with red icon -->
+        <a href="{% url "logout" %}" class="flex items-center gap-2 text-sm font-bold text-red-600 hover:text-red-800 transition-colors">
+            <i class="ph ph-sign-out text-lg"></i> Logout
+        </a>
+    {% else %}
+        <!-- Login highlighted -->
+<a href="{% url "login" %}" 
+   class="flex items-center gap-2 text-sm font-bold text-white bg-brand-primary px-3 py-1.5 rounded-lg shadow-md hover:bg-brand-dark transition-all">
+   Login
+</a>
+
+
+    {% endif %}
+</div>
+
+            </div>
+        </div>
+
+      
+
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-brand-sage shadow-xl absolute w-full left-0 origin-top">
+    <div class="px-4 pt-4 pb-6 space-y-2 flex flex-col max-w-7xl mx-auto">
+        {% if user.is_authenticated %}
+        <a href="{% url 'shop' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl transition-colors">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url "aboutus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url "contactus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url "user_profile" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+
+
+
+               <a href="{% url "orders" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-info"></i> My Orders
+        </a>
+      
+        <a href="{% url "addresses" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> My Addesses
+        </a>
+          <a href="{% url "my-milk-subscription" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> My Subscriptions
+        </a>
+          <a href="{% url "logout" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-red-600 bg-red-50 rounded-xl transition-colors">
+                <i class="ph ph-sign-out"></i> Logout
+            </a>
+ {% else %}
+  <a href="{% url 'shop' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl transition-colors">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url "aboutus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url "contactus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url "user_profile" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+       
+        
+           
+      
+            <a href="{% url "login" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl transition-colors">
+                Login
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+    </header>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        <!-- Registration Card (Slightly wider than login for the grid layout) -->
+        <div class="max-w-[34rem] w-full bg-white/95 backdrop-blur-md rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-brand-sage/60 p-8 sm:p-10 animate-slide-up relative overflow-hidden transition-all duration-500 hover:shadow-[0_8px_40px_rgba(20,92,58,0.08)]">
+            
+            <!-- Decorative corner accent -->
+            <div class="absolute -top-12 -right-12 w-32 h-32 bg-brand-sage rounded-full blur-2xl pointer-events-none"></div>
+            
+            <!-- Header section of form -->
+            <div class="text-center mb-8 relative z-10">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-cream border border-brand-sage mb-4 shadow-inner">
+                    <i class="ph ph-user-plus text-4xl text-brand-primary"></i>
+                </div>
+                <h2 class="text-3xl font-serif font-bold text-brand-dark mb-2">Create an Account</h2>
+                <p class="text-sm text-brand-earth font-medium">Join us for daily farm-fresh deliveries.</p>
+            </div>
+
+            <form class="space-y-5 relative z-10" method="POST"
+                action="{% url 'register' %}">
+
+
+{% csrf_token %}
+
+{% if messages %}
+    <div class="mb-6 space-y-3">
+        {% for message in messages %}
+            <div class="relative flex items-center justify-between p-4 rounded-xl shadow-sm text-sm font-medium animate-slide-up
+                {% if message.tags == 'error' %} 
+                    bg-red-50/90 text-red-700 border border-red-200 
+                {% elif message.tags == 'success' %} 
+                    bg-green-50/90 text-brand-primary border border-brand-sage 
+                {% elif message.tags == 'warning' %} 
+                    bg-yellow-50/90 text-yellow-700 border border-yellow-200 
+                {% else %} 
+                    bg-blue-50/90 text-blue-700 border border-blue-200 
+                {% endif %}" 
+                role="alert">
+
+                <span class="message-text flex items-center gap-2">
+                    <!-- Optional: Keeping phosphor icons for consistent UI, matching tag colors -->
+                    {% if message.tags == 'error' %}
+                        <i class="ph-fill ph-warning-circle text-lg"></i>
+                    {% elif message.tags == 'success' %}
+                        <i class="ph-fill ph-check-circle text-lg"></i>
+                    {% else %}
+                        <i class="ph-fill ph-info text-lg"></i>
+                    {% endif %}
+                    {{ message }}
+                </span>
+
+                <button 
+                    type="button" 
+                    class="ml-4 opacity-70 hover:opacity-100 transition-opacity focus:outline-none text-2xl leading-none" 
+                    onclick="this.parentElement.remove();" 
+                    aria-label="Close message">
+                    &times;
+                </button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+                <!-- Full Name Input -->
+                <div>
+                    <label for="fullname" class="block text-sm font-semibold text-brand-dark mb-1.5 ml-1">Full Name</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                            <i class="ph ph-user text-brand-dark/40 text-xl"></i>
+                        </div>
+                        <input id="fullname" name="full_name" type="text" autocomplete="name" required 
+                            class="block w-full pl-11 pr-4 py-3 bg-brand-cream/50 border border-brand-sage rounded-xl text-brand-dark placeholder-brand-earth/50 focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary focus:bg-white transition-all shadow-sm"
+                            placeholder="John Doe">
+                    </div>
+                </div>
+
+                <!-- Contact Info Grid (Email & Phone side-by-side on sm screens) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <!-- Email Input -->
+                    <div>
+                        <label for="email" class="block text-sm font-semibold text-brand-dark mb-1.5 ml-1">Email Address</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                                <i class="ph ph-envelope-simple text-brand-dark/40 text-xl"></i>
+                            </div>
+                            <input id="email" name="email" type="email" autocomplete="email" required 
+                                class="block w-full pl-11 pr-4 py-3 bg-brand-cream/50 border border-brand-sage rounded-xl text-brand-dark placeholder-brand-earth/50 focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary focus:bg-white transition-all shadow-sm"
+                                placeholder="you@example.com">
+                        </div>
+                    </div>
+
+                    <!-- Phone Number Input -->
+                    <div>
+                        <label for="phone" class="block text-sm font-semibold text-brand-dark mb-1.5 ml-1">Phone Number</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                                <i class="ph ph-phone text-brand-dark/40 text-xl"></i>
+                            </div>
+                            <input id="phone" name="phone" type="tel" autocomplete="tel" required 
+                                class="block w-full pl-11 pr-4 py-3 bg-brand-cream/50 border border-brand-sage rounded-xl text-brand-dark placeholder-brand-earth/50 focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary focus:bg-white transition-all shadow-sm"
+                                placeholder="+91 98765 43210">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Password Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <!-- Password Input -->
+                    <div>
+                        <label for="password" class="block text-sm font-semibold text-brand-dark mb-1.5 ml-1">Password</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                                <i class="ph ph-lock-key text-brand-dark/40 text-xl"></i>
+                            </div>
+                            <input id="password" name="password" type="password" autocomplete="new-password" required 
+                                class="block w-full pl-11 pr-12 py-3 bg-brand-cream/50 border border-brand-sage rounded-xl text-brand-dark placeholder-brand-earth/50 focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary focus:bg-white transition-all shadow-sm"
+                                placeholder="••••••••">
+                            
+                            <!-- Toggle Password -->
+                            <button type="button" onclick="togglePassword('password', 'toggleIcon1')" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-brand-dark/40 hover:text-brand-primary focus:outline-none transition-colors">
+                                <i id="toggleIcon1" class="ph ph-eye text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Confirm Password Input -->
+                    <div>
+                        <label for="confirm_password" class="block text-sm font-semibold text-brand-dark mb-1.5 ml-1">Confirm Password</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                                <i class="ph ph-lock-key text-brand-dark/40 text-xl"></i>
+                            </div>
+                            <input id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" required 
+                                class="block w-full pl-11 pr-12 py-3 bg-brand-cream/50 border border-brand-sage rounded-xl text-brand-dark placeholder-brand-earth/50 focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary focus:bg-white transition-all shadow-sm"
+                                placeholder="••••••••">
+                            
+                            <!-- Toggle Confirm Password -->
+                            <button type="button" onclick="togglePassword('confirm_password', 'toggleIcon2')" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-brand-dark/40 hover:text-brand-primary focus:outline-none transition-colors">
+                                <i id="toggleIcon2" class="ph ph-eye text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-4">
+                    <button type="submit" class="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-md text-sm font-bold text-brand-milk bg-gradient-to-r from-brand-primary to-brand-dark hover:from-brand-light hover:to-brand-primary hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary">
+                        Create Account
+                        <i class="ph ph-arrow-right ml-2 text-lg"></i>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Divider -->
+            <div class="mt-8 relative">
+                <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                    <div class="w-full border-t border-brand-sage"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-3 bg-white text-brand-earth font-medium">Already part of our family?</span>
+                </div>
+            </div>
+
+            <!-- Login Link -->
+            <div class="mt-6 text-center">
+                <p class="text-sm text-brand-earth">
+                    Already have an account? 
+                    <a href="/login" class="font-bold text-brand-primary hover:text-brand-light transition-colors border-b border-transparent hover:border-brand-light pb-0.5 ml-1">
+                        Login here
+                    </a>
+                </p>
+            </div>
+            
+        </div>
+    </main>
+ <!-- Footer -->
+    <footer class="bg-brand-dark text-brand-cream pt-16 pb-6 mt-auto border-t-4 border-brand-gold relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 mb-12">
+                <!-- Part 1: Brand Info -->
+                <div class="lg:col-span-1 flex flex-col items-start">
+                    <a href="{% url "shop" %}" class="flex items-center gap-3 mb-4 group">
+                        <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden">
+                            <img  src="{% static 'images/Logo.jpeg' %}" alt="Rajanna Dairy Farm Logo" class="w-[90%] h-[90%] object-contain mix-blend-multiply" onerror="this.src='https://placehold.co/100x100/145c3a/ffffff?text=Logo'">
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-serif text-xl font-bold tracking-wide text-brand-gold leading-tight">RAJANNA</span>
+                            <span class="font-sans text-[0.65rem] tracking-[0.2em] uppercase font-bold text-brand-cream/80">Dairy Farm</span>
+                        </div>
+                    </a>
+                    <p class="text-sm text-brand-cream/70 mb-6 leading-relaxed">
+                        Delivering pure, fresh, and natural dairy products straight from our farm to your home every morning.
+                    </p>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#1877F2] hover:text-white transition-all duration-300 hover:-translate-y-1"><i class="ph-fill ph-facebook-logo text-lg"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:text-white transition-all duration-300 hover:-translate-y-1" style="transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)'" onmouseout="this.style.background='rgba(244, 244, 236, 0.1)'"><i class="ph-fill ph-instagram-logo text-lg"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#1DA1F2] hover:text-white transition-all duration-300 hover:-translate-y-1"><i class="ph-fill ph-twitter-logo text-lg"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#FF0000] hover:text-white transition-all duration-300 hover:-translate-y-1"><i class="ph-fill ph-youtube-logo text-lg"></i></a>
+                    </div>
+                </div>
+
+                <!-- Part 2: About -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-info text-brand-gold text-xl"></i> About</h3>
+                    <ul class="space-y-3">
+                        <li><a href="{% url "contactus" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Contact Us</a></li>
+                        <li><a href="{% url "aboutus" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> About Us</a></li>
+                        <li><a href="{% url "ourstory" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Our Story</a></li>
+                        <li><a href="{% url 'subscribe' %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Subscribe</a></li>
+                    </ul>
+                </div>
+
+                <!-- Part 3: Platform -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-squares-four text-brand-gold text-xl"></i> Platform</h3>
+                    <ul class="space-y-3">
+                        <li><a href="{% url "shop" %}" class="text-sm text-brand-gold hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold transition-colors"></i> Shop</a></li>
+                        <li><a href="#" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Services</a></li>
+                        <li><a href="#" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Offers</a></li>
+                    </ul>
+                </div>
+
+                <!-- Part 4: Help -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-question text-brand-gold text-xl"></i> Help</h3>
+                    <ul class="space-y-3">
+                        <li><a href="{% url "terms_conditions" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Terms & Conditions</a></li>
+                        <li><a href="{% url "privacy_policy" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <!-- Part 5: Location -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-map-pin line text-brand-gold text-xl"></i> Location</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i class="ph-fill ph-map-pin text-brand-gold mt-0.5 text-lg"></i>
+                            <span class="text-sm text-brand-cream/70 leading-relaxed">123 Green Pastures Lane,<br>Dairy District, HYD 500001</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="ph-fill ph-phone text-brand-gold text-lg"></i>
+                            <span class="text-sm text-brand-cream/70">+91 98765 43210</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="ph-fill ph-envelope-simple text-brand-gold text-lg"></i>
+                            <span class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors cursor-pointer">hello@rajannadairy.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Copyright Bar -->
+            <div class="border-t border-brand-cream/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-sm text-brand-cream/60">
+                    &copy; <span id="year"></span> Rajanna Dairy Farms. <span class="text-brand-gold font-medium">Farm to home</span>
+                </div>
+                <div class="text-xs text-brand-cream/40 flex flex-wrap justify-center md:justify-end gap-3 md:gap-6 font-medium tracking-wide uppercase">
+                    <span>Fresh Milk</span><span class="hidden sm:inline text-brand-cream/20">•</span>
+                    <span>Pure Dairy</span><span class="hidden sm:inline text-brand-cream/20">•</span>
+                    <span>Natural Products</span><span class="hidden sm:inline text-brand-cream/20">•</span>
+                    <span>Organic Farming</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Interactive Scripts -->
+    <script>
+        // Set current year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Mobile Menu Toggle Logic
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileIcon = document.getElementById('mobile-menu-icon');
+
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileIcon.classList.replace('ph-x', 'ph-list');
+            } else {
+                mobileIcon.classList.replace('ph-list', 'ph-x');
+            }
+        });
+
+        // Reusable Toggle Password Visibility Logic
+        function togglePassword(inputId, iconId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleIcon = document.getElementById(iconId);
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.replace('ph-eye', 'ph-eye-slash');
+                toggleIcon.classList.add('text-brand-primary');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.replace('ph-eye-slash', 'ph-eye');
+                toggleIcon.classList.remove('text-brand-primary');
+            }
+        }
+    </script>
+</body>
+</html>

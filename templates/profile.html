@@ -1,0 +1,742 @@
+
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en"  class="overflow-x-hidden">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Manage your Rajanna Dairy Farm profile, personal information and account details.">
+    <title>Edit Profile | Rajanna Dairy Farm</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons (Phosphor Icons for clean UI) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0f3d26',    
+                            primary: '#145c3a', 
+                            light: '#2a7a50',   
+                            milk: '#fdfdfc',    
+                            cream: '#f4f4ec',   
+                            sage: '#e6ede9',    
+                            gold: '#d4af37',    
+                            earth: '#5c4a3d',   
+                            blueAccent: '#3b82f6', // Matching dashboard accent
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['Lato', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+            background-color: #59db8d; /* Deeper, muted earthy-sage base */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Custom Theme Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #f4f4ec; }
+        ::-webkit-scrollbar-thumb { background: #2a7a50; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #145c3a; }
+
+        /* Ambient background */
+        .ambient-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(135deg, #9fd58d 0%, #dce3de 50%, #d4af37 100%);
+        }
+        
+        @keyframes floatOrbSlow {
+            0% { transform: translateY(0px) scale(1); opacity: 0.15; }
+            50% { transform: translateY(-20px) scale(1.05); opacity: 0.3; }
+            100% { transform: translateY(0px) scale(1); opacity: 0.15; }
+        }
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: -1;
+        }
+
+        /* Animations */
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-up {
+            animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Header Link Underline Animation */
+        .nav-link {
+            position: relative;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #145c3a; 
+            transform-origin: bottom right;
+            transition: transform 0.3s ease-out;
+        }
+        .nav-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* Footer Social Media Brand Colors */
+        .social-fb:hover { background-color: #1877F2 !important; color: white !important; }
+        .social-ig:hover { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%) !important; color: white !important; }
+        .social-tw:hover { background-color: #1DA1F2 !important; color: white !important; }
+        .social-yt:hover { background-color: #FF0000 !important; color: white !important; }
+
+        /* Form Customizations */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Input overrides for Django rendered fields */
+        input[type="text"], input[type="email"], input[type="tel"], input[type="date"], select, textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background-color: rgba(244, 244, 236, 0.5); /* cream/50 */
+            border: 1px solid #e6ede9; /* sage */
+            border-radius: 0.75rem;
+            color: #0f3d26; /* dark */
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #145c3a; /* primary */
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(20, 92, 58, 0.1);
+        }
+        input:disabled {
+            background-color: rgba(230, 237, 233, 0.5);
+            color: #5c4a3d;
+            cursor: not-allowed;
+            border-color: transparent;
+        }
+        
+        textarea { resize: vertical; min-height: 100px; }
+    </style>
+</head>
+<body class="text-brand-dark font-sans antialiased relative selection:bg-brand-primary selection:text-brand-milk">
+
+    <!-- Ambient Background -->
+    <div class="ambient-bg"></div>
+    <div class="bg-orb w-96 h-96 bg-brand-light/20 top-0 left-0" style="animation: floatOrbSlow 12s ease-in-out infinite;"></div>
+    <div class="bg-orb w-[30rem] h-[30rem] bg-brand-gold/15 bottom-0 right-0" style="animation: floatOrbSlow 15s ease-in-out infinite reverse;"></div>
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-brand-sage shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo & Brand -->
+                <a href="{% url 'shop' %}" class="flex items-center gap-3 group">
+                    <div class="w-12 h-12 rounded-full bg-white border border-brand-sage shadow-sm flex items-center justify-center overflow-hidden transition-transform group-hover:scale-105">
+                        <img src="{% static 'images/Logo.jpeg' %}" alt="Rajanna Dairy Farm Logo" class="w-[90%] h-[90%] object-contain mix-blend-multiply" onerror="this.src='https://placehold.co/100x100/145c3a/ffffff?text=Logo'">
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-serif text-xl md:text-2xl font-bold tracking-wide text-brand-primary leading-tight">RAJANNA</span>
+                        <span class="font-sans text-[0.65rem] md:text-xs tracking-[0.2em] uppercase font-bold text-brand-dark/80">Dairy Farm</span>
+                    </div>
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <!-- Desktop Navigation -->
+<nav class="hidden lg:flex items-center gap-8">
+    {% if user.is_authenticated %}
+        <a href="{% url 'shop' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url 'aboutus' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url 'contactus' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url 'user_profile' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+        <a href="{% url 'orders' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-package"></i> My Orders
+        </a>  
+        <a href=" {% url 'addresses' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-map-pin"></i> My Address
+        </a>
+         <a href="{% url 'my-milk-subscription' %}" 
+   class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+    <i class="ph ph-crown"></i> My Subscriptions
+</a>
+
+    {% else %}
+        <!-- Active Link -->
+        <a href="{% url 'shop' %}" class="flex items-center gap-2 text-sm font-bold text-brand-primary bg-brand-sage/40 px-3 py-1.5 rounded-lg">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url "aboutus" %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url "contactus" %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url "user_profile" %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+       
+    {% endif %}
+</nav>
+
+
+                <!-- Mobile Menu Button & Cart -->
+                <div class="lg:hidden flex items-center gap-4">
+                    <a href="{% url "cart" %}" class="text-brand-dark hover:text-brand-primary transition-colors relative">
+                        <i class="ph ph-shopping-cart text-2xl"></i>
+                          <span class="absolute -top-1 -right-1 w-4 h-4 bg-brand-gold text-brand-dark text-[0.65rem] font-bold rounded-full flex items-center justify-center border border-white">{{ cart_count }}</span>
+                    </a>
+                    <button id="mobile-menu-btn" class="text-brand-dark hover:text-brand-primary focus:outline-none p-2 transition-colors">
+                        <i class="ph ph-list text-2xl" id="mobile-menu-icon"></i>
+                    </button>
+                </div>
+                
+                
+                <!-- Desktop Cart + Auth -->
+<div class="hidden lg:flex items-center gap-4">
+    <!-- Cart -->
+    <a href="{% url "cart" %}" class="w-10 h-10 rounded-full bg-brand-sage/50 flex items-center justify-center text-brand-dark hover:bg-brand-primary hover:text-white transition-all relative">
+        <i class="ph ph-shopping-cart text-xl"></i>
+        <span class="absolute -top-1 -right-1 w-4 h-4 bg-brand-gold text-brand-dark text-[0.65rem] font-bold rounded-full flex items-center justify-center border border-white">{{ cart_count }}</span>
+    </a>
+
+    {% if user.is_authenticated %}
+        <!-- Logout with red icon -->
+        <a href="{% url "logout" %}" class="flex items-center gap-2 text-sm font-bold text-red-600 hover:text-red-800 transition-colors">
+            <i class="ph ph-sign-out text-lg"></i> Logout
+        </a>
+    {% else %}
+        <!-- Login highlighted -->
+<a href="{% url "login" %}" 
+   class="flex items-center gap-2 text-sm font-bold text-white bg-brand-primary px-3 py-1.5 rounded-lg shadow-md hover:bg-brand-dark transition-all">
+   Login
+</a>
+
+
+    {% endif %}
+</div>
+
+            </div>
+        </div>
+
+      
+
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-brand-sage shadow-xl absolute w-full left-0 origin-top">
+    <div class="px-4 pt-4 pb-6 space-y-2 flex flex-col max-w-7xl mx-auto">
+        {% if user.is_authenticated %}
+        <a href="{% url 'shop' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl transition-colors">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url "aboutus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url "contactus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url "user_profile" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+
+
+
+               <a href="{% url "orders" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-info"></i> My Orders
+        </a>
+      
+        <a href="{% url "addresses" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> My Addesses
+        </a>
+          <a href="{% url "my-milk-subscription" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> My Subscriptions
+        </a>
+          <a href="{% url "logout" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-red-600 bg-red-50 rounded-xl transition-colors">
+                <i class="ph ph-sign-out"></i> Logout
+            </a>
+ {% else %}
+  <a href="{% url 'shop' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl transition-colors">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url "aboutus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url "contactus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url "user_profile" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+       
+        
+           
+      
+            <a href="{% url "login" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl transition-colors">
+                Login
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+    </header>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Main Profile Content -->
+    <main class="flex-grow w-full relative z-10 py-10 md:py-16 px-4 sm:px-6 lg:px-8">
+        
+        <div class="max-w-4xl mx-auto animate-slide-up">
+            
+            <!-- Page Header (Back Button & Title) -->
+            <header class="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                <div>
+                    <p class="text-xs font-bold tracking-widest text-brand-gold uppercase mb-1">My Account</p>
+                    <h1 class="text-3xl md:text-4xl font-serif font-bold text-brand-dark">Edit Profile</h1>
+                    <p class="text-sm text-brand-earth mt-2">Manage your personal information and account details.</p>
+                </div>
+                <a href="{% url 'user_profile' %}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-brand-sage rounded-xl text-sm font-bold text-brand-dark hover:bg-brand-sage/40 hover:text-brand-primary transition-all shadow-sm group">
+                    <i class="ph ph-arrow-left group-hover:-translate-x-1 transition-transform"></i> Back to Profile
+                </a>
+            </header>
+
+            <!-- Django Messages -->
+            {% if messages %}
+                <div class="mb-8 space-y-3">
+                    {% for message in messages %}
+                        <div class="relative flex items-center justify-between p-4 rounded-xl shadow-sm text-sm font-medium
+                            {% if message.tags == 'error' %} bg-red-50 text-red-700 border border-red-200 
+                            {% elif message.tags == 'success' %} bg-green-50 text-brand-primary border border-brand-sage 
+                            {% elif message.tags == 'warning' %} bg-yellow-50 text-yellow-700 border border-yellow-200 
+                            {% else %} bg-blue-50 text-brand-blueAccent border border-blue-200 {% endif %}" 
+                            role="alert">
+                            <span class="flex items-center gap-2">
+                                {% if message.tags == 'error' %}<i class="ph-fill ph-warning-circle text-lg"></i>
+                                {% elif message.tags == 'success' %}<i class="ph-fill ph-check-circle text-lg"></i>
+                                {% else %}<i class="ph-fill ph-info text-lg"></i>{% endif %}
+                                {{ message }}
+                            </span>
+                            <button type="button" class="ml-4 opacity-70 hover:opacity-100 transition-opacity focus:outline-none" onclick="this.parentElement.remove();" aria-label="Close message">
+                                <i class="ph ph-x text-lg"></i>
+                            </button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Left Column: Status Overview -->
+                <div class="lg:col-span-1 space-y-6">
+                    
+                    <!-- Profile Identity Card -->
+                    <div class="glass-card rounded-[2rem] p-6 text-center border-t-4 border-t-brand-primary relative overflow-hidden">
+                        <div class="absolute -top-10 -right-10 w-24 h-24 bg-brand-light/10 rounded-full blur-xl pointer-events-none"></div>
+                        
+                        <div class="w-24 h-24 mx-auto rounded-full bg-brand-cream border-4 border-white shadow-md flex items-center justify-center overflow-hidden mb-4 relative z-10">
+                            {% if request.user.image %}
+                                <img src="{{ request.user.image.url }}" alt="{{ request.user.full_name }}" class="w-full h-full object-cover">
+                            {% else %}
+                                <span class="text-3xl font-serif font-bold text-brand-primary" aria-label="No profile photo">
+                                    {{ request.user.full_name|first|upper }}
+                                </span>
+                            {% endif %}
+                        </div>
+                        
+                        <h2 class="text-xl font-serif font-bold text-brand-dark mb-1 relative z-10">{{ request.user.full_name }}</h2>
+                        <p class="text-xs font-bold text-brand-earth/80 truncate mb-1 relative z-10">{{ request.user.email }}</p>
+                        {% if request.user.phone %}
+                            <p class="text-xs text-brand-earth/80 relative z-10">{{ request.user.phone }}</p>
+                        {% endif %}
+                        <div class="mt-4 pt-4 border-t border-brand-sage/60 relative z-10">
+                            <span class="inline-block px-3 py-1 bg-brand-sage/50 text-[0.65rem] font-bold text-brand-dark uppercase tracking-widest rounded-full">
+                                ID: {{ request.user.user_id }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Completion Card -->
+                    <div class="glass-card rounded-[2rem] p-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-sm font-bold text-brand-dark">Profile Completion</span>
+                            <strong class="text-sm font-bold text-brand-blueAccent">{{ completion_percentage }}%</strong>
+                        </div>
+                        <div class="h-2 w-full bg-brand-sage rounded-full overflow-hidden mb-4" role="progressbar" aria-valuenow="{{ completion_percentage }}" aria-valuemin="0" aria-valuemax="100" aria-label="Profile completion">
+                            <div class="h-full bg-brand-blueAccent transition-all duration-1000 ease-out" style="width: {{ completion_percentage }}%;"></div>
+                        </div>
+                        
+                        {% if missing_fields %}
+                            <p class="text-xs text-brand-earth font-medium">Complete the remaining details to finish your profile.</p>
+                        {% else %}
+                            <p class="text-xs text-brand-primary font-bold flex items-center gap-1"><i class="ph-fill ph-check-circle"></i> Your profile is complete.</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Missing Fields Alert -->
+                    {% if missing_fields %}
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-[2rem] p-6">
+                            <div class="flex items-start gap-3">
+                                <div class="w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <i class="ph-fill ph-warning"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold text-yellow-800 mb-2">Complete your profile</h3>
+                                    <p class="text-xs text-yellow-700 mb-2">Add the following information:</p>
+                                    <ul class="text-xs text-yellow-700 font-medium space-y-1 pl-4 list-disc marker:text-yellow-400">
+                                        {% for field in missing_fields %}
+                                            <li>{{ field }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                </div>
+
+                <!-- Right Column: Edit Form -->
+                <div class="lg:col-span-2">
+                    
+                    <form method="POST" enctype="multipart/form-data" class="space-y-6">
+                        {% csrf_token %}
+
+                        <!-- Section 1: Photo -->
+                        <section class="glass-card rounded-[2rem] p-6 md:p-8">
+                            <div class="flex items-center gap-3 border-b border-brand-sage pb-4 mb-6">
+                                <span class="w-8 h-8 rounded-full bg-brand-cream flex items-center justify-center text-xs font-bold text-brand-primary">01</span>
+                                <div>
+                                    <h2 class="text-lg font-serif font-bold text-brand-dark">Profile Photo</h2>
+                                    <p class="text-xs text-brand-earth">Help us recognize you easily.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row items-center gap-6">
+                                <div class="w-24 h-24 rounded-full bg-brand-cream border border-brand-sage flex items-center justify-center overflow-hidden flex-shrink-0 shadow-inner">
+                                    {% if request.user.image %}
+                                        <img src="{{ request.user.image.url }}" alt="{{ request.user.full_name }}" id="profilePreview" class="w-full h-full object-cover">
+                                    {% else %}
+                                        <div id="profilePlaceholder" class="text-3xl font-serif font-bold text-brand-primary">
+                                            {{ request.user.full_name|first|upper }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="text-center sm:text-left">
+                                    <label for="profile-image" class="inline-block px-5 py-2.5 bg-brand-cream hover:bg-brand-sage border border-brand-sage rounded-xl text-sm font-bold text-brand-dark cursor-pointer transition-colors shadow-sm mb-2">
+                                        <i class="ph ph-upload-simple mr-1"></i> Change Photo
+                                    </label>
+                                    <input type="file" id="profile-image" name="image" accept="image/jpeg,image/png,image/webp" hidden>
+                                    <p class="text-xs text-brand-earth/80">JPG, PNG or WebP</p>
+                                    <p class="text-xs text-brand-earth/80">Maximum size: 5 MB</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Section 2: Personal Info -->
+                        <section class="glass-card rounded-[2rem] p-6 md:p-8">
+                            <div class="flex items-center gap-3 border-b border-brand-sage pb-4 mb-6">
+                                <span class="w-8 h-8 rounded-full bg-brand-cream flex items-center justify-center text-xs font-bold text-brand-primary">02</span>
+                                <div>
+                                    <h2 class="text-lg font-serif font-bold text-brand-dark">Personal Information</h2>
+                                    <p class="text-xs text-brand-earth">Keep your personal details up to date.</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <!-- Read-only Fields -->
+                                <div>
+                                    <label for="full-name" class="block text-sm font-semibold text-brand-dark mb-1.5 ml-1">Full Name</label>
+                                    <input type="text" id="full-name" value="{{ request.user.full_name }}" disabled>
+                                    <p class="text-[0.65rem] text-brand-earth/70 mt-1 ml-1">Contact support to change.</p>
+                                </div>
+                                <div>
+                                    <label for="email" class="block text-sm font-semibold text-brand-dark mb-1.5 ml-1">Email Address</label>
+                                    <input type="email" id="email" value="{{ request.user.email }}" disabled>
+                                    <p class="text-[0.65rem] text-brand-earth/70 mt-1 ml-1">Email changes require verification.</p>
+                                </div>
+                                <div>
+                                    <label for="phone" class="block text-sm font-semibold text-brand-dark mb-1.5 ml-1">Phone Number</label>
+                                    <input type="text" id="phone" value="{{ request.user.phone }}" disabled>
+                                    <p class="text-[0.65rem] text-brand-earth/70 mt-1 ml-1">Registered primary phone.</p>
+                                </div>
+
+                                <!-- Editable Fields from Django Form -->
+                                <div>
+                                    <label for="{{ form.alternate_phone.id_for_label }}" class="block text-sm font-semibold text-brand-dark mb-1.5 ml-1">Alternate Phone</label>
+                                    {{ form.alternate_phone }}
+                                    {% if form.alternate_phone.errors %}
+                                        <div class="text-xs text-red-500 mt-1 ml-1">
+                                            {% for error in form.alternate_phone.errors %}{{ error }}{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <label for="{{ form.date_of_birth.id_for_label }}" class="block text-sm font-semibold text-brand-dark mb-1.5 ml-1">Date of Birth</label>
+                                    {{ form.date_of_birth }}
+                                    {% if form.date_of_birth.errors %}
+                                        <div class="text-xs text-red-500 mt-1 ml-1">
+                                            {% for error in form.date_of_birth.errors %}{{ error }}{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <label for="{{ form.gender.id_for_label }}" class="block text-sm font-semibold text-brand-dark mb-1.5 ml-1">Gender</label>
+                                    {{ form.gender }}
+                                    {% if form.gender.errors %}
+                                        <div class="text-xs text-red-500 mt-1 ml-1">
+                                            {% for error in form.gender.errors %}{{ error }}{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Section 3: Location -->
+                        <section class="glass-card rounded-[2rem] p-6 md:p-8">
+                            <div class="flex items-center gap-3 border-b border-brand-sage pb-4 mb-6">
+                                <span class="w-8 h-8 rounded-full bg-brand-cream flex items-center justify-center text-xs font-bold text-brand-primary">03</span>
+                                <div>
+                                    <h2 class="text-lg font-serif font-bold text-brand-dark">Location</h2>
+                                    <p class="text-xs text-brand-earth">Helps us ensure smooth deliveries.</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div class="sm:col-span-2">
+                                    <label for="address" class="block text-sm font-semibold text-brand-dark mb-1.5 ml-1">Address</label>
+                                    <textarea id="address" name="address" maxlength="500" placeholder="Enter your complete address...">{{ request.user.address|default:"" }}</textarea>
+                                </div>
+                                <div>
+                                    <label for="{{ form.city.id_for_label }}" class="block text-sm font-semibold text-brand-dark mb-1.5 ml-1">City</label>
+                                    {{ form.city }}
+                                    {% if form.city.errors %}
+                                        <div class="text-xs text-red-500 mt-1 ml-1">{% for error in form.city.errors %}{{ error }}{% endfor %}</div>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <label for="{{ form.state.id_for_label }}" class="block text-sm font-semibold text-brand-dark mb-1.5 ml-1">State</label>
+                                    {{ form.state }}
+                                    {% if form.state.errors %}
+                                        <div class="text-xs text-red-500 mt-1 ml-1">{% for error in form.state.errors %}{{ error }}{% endfor %}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="sm:col-span-2 sm:w-1/2 pr-2">
+                                    <label for="{{ form.pincode.id_for_label }}" class="block text-sm font-semibold text-brand-dark mb-1.5 ml-1">Pincode</label>
+                                    {{ form.pincode }}
+                                    {% if form.pincode.errors %}
+                                        <div class="text-xs text-red-500 mt-1 ml-1">{% for error in form.pincode.errors %}{{ error }}{% endfor %}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Section 4: About -->
+                        <section class="glass-card rounded-[2rem] p-6 md:p-8">
+                            <div class="flex items-center gap-3 border-b border-brand-sage pb-4 mb-6">
+                                <span class="w-8 h-8 rounded-full bg-brand-cream flex items-center justify-center text-xs font-bold text-brand-primary">04</span>
+                                <div>
+                                    <h2 class="text-lg font-serif font-bold text-brand-dark">About You</h2>
+                                    <p class="text-xs text-brand-earth">Tell us a little about yourself.</p>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="{{ form.bio.id_for_label }}" class="block text-sm font-semibold text-brand-dark mb-1.5 ml-1">Bio</label>
+                                {{ form.bio }}
+                                <p class="text-[0.65rem] text-brand-earth/70 mt-1 ml-1 text-right">Maximum 500 characters.</p>
+                                {% if form.bio.errors %}
+                                    <div class="text-xs text-red-500 mt-1 ml-1">{% for error in form.bio.errors %}{{ error }}{% endfor %}</div>
+                                {% endif %}
+                            </div>
+                        </section>
+
+                        <!-- Action Buttons -->
+                        <div class="flex flex-col-reverse sm:flex-row justify-end items-center gap-4 pt-4">
+                            <a href="{% url 'shop' %}" class="w-full sm:w-auto px-6 py-3 rounded-xl border border-brand-sage bg-white text-brand-dark font-bold text-sm text-center hover:bg-brand-sage/40 transition-colors">
+                                Cancel
+                            </a>
+                            <button type="submit" class="w-full sm:w-auto px-8 py-3 rounded-xl bg-brand-primary text-white font-bold text-sm shadow-md hover:bg-brand-dark hover:-translate-y-0.5 transition-all flex justify-center items-center gap-2">
+                                <i class="ph ph-floppy-disk"></i> Save Changes
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+ <!-- Footer -->
+    <footer class="bg-brand-dark text-brand-cream pt-16 pb-6 mt-auto border-t-4 border-brand-gold relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 mb-12">
+                <!-- Part 1: Brand Info -->
+                <div class="lg:col-span-1 flex flex-col items-start">
+                    <a href="{% url "shop" %}" class="flex items-center gap-3 mb-4 group">
+                        <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden">
+                            <img  src="{% static 'images/Logo.jpeg' %}" alt="Rajanna Dairy Farm Logo" class="w-[90%] h-[90%] object-contain mix-blend-multiply" onerror="this.src='https://placehold.co/100x100/145c3a/ffffff?text=Logo'">
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-serif text-xl font-bold tracking-wide text-brand-gold leading-tight">RAJANNA</span>
+                            <span class="font-sans text-[0.65rem] tracking-[0.2em] uppercase font-bold text-brand-cream/80">Dairy Farm</span>
+                        </div>
+                    </a>
+                    <p class="text-sm text-brand-cream/70 mb-6 leading-relaxed">
+                        Delivering pure, fresh, and natural dairy products straight from our farm to your home every morning.
+                    </p>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#1877F2] hover:text-white transition-all duration-300 hover:-translate-y-1"><i class="ph-fill ph-facebook-logo text-lg"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:text-white transition-all duration-300 hover:-translate-y-1" style="transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)'" onmouseout="this.style.background='rgba(244, 244, 236, 0.1)'"><i class="ph-fill ph-instagram-logo text-lg"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#1DA1F2] hover:text-white transition-all duration-300 hover:-translate-y-1"><i class="ph-fill ph-twitter-logo text-lg"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#FF0000] hover:text-white transition-all duration-300 hover:-translate-y-1"><i class="ph-fill ph-youtube-logo text-lg"></i></a>
+                    </div>
+                </div>
+
+                <!-- Part 2: About -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-info text-brand-gold text-xl"></i> About</h3>
+                    <ul class="space-y-3">
+                        <li><a href="{% url "contactus" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Contact Us</a></li>
+                        <li><a href="{% url "aboutus" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> About Us</a></li>
+                        <li><a href="{% url "ourstory" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Our Story</a></li>
+                        <li><a href="{% url 'subscribe' %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Subscribe</a></li>
+                    </ul>
+                </div>
+
+                <!-- Part 3: Platform -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-squares-four text-brand-gold text-xl"></i> Platform</h3>
+                    <ul class="space-y-3">
+                        <li><a href="{% url "shop" %}" class="text-sm text-brand-gold hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold transition-colors"></i> Shop</a></li>
+                        <li><a href="#" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Services</a></li>
+                        <li><a href="#" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Offers</a></li>
+                    </ul>
+                </div>
+
+                <!-- Part 4: Help -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-question text-brand-gold text-xl"></i> Help</h3>
+                    <ul class="space-y-3">
+                        <li><a href="{% url "terms_conditions" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Terms & Conditions</a></li>
+                        <li><a href="{% url "privacy_policy" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <!-- Part 5: Location -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-map-pin line text-brand-gold text-xl"></i> Location</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i class="ph-fill ph-map-pin text-brand-gold mt-0.5 text-lg"></i>
+                            <span class="text-sm text-brand-cream/70 leading-relaxed">123 Green Pastures Lane,<br>Dairy District, HYD 500001</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="ph-fill ph-phone text-brand-gold text-lg"></i>
+                            <span class="text-sm text-brand-cream/70">+91 98765 43210</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="ph-fill ph-envelope-simple text-brand-gold text-lg"></i>
+                            <span class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors cursor-pointer">hello@rajannadairy.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Copyright Bar -->
+            <div class="border-t border-brand-cream/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-sm text-brand-cream/60">
+                    &copy; <span id="year"></span> Rajanna Dairy Farms. <span class="text-brand-gold font-medium">Farm to home</span>
+                </div>
+                <div class="text-xs text-brand-cream/40 flex flex-wrap justify-center md:justify-end gap-3 md:gap-6 font-medium tracking-wide uppercase">
+                    <span>Fresh Milk</span><span class="hidden sm:inline text-brand-cream/20">•</span>
+                    <span>Pure Dairy</span><span class="hidden sm:inline text-brand-cream/20">•</span>
+                    <span>Natural Products</span><span class="hidden sm:inline text-brand-cream/20">•</span>
+                    <span>Organic Farming</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // Set current year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Mobile Menu Toggle Logic
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileIcon = document.getElementById('mobile-menu-icon');
+
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileIcon.classList.replace('ph-x', 'ph-list');
+            } else {
+                mobileIcon.classList.replace('ph-list', 'ph-x');
+            }
+        });
+    </script>
+    
+    <!-- Retained JS linking per request -->
+    <script src="{% static '/js/profile.js' %}"></script>
+</body>
+</html>

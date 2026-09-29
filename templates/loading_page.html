@@ -1,0 +1,315 @@
+
+
+
+
+
+
+
+
+
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en"  class="overflow-x-hidden">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rajanna Dairy Farm - Loading</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Rajanna Dairy Farm - Premium Farm to Home dairy products. Pure, fresh, and natural.">
+    <meta name="keywords" content="dairy farm, fresh milk, farm to home, pure milk, Rajanna Dairy Farm">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0f3d26',    // Deep green from the logo
+                            primary: '#145c3a', // Primary logo green
+                            light: '#2a7a50',   // Lighter accent green
+                            // New Sunset/Sunrise inspired colors replacing cream/white
+                            sunset: '#f4e0c3',  // Warm, light sunset base (replacing cream)
+                            gold: '#d4af37',    // Rich gold for accents
+                            orange: '#e88d4f',  // Sunrise orange
+                            peach: '#f0c6a5'    // Soft peach for gradients
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['Lato', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base Page Setup */
+        body {
+            margin: 0;
+            /* Changed to hidden to remove double scrollbars and lock the loading screen */
+            overflow: hidden; 
+            background-color: #f4e0c3; /* brand-sunset */
+        }
+
+        /* Custom Theme Scrollbar (Kept for fallback if content somehow overflows) */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(244, 224, 195, 0.5); /* Sunset base slightly transparent */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d4af37; /* Gold thumb */
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #145c3a; /* Green thumb on hover */
+        }
+
+        /* 1. Animated Gradient Background */
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animated-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: linear-gradient(135deg, rgba(244, 224, 195, 1) 0%, rgba(240, 198, 165, 0.6) 50%, rgba(232, 141, 79, 0.15) 100%);
+            background-size: 200% 200%;
+            animation: gradientFlow 15s ease infinite;
+        }
+
+        /* Subtle glowing orbs in background */
+        @keyframes floatOrb {
+            0% { transform: translateY(0px) scale(1); opacity: 0.3; }
+            50% { transform: translateY(-30px) scale(1.1); opacity: 0.6; }
+            100% { transform: translateY(0px) scale(1); opacity: 0.3; }
+        }
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            z-index: 2;
+        }
+        .orb-1 {
+            width: 300px; height: 300px;
+            background-color: rgba(212, 175, 55, 0.2); /* Gold orb */
+            top: -10%; left: -10%;
+            animation: floatOrb 8s ease-in-out infinite;
+        }
+        .orb-2 {
+            width: 400px; height: 400px;
+            background-color: rgba(232, 141, 79, 0.15); /* Orange orb */
+            bottom: -20%; right: -10%;
+            animation: floatOrb 12s ease-in-out infinite reverse;
+        }
+
+        /* 2. Logo Zoom Out Animation */
+        @keyframes zoomOutLogo {
+            0% { transform: scale(1.8); opacity: 0; filter: blur(12px); }
+            100% { transform: scale(1); opacity: 1; filter: blur(0px); }
+        }
+        .animate-zoom-out {
+            animation: zoomOutLogo 2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        /* 3. Orbit Animations */
+        @keyframes spinClockwise {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        @keyframes spinAntiClockwise {
+            from { transform: translate(-50%, -50%) rotate(360deg); }
+            to { transform: translate(-50%, -50%) rotate(0deg); }
+        }
+
+        .orbit-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* Adjusted orbit colors to match new theme */
+        .orbit-cw {
+            border: 1.5px dashed rgba(20, 92, 58, 0.3); /* Green */
+            animation: spinClockwise 14s linear infinite;
+        }
+
+        .orbit-ccw {
+            border: 1px solid rgba(212, 175, 55, 0.4); /* Gold */
+            animation: spinAntiClockwise 20s linear infinite;
+        }
+
+        .star {
+            position: absolute;
+            filter: drop-shadow(0 0 4px currentColor);
+        }
+
+        /* 4. Text & Bar Fade In */
+        .fade-up-enter {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 1.2s ease-out 1.5s forwards;
+        }
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 5. Page Transition Out */
+        #loading-screen {
+            transition: opacity 0.8s ease-in-out;
+        }
+        .fade-out {
+            opacity: 0 !important;
+        }
+    </style>
+</head>
+
+<body class="text-brand-dark font-sans antialiased">
+
+    <!-- LOADING SCREEN -->
+    <!-- Changed to exactly h-screen w-full to remove bottom empty space and strict overflow handling -->
+    <div id="loading-screen" class="relative z-50 flex flex-col items-center justify-center h-screen w-full overflow-hidden">
+
+        <!-- Animated Background & Orbs -->
+        <div class="animated-bg"></div>
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+
+        <!-- Center Stage: Logo and Orbits -->
+        <div class="relative flex items-center justify-center mb-8 z-20 w-48 h-48 md:w-64 md:h-64">
+
+            <!-- Orbit 1: Clockwise (Outer - Green dashed) -->
+            <div class="orbit-container orbit-cw w-48 h-48 md:w-64 md:h-64">
+                <!-- Gold Star -->
+                <svg class="star -top-3 right-12 w-6 h-6 animate-pulse text-brand-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z"/></svg>
+                <!-- Orange Star -->
+                <svg class="star -bottom-2 left-10 w-4 h-4 animate-pulse text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z"/></svg>
+                <!-- Primary Green Star -->
+                <svg class="star top-1/2 -left-3 w-5 h-5 animate-pulse text-brand-primary" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z"/></svg>
+                <!-- Extra Star 1 (New) -->
+                <svg class="star bottom-4 right-2 w-4 h-4 animate-pulse text-brand-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z"/></svg>
+                <!-- Extra Star 2 (New) -->
+                <svg class="star -top-2 left-1/4 w-3 h-3 animate-pulse text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z"/></svg>
+            </div>
+
+            <!-- Orbit 2: Anti-Clockwise (Inner - Gold solid) -->
+            <div class="orbit-container orbit-ccw w-36 h-36 md:w-48 md:h-48">
+                <!-- Green Star -->
+                <svg class="star bottom-2 right-4 w-5 h-5 opacity-90 text-brand-primary" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z"/></svg>
+                <!-- Orange Star -->
+                <svg class="star top-4 left-4 w-3 h-3 opacity-80 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z"/></svg>
+                <!-- Gold Star -->
+                <svg class="star top-1/2 -right-2 w-4 h-4 opacity-100 text-brand-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z"/></svg>
+                <!-- Extra Star 3 (New) -->
+                <svg class="star bottom-1/4 -left-2 w-4 h-4 opacity-90 text-brand-primary" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z"/></svg>
+                <!-- Extra Star 4 (New) -->
+                <svg class="star top-1/4 right-0 w-3 h-3 opacity-80 text-brand-gold" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z"/></svg>
+            </div>
+
+            <!-- The Logo -->
+            <div class="absolute inset-0 flex items-center justify-center">
+                <!-- Scaled down inner logo container -->
+                <div class="relative w-28 h-28 md:w-36 md:h-36 rounded-full bg-[#faedd6] border-4 border-brand-primary/20 shadow-2xl flex items-center justify-center animate-zoom-out z-30">
+                    <img src="{% static 'images/Logo.jpeg' %}" alt="Rajanna Dairy Farm Logo" class="w-[95%] h-[95%] object-contain rounded-full mix-blend-multiply">
+                </div>
+            </div>
+        </div>
+
+        <!-- Brand Name & Tagline -->
+        <div class="text-center z-20 px-6 mb-10 fade-up-enter flex flex-col items-center">
+            <h1 class="font-serif text-3xl md:text-4xl lg:text-5xl font-bold tracking-wide uppercase text-brand-primary mb-3 drop-shadow-sm">
+                Rajanna Dairy Farm
+            </h1>
+
+            <div class="flex items-center justify-center gap-3">
+                <div class="w-1.5 h-1.5 rotate-45 bg-brand-orange"></div>
+                <p class="font-sans text-xs md:text-sm tracking-[0.35em] uppercase font-bold text-brand-dark/80">Farm To Home</p>
+                <div class="w-1.5 h-1.5 rotate-45 bg-brand-orange"></div>
+            </div>
+        </div>
+
+        <!-- Loading Bar -->
+        <div class="w-96 md:w-[32rem] max-w-[90vw] z-20 fade-up-enter" style="animation-delay: 1.8s;">
+            <div class="flex justify-between items-end mb-3 px-1">
+                <span class="text-sm md:text-base font-bold uppercase tracking-widest text-brand-dark/70">Preparing Freshness</span>
+                <span class="text-base md:text-lg font-bold font-serif text-brand-primary" id="progress-text">0%</span>
+            </div>
+            <!-- Progress Track -->
+            <div class="h-5 md:h-6 w-full bg-black/10 rounded-full overflow-hidden shadow-inner border border-white/30">
+                <!-- Progress Fill -->
+                <div id="progress-bar" class="h-full bg-gradient-to-r from-brand-primary to-brand-gold rounded-full w-0 transition-all duration-[80ms] ease-out relative">
+                    <!-- Subtle shine effect -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-full"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            const loadingScreen = document.getElementById('loading-screen');
+
+            let currentProgress = 0;
+            // Total time for simulation (e.g., 4.5 seconds to allow animations to play out nicely)
+            const totalSimulationTimeMs = 4500; 
+            const updateIntervalMs = 50;
+
+            const averageIncrement = 100 / (totalSimulationTimeMs / updateIntervalMs);
+
+            const loadingInterval = setInterval(() => {
+                // Add randomization for realistic loading feel
+                const randomFactor = Math.random() * (averageIncrement * 2);
+                currentProgress += randomFactor;
+
+                if (currentProgress >= 100) {
+                    currentProgress = 100;
+                    clearInterval(loadingInterval);
+                    updateUI(100);
+
+                    // Delay slightly at 100% before redirecting
+                    setTimeout(redirectToHome, 800); 
+                } else {
+                    updateUI(currentProgress);
+                }
+            }, updateIntervalMs);
+
+            function updateUI(value) {
+                const displayValue = Math.floor(value);
+                progressBar.style.width = `${value}%`;
+                progressText.innerText = `${displayValue}%`;
+            }
+
+            function redirectToHome() {
+                // Fade out the current screen
+                loadingScreen.classList.add('fade-out');
+
+                // Wait for fade transition, then redirect
+                setTimeout(() => {
+                    // Redirect to home.html
+                    // Note: If running locally without a server, make sure home.html is in the same directory
+                    window.location.href = "{% url 'shop' %}";
+                }, 800); // matches the transition duration in CSS
+            }
+        });
+    </script>
+</body>
+</html>

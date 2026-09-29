@@ -1,0 +1,378 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    /* Native Django Admin Custom Styling Overrides */
+    
+    /* Global layout adjustments for the content block */
+    #content-main {
+        max-width: 1200px;
+        margin-top: 10px;
+    }
+
+    /* Main headings */
+    .page-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--body-fg, #333);
+        margin-bottom: 5px;
+        border-bottom: 1px solid var(--hairline-color, #eee);
+        padding-bottom: 10px;
+    }
+    
+    .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--body-fg, #333);
+        margin: 30px 0 10px 0;
+        background: var(--darkened-bg, #f8f8f8);
+        padding: 10px 15px;
+        border: 1px solid var(--hairline-color, #eee);
+        border-radius: 4px 4px 0 0;
+    }
+
+    /* Subtext under main title */
+    .date-indicator {
+        font-size: 14px;
+        color: var(--body-quiet-color, #666);
+        margin-bottom: 30px;
+    }
+    .date-indicator strong {
+        color: #145c3a; /* Custom brand green */
+    }
+
+    /* Customizing tables to match Django Admin native 'module' style perfectly */
+    .data-table-wrapper {
+        border: 1px solid var(--border-color, #ccc);
+        border-top: none;
+        border-radius: 0 0 4px 4px;
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .data-table th, .data-table td {
+        padding: 10px 15px;
+        text-align: left;
+        font-size: 13px;
+        border-bottom: 1px solid var(--hairline-color, #eee);
+    }
+    
+    /* Narrow layout tables (Overview style) */
+    .narrow-table {
+        max-width: 600px;
+    }
+    .narrow-table th {
+        width: 250px;
+    }
+
+    .data-table thead th {
+        font-weight: 600;
+        color: var(--body-quiet-color, #666);
+        background: var(--darkened-bg, #f8f8f8);
+        border-bottom: 1px solid var(--border-color, #ccc);
+    }
+
+    .data-table tbody tr {
+        background: var(--body-bg, #fff);
+    }
+    .data-table tbody tr.row1 { background: var(--body-bg, #fff); }
+    .data-table tbody tr.row2 { background: var(--darkened-bg, #f9f9f9); }
+
+    .data-table tbody tr:hover {
+        background-color: var(--selected-row, #eef7ee);
+    }
+
+    /* Status indicators */
+    .status-badge {
+        font-weight: bold;
+    }
+    .status-success { color: #28a745; }
+    .status-error { color: var(--error-fg, #ba2121); }
+    .status-warning { color: #ffc107; }
+
+    /* Action Buttons within tables */
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    
+    /* Using native Django button class, plus custom variations */
+    .btn-action {
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        color: #fff;
+        line-height: 1;
+        transition: opacity 0.2s;
+    }
+    .btn-action:hover { opacity: 0.85; }
+    .btn-green { background: #28a745; }
+    .btn-red { background: var(--error-fg, #ba2121); }
+
+    /* Empty State */
+    .empty-message {
+        padding: 30px;
+        background: var(--darkened-bg, #f8f8f8);
+        border: 1px solid var(--border-color, #ccc);
+        border-top: none;
+        border-radius: 0 0 4px 4px;
+        text-align: center;
+        color: var(--body-quiet-color, #666);
+        font-size: 14px;
+    }
+
+    /* Management Links */
+    .management-links {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px;
+        background: var(--darkened-bg, #f8f8f8);
+        border: 1px solid var(--border-color, #ccc);
+        border-top: none;
+        border-radius: 0 0 4px 4px;
+    }
+    .management-links a {
+        color: var(--link-fg, #447e9b);
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+    }
+    .management-links a:hover {
+        color: var(--link-hover-color, #036);
+        text-decoration: underline;
+    }
+    .management-links a::before {
+        content: "»";
+        margin-right: 8px;
+        font-size: 16px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+
+    <h1 class="page-title">Milk Operations</h1>
+
+    <p class="date-indicator">
+        Today's milk operations:
+        <strong>{{ today|date:"d M Y" }}</strong>
+    </p>
+
+    <!-- ==========================================
+         Subscription Overview
+    =========================================== -->
+    <h2 class="section-title">Subscription Overview</h2>
+    <div class="data-table-wrapper narrow-table">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Status</th>
+                    <th>Customers</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="row1">
+                    <td>Active</td>
+                    <td><strong>{{ active_subscriptions }}</strong></td>
+                </tr>
+                <tr class="row2">
+                    <td>Pending Approval</td>
+                    <td><strong>{{ pending_subscriptions }}</strong></td>
+                </tr>
+                <tr class="row1">
+                    <td>Paused</td>
+                    <td><strong>{{ paused_subscriptions }}</strong></td>
+                </tr>
+                <tr class="row2">
+                    <td>Cancelled</td>
+                    <td><strong>{{ cancelled_subscriptions }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ==========================================
+         Today's Delivery Overview
+    =========================================== -->
+    <h2 class="section-title">Today's Delivery Overview</h2>
+    <div class="data-table-wrapper narrow-table">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="row1">
+                    <td>Total Deliveries</td>
+                    <td><strong>{{ total_deliveries }}</strong></td>
+                </tr>
+                <tr class="row2">
+                    <td>Scheduled</td>
+                    <td><strong>{{ scheduled_deliveries }}</strong></td>
+                </tr>
+                <tr class="row1">
+                    <td>Delivered</td>
+                    <td class="status-success status-badge">{{ delivered_deliveries }}</td>
+                </tr>
+                <tr class="row2">
+                    <td>Missed</td>
+                    <td class="status-error status-badge">{{ missed_deliveries }}</td>
+                </tr>
+                <tr class="row1">
+                    <td>Skipped</td>
+                    <td><strong>{{ skipped_deliveries }}</strong></td>
+                </tr>
+                <tr class="row2">
+                    <td>Total Milk Quantity</td>
+                    <td><strong>{{ today_quantity }}</strong></td>
+                </tr>
+                <tr class="row1">
+                    <td>Total Delivery Value</td>
+                    <td class="status-success status-badge">₹{{ today_delivery_value }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ==========================================
+         Billing Overview
+    =========================================== -->
+    <h2 class="section-title">Current Month Billing</h2>
+    <div class="data-table-wrapper narrow-table">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="row1">
+                    <td>Total Billed</td>
+                    <td><strong>₹{{ total_billed }}</strong></td>
+                </tr>
+                <tr class="row2">
+                    <td>Total Cash Collected</td>
+                    <td class="status-success status-badge">₹{{ total_collected }}</td>
+                </tr>
+                <tr class="row1">
+                    <td>Total Pending</td>
+                    <td class="status-error status-badge">₹{{ total_pending }}</td>
+                </tr>
+                <tr class="row2">
+                    <td>Bills With Pending Amount</td>
+                    <td><strong>{{ pending_bills }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ==========================================
+         Today's Deliveries Table
+    =========================================== -->
+    <h2 class="section-title">Today's Deliveries</h2>
+    
+    {% if todays_deliveries %}
+        <div class="data-table-wrapper results">
+            <table class="data-table" id="result_list">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Phone</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Amount</th>
+                        <th>Address</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for delivery in todays_deliveries %}
+                    <tr class="{% cycle 'row1' 'row2' %}">
+                        <td>
+                            {% if delivery.subscription.user.full_name %}
+                                <strong>{{ delivery.subscription.user.full_name }}</strong>
+                            {% else %}
+                                <strong>{{ delivery.subscription.user.email }}</strong>
+                            {% endif %}
+                        </td>
+                        <td>{{ delivery.subscription.address.phone_number }}</td>
+                        <td>{{ delivery.subscription_item.product.name }}</td>
+                        <td>{{ delivery.quantity }}</td>
+                        <td><strong>₹{{ delivery.total_amount }}</strong></td>
+                        <td style="max-width: 250px; line-height: 1.4;">
+                            {{ delivery.subscription.address.address_line1 }}
+                            {% if delivery.subscription.address.address_line2 %}, {{ delivery.subscription.address.address_line2 }}{% endif %}
+                            <br>{{ delivery.subscription.address.city }} - {{ delivery.subscription.address.pincode }}
+                        </td>
+                        <td>
+                            <!-- Status Badges Logic -->
+                            {% if delivery.status == "delivered" %}
+                                <span class="status-success status-badge">Delivered</span>
+                            {% elif delivery.status == "missed" %}
+                                <span class="status-error status-badge">Missed</span>
+                            {% else %}
+                                <span>{{ delivery.get_status_display }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <!-- Actions Logic -->
+                            <div class="action-buttons">
+                                {% if delivery.status == "scheduled" %}
+                                    <form method="post" action="{% url 'admin:milk-delivery-mark-delivered' delivery.id %}" style="margin:0; display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn-action btn-green">Mark Delivered</button>
+                                    </form>
+                                    <form method="post" action="{% url 'admin:milk-delivery-mark-missed' delivery.id %}" style="margin:0; display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn-action btn-red">Mark Missed</button>
+                                    </form>
+                                {% elif delivery.status == "delivered" %}
+                                    <span class="status-success status-badge" style="font-size:18px;">✓</span>
+                                {% elif delivery.status == "missed" %}
+                                    <span class="status-error status-badge" style="font-size:18px;">✗</span>
+                                {% else %}
+                                    <span style="color: var(--body-quiet-color, #999);">-</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-message">
+            <p>No milk deliveries have been generated for today.</p>
+        </div>
+    {% endif %}
+
+    <!-- ==========================================
+         Admin Shortcuts
+    =========================================== -->
+    <h2 class="section-title">Milk Management Shortcuts</h2>
+    <div class="management-links">
+        <a href="{{ milk_delivery_url }}">Manage All Milk Deliveries</a>
+        <a href="{{ milk_subscription_url }}">Manage Milk Subscriptions</a>
+        <a href="{{ milk_bill_url }}">Manage Milk Bills</a>
+    </div>
+
+</div>
+{% endblock %}

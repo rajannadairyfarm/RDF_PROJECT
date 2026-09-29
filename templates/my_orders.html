@@ -1,0 +1,527 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en"  class="overflow-x-hidden">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | Rajanna Dairy Farm</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="View and track your past orders with Rajanna Dairy Farm.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons (Phosphor Icons) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0f3d26',    
+                            primary: '#145c3a', 
+                            light: '#2a7a50',   
+                            milk: '#fdfdfc',    
+                            cream: '#f4f4ec',   
+                            sage: '#e6ede9',    
+                            gold: '#d4af37',    
+                            earth: '#5c4a3d',   
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['Lato', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+            background-color: #59db8d; /* Deeper, muted earthy-sage base */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Custom Theme Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #f4f4ec; }
+        ::-webkit-scrollbar-thumb { background: #2a7a50; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #145c3a; }
+
+        /* Ambient background */
+        .ambient-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(135deg, #9fd58d 0%, #dce3de 50%, #d4af37 100%);
+        }
+        
+        @keyframes floatOrbSlow {
+            0% { transform: translateY(0px) scale(1); opacity: 0.15; }
+            50% { transform: translateY(-20px) scale(1.05); opacity: 0.3; }
+            100% { transform: translateY(0px) scale(1); opacity: 0.15; }
+        }
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: -1;
+        }
+
+        /* Entrance animation */
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-up {
+            animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Header Link Underline Animation */
+        .nav-link {
+            position: relative;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #145c3a; 
+            transform-origin: bottom right;
+            transition: transform 0.3s ease-out;
+        }
+        .nav-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* Glassmorphism utility */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="text-brand-dark font-sans antialiased relative selection:bg-brand-primary selection:text-brand-milk">
+
+    <!-- Ambient Background -->
+    <div class="ambient-bg"></div>
+    <div class="bg-orb w-96 h-96 bg-brand-light/20 top-0 left-0" style="animation: floatOrbSlow 12s ease-in-out infinite;"></div>
+    <div class="bg-orb w-[30rem] h-[30rem] bg-brand-gold/15 bottom-0 right-0" style="animation: floatOrbSlow 15s ease-in-out infinite reverse;"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-brand-sage shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo & Brand -->
+                <a href="{% url 'shop' %}" class="flex items-center gap-3 group">
+                    <div class="w-12 h-12 rounded-full bg-white border border-brand-sage shadow-sm flex items-center justify-center overflow-hidden transition-transform group-hover:scale-105">
+                        <img src="{% static 'images/Logo.jpeg' %}" alt="Rajanna Dairy Farm Logo" class="w-[90%] h-[90%] object-contain mix-blend-multiply" onerror="this.src='https://placehold.co/100x100/145c3a/ffffff?text=Logo'">
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-serif text-xl md:text-2xl font-bold tracking-wide text-brand-primary leading-tight">RAJANNA</span>
+                        <span class="font-sans text-[0.65rem] md:text-xs tracking-[0.2em] uppercase font-bold text-brand-dark/80">Dairy Farm</span>
+                    </div>
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <!-- Desktop Navigation -->
+<nav class="hidden lg:flex items-center gap-8">
+    {% if user.is_authenticated %}
+        <a href="{% url 'shop' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url 'aboutus' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url 'contactus' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url 'user_profile' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+        <a href="{% url 'orders' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-package"></i> My Orders
+        </a>  
+        <a href=" {% url 'addresses' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-map-pin"></i> My Address
+        </a>
+         <a href="{% url 'my-milk-subscription' %}" 
+   class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+    <i class="ph ph-crown"></i> My Subscriptions
+</a>
+
+    {% else %}
+        <!-- Active Link -->
+        <a href="{% url 'shop' %}" class="flex items-center gap-2 text-sm font-bold text-brand-primary bg-brand-sage/40 px-3 py-1.5 rounded-lg">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url "aboutus" %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url "contactus" %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url "user_profile" %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+       
+    {% endif %}
+</nav>
+
+
+                <!-- Mobile Menu Button & Cart -->
+                <div class="lg:hidden flex items-center gap-4">
+                    <a href="{% url "cart" %}" class="text-brand-dark hover:text-brand-primary transition-colors relative">
+                        <i class="ph ph-shopping-cart text-2xl"></i>
+                          <span class="absolute -top-1 -right-1 w-4 h-4 bg-brand-gold text-brand-dark text-[0.65rem] font-bold rounded-full flex items-center justify-center border border-white">{{ cart_count }}</span>
+                    </a>
+                    <button id="mobile-menu-btn" class="text-brand-dark hover:text-brand-primary focus:outline-none p-2 transition-colors">
+                        <i class="ph ph-list text-2xl" id="mobile-menu-icon"></i>
+                    </button>
+                </div>
+                
+                
+                <!-- Desktop Cart + Auth -->
+<div class="hidden lg:flex items-center gap-4">
+    <!-- Cart -->
+    <a href="{% url "cart" %}" class="w-10 h-10 rounded-full bg-brand-sage/50 flex items-center justify-center text-brand-dark hover:bg-brand-primary hover:text-white transition-all relative">
+        <i class="ph ph-shopping-cart text-xl"></i>
+        <span class="absolute -top-1 -right-1 w-4 h-4 bg-brand-gold text-brand-dark text-[0.65rem] font-bold rounded-full flex items-center justify-center border border-white">{{ cart_count }}</span>
+    </a>
+
+    {% if user.is_authenticated %}
+        <!-- Logout with red icon -->
+        <a href="{% url "logout" %}" class="flex items-center gap-2 text-sm font-bold text-red-600 hover:text-red-800 transition-colors">
+            <i class="ph ph-sign-out text-lg"></i> Logout
+        </a>
+    {% else %}
+        <!-- Login highlighted -->
+<a href="{% url "login" %}" 
+   class="flex items-center gap-2 text-sm font-bold text-white bg-brand-primary px-3 py-1.5 rounded-lg shadow-md hover:bg-brand-dark transition-all">
+   Login
+</a>
+
+
+    {% endif %}
+</div>
+
+            </div>
+        </div>
+
+      
+
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-brand-sage shadow-xl absolute w-full left-0 origin-top">
+    <div class="px-4 pt-4 pb-6 space-y-2 flex flex-col max-w-7xl mx-auto">
+        {% if user.is_authenticated %}
+        <a href="{% url 'shop' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl transition-colors">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url "aboutus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url "contactus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url "user_profile" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+
+
+
+               <a href="{% url "orders" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-info"></i> My Orders
+        </a>
+      
+        <a href="{% url "addresses" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> My Addesses
+        </a>
+          <a href="{% url "my-milk-subscription" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> My Subscriptions
+        </a>
+          <a href="{% url "logout" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-red-600 bg-red-50 rounded-xl transition-colors">
+                <i class="ph ph-sign-out"></i> Logout
+            </a>
+ {% else %}
+  <a href="{% url 'shop' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl transition-colors">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url "aboutus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url "contactus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url "user_profile" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+       
+        
+           
+      
+            <a href="{% url "login" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl transition-colors">
+                Login
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+    </header>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Main Content Area -->
+    <main class="flex-grow w-full relative z-10 py-10 md:py-16 px-4 sm:px-6 lg:px-8">
+        
+        <div class="max-w-4xl mx-auto">
+            
+            <!-- Page Header -->
+            <header class="mb-8 md:mb-10 animate-slide-up flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white border border-brand-sage shadow-sm flex items-center justify-center">
+                        <i class="ph-fill ph-receipt text-2xl md:text-3xl text-brand-primary"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl md:text-4xl font-serif font-extrabold text-brand-dark leading-tight">My Orders</h1>
+                        <p class="text-sm md:text-base text-brand-earth font-medium">Track and view your past dairy purchases.</p>
+                    </div>
+                </div>
+                <a href="{% url 'shop' %}" class="inline-flex items-center text-sm font-bold text-brand-earth hover:text-brand-primary transition-colors group">
+                    <i class="ph-bold ph-storefront mr-1.5"></i> Continue Shopping
+                </a>
+            </header>
+
+           {% if orders %}
+                <div class="space-y-4 animate-slide-up" style="animation-delay: 0.1s;">
+                    {% for order in orders %}
+                        <article class="glass-card rounded-[1.5rem] p-5 sm:p-6 border-l-4 border-brand-primary relative overflow-hidden transition-all hover:shadow-[0_4px_20px_rgba(20,92,58,0.06)]">
+                            
+                            <!-- Top Row: Order Number & Date -->
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4 border-b border-brand-sage pb-3">
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-[0.65rem] font-bold uppercase tracking-widest text-brand-earth/80">Order</span>
+                                    <h2 class="text-lg font-serif font-bold text-brand-dark leading-none">#{{ order.order_number }}</h2>
+                                </div>
+                                <div class="flex items-center gap-1.5 text-[0.7rem] font-bold text-brand-earth">
+                                    <i class="ph-fill ph-calendar text-brand-primary"></i> 
+                                    {{ order.created_at|date:"d M Y, h:i A" }}
+                                </div>
+                            </div>
+
+                            <!-- Middle Row: Compact Info Grid -->
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+                                <div>
+                                    <span class="block text-[0.6rem] font-bold uppercase tracking-widest text-brand-earth/70 mb-0.5">Status</span>
+                                    <span class="inline-flex items-center px-2 py-0.5 bg-brand-sage text-brand-dark font-bold text-[0.7rem] rounded-md">{{ order.get_status_display }}</span>
+                                </div>
+                                <div>
+                                    <span class="block text-[0.6rem] font-bold uppercase tracking-widest text-brand-earth/70 mb-0.5">Payment</span>
+                                    <span class="text-[0.75rem] font-bold text-brand-dark block truncate">{{ order.get_payment_method_display }}</span>
+                                </div>
+                                <div>
+                                    <span class="block text-[0.6rem] font-bold uppercase tracking-widest text-brand-earth/70 mb-0.5">Items</span>
+                                    <span class="text-[0.75rem] font-bold text-brand-dark block">{{ order.items.count }} Item{{ order.items.count|pluralize }}</span>
+                                </div>
+                                <div>
+                                    <span class="block text-[0.6rem] font-bold uppercase tracking-widest text-brand-earth/70 mb-0.5">Total</span>
+                                    <span class="text-sm font-bold text-brand-primary block leading-none">₹{{ order.total_amount|floatformat:2 }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Bottom Row: Actions (Combined into one row) -->
+                            <div class="flex flex-col sm:flex-row justify-between items-center pt-3 border-t border-dashed border-brand-sage/60 gap-3">
+                                <span class="text-[0.7rem] text-brand-earth font-bold flex items-center gap-1">
+                                    <i class="ph-fill ph-check-circle text-green-600"></i> {{ order.get_payment_status_display }}
+                                </span>
+                                
+                                <div class="flex gap-2 w-full sm:w-auto">
+                                    <a href="{% url 'order-tracking' order.order_number %}" class="flex-1 sm:flex-none inline-flex items-center justify-center px-4 py-2 bg-white border border-brand-sage hover:border-brand-primary hover:text-brand-primary text-brand-dark rounded-lg text-xs font-bold transition-all shadow-sm group">
+                                        <i class="ph-bold ph-map-pin-line mr-1.5 text-sm"></i> Track
+                                    </a>
+                                    <a href="{% url 'order-detail' order.order_number %}" class="flex-1 sm:flex-none inline-flex items-center justify-center px-4 py-2 bg-brand-primary hover:bg-brand-dark text-white rounded-lg text-xs font-bold transition-all shadow-sm group">
+                                        Details <i class="ph-bold ph-arrow-right ml-1.5 text-sm transition-transform group-hover:translate-x-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </article>
+                    {% endfor %}
+                </div>
+
+            {% else %}
+                <!-- Empty Orders State -->
+                <div class="glass-card rounded-[2rem] p-12 md:p-16 text-center animate-slide-up border-t-4 border-brand-gold shadow-lg" style="animation-delay: 0.1s;">
+                    <div class="w-20 h-20 mx-auto bg-brand-cream border-2 border-brand-sage rounded-full flex items-center justify-center mb-5 shadow-inner">
+                        <i class="ph-fill ph-package text-4xl text-brand-earth/40"></i>
+                    </div>
+                    <h2 class="text-2xl font-serif font-bold text-brand-dark mb-3">No orders yet</h2>
+                    <p class="text-sm text-brand-earth font-medium mb-8 max-w-sm mx-auto">
+                        You haven't placed any orders yet. Explore our farm-fresh dairy and place your first order today!
+                    </p>
+                    <a href="{% url 'shop' %}" class="inline-flex items-center justify-center px-8 py-3.5 bg-brand-primary hover:bg-brand-dark text-white rounded-xl text-base font-bold transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 group">
+                        <i class="ph-bold ph-storefront mr-2"></i> Start Shopping
+                    </a>
+                </div>
+            {% endif %}
+
+        </div>
+    </main>
+ <!-- Footer -->
+    <footer class="bg-brand-dark text-brand-cream pt-16 pb-6 mt-auto border-t-4 border-brand-gold relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 mb-12">
+                <!-- Part 1: Brand Info -->
+                <div class="lg:col-span-1 flex flex-col items-start">
+                    <a href="{% url "shop" %}" class="flex items-center gap-3 mb-4 group">
+                        <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden">
+                            <img  src="{% static 'images/Logo.jpeg' %}" alt="Rajanna Dairy Farm Logo" class="w-[90%] h-[90%] object-contain mix-blend-multiply" onerror="this.src='https://placehold.co/100x100/145c3a/ffffff?text=Logo'">
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-serif text-xl font-bold tracking-wide text-brand-gold leading-tight">RAJANNA</span>
+                            <span class="font-sans text-[0.65rem] tracking-[0.2em] uppercase font-bold text-brand-cream/80">Dairy Farm</span>
+                        </div>
+                    </a>
+                    <p class="text-sm text-brand-cream/70 mb-6 leading-relaxed">
+                        Delivering pure, fresh, and natural dairy products straight from our farm to your home every morning.
+                    </p>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#1877F2] hover:text-white transition-all duration-300 hover:-translate-y-1"><i class="ph-fill ph-facebook-logo text-lg"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:text-white transition-all duration-300 hover:-translate-y-1" style="transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)'" onmouseout="this.style.background='rgba(244, 244, 236, 0.1)'"><i class="ph-fill ph-instagram-logo text-lg"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#1DA1F2] hover:text-white transition-all duration-300 hover:-translate-y-1"><i class="ph-fill ph-twitter-logo text-lg"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#FF0000] hover:text-white transition-all duration-300 hover:-translate-y-1"><i class="ph-fill ph-youtube-logo text-lg"></i></a>
+                    </div>
+                </div>
+
+                <!-- Part 2: About -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-info text-brand-gold text-xl"></i> About</h3>
+                    <ul class="space-y-3">
+                        <li><a href="{% url "contactus" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Contact Us</a></li>
+                        <li><a href="{% url "aboutus" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> About Us</a></li>
+                        <li><a href="{% url "ourstory" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Our Story</a></li>
+                        <li><a href="{% url 'subscribe' %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Subscribe</a></li>
+                    </ul>
+                </div>
+
+                <!-- Part 3: Platform -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-squares-four text-brand-gold text-xl"></i> Platform</h3>
+                    <ul class="space-y-3">
+                        <li><a href="{% url "shop" %}" class="text-sm text-brand-gold hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold transition-colors"></i> Shop</a></li>
+                        <li><a href="#" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Services</a></li>
+                        <li><a href="#" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Offers</a></li>
+                    </ul>
+                </div>
+
+                <!-- Part 4: Help -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-question text-brand-gold text-xl"></i> Help</h3>
+                    <ul class="space-y-3">
+                        <li><a href="{% url "terms_conditions" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Terms & Conditions</a></li>
+                        <li><a href="{% url "privacy_policy" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <!-- Part 5: Location -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-map-pin line text-brand-gold text-xl"></i> Location</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i class="ph-fill ph-map-pin text-brand-gold mt-0.5 text-lg"></i>
+                            <span class="text-sm text-brand-cream/70 leading-relaxed">123 Green Pastures Lane,<br>Dairy District, HYD 500001</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="ph-fill ph-phone text-brand-gold text-lg"></i>
+                            <span class="text-sm text-brand-cream/70">+91 98765 43210</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="ph-fill ph-envelope-simple text-brand-gold text-lg"></i>
+                            <span class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors cursor-pointer">hello@rajannadairy.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Copyright Bar -->
+            <div class="border-t border-brand-cream/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-sm text-brand-cream/60">
+                    &copy; <span id="year"></span> Rajanna Dairy Farms. <span class="text-brand-gold font-medium">Farm to home</span>
+                </div>
+                <div class="text-xs text-brand-cream/40 flex flex-wrap justify-center md:justify-end gap-3 md:gap-6 font-medium tracking-wide uppercase">
+                    <span>Fresh Milk</span><span class="hidden sm:inline text-brand-cream/20">•</span>
+                    <span>Pure Dairy</span><span class="hidden sm:inline text-brand-cream/20">•</span>
+                    <span>Natural Products</span><span class="hidden sm:inline text-brand-cream/20">•</span>
+                    <span>Organic Farming</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+    
+    <script>
+        // Set current year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Mobile Menu Toggle Logic
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileIcon = document.getElementById('mobile-menu-icon');
+
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileIcon.classList.replace('ph-x', 'ph-list');
+            } else {
+                mobileIcon.classList.replace('ph-list', 'ph-x');
+            }
+        });
+    </script>
+</body>
+</html>

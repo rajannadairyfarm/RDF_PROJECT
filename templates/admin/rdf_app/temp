@@ -1,0 +1,999 @@
+{% comment %} 
+{% extends "admin/base_site.html" %}
+
+{% load static %}
+{% load admin_dashboard %}
+
+{% block content %}
+
+{% dashboard_stats as stats %}
+{% recent_orders 8 as recent_orders_list %}
+{% low_stock_products 8 as low_stock_list %}
+{% out_of_stock_products 8 as out_of_stock_list %}
+{% best_selling_products 10 as best_selling_list %}
+{% order_status_summary as order_status_list %}
+{% customer_stats as customer_data %}
+
+<div class="container-fluid">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="row mb-3">
+        <div class="col-12">
+
+            <div class="card">
+                <div class="card-body">
+
+                    <h2 class="mb-1">
+                        Rajanna Dairy Farm
+                    </h2>
+
+                    <p class="text-muted mb-0">
+                        E-commerce administration dashboard
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- =====================================================
+         PRIMARY STATISTICS
+    ====================================================== -->
+
+    <div class="row">
+
+        <!-- TOTAL ORDERS -->
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card">
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Total Orders
+                    </h6>
+
+                    <h2>
+                        {{ stats.total_orders }}
+                    </h2>
+
+                    <small class="text-muted">
+                        {{ stats.today_orders }} today
+                    </small>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- TOTAL SALES -->
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card">
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Total Sales
+                    </h6>
+
+                    <h2>
+                        ₹{{ stats.total_sales|floatformat:2 }}
+                    </h2>
+
+                    <small class="text-muted">
+                        ₹{{ stats.today_sales|floatformat:2 }} today
+                    </small>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- CUSTOMERS -->
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card">
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Customers
+                    </h6>
+
+                    <h2>
+                        {{ stats.total_customers }}
+                    </h2>
+
+                    <small class="text-muted">
+                        Registered customers
+                    </small>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- PRODUCTS -->
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card">
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Products
+                    </h6>
+
+                    <h2>
+                        {{ stats.total_products }}
+                    </h2>
+
+                    <small class="text-muted">
+                        Active products
+                    </small>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ORDER STATUS
+    ====================================================== -->
+
+    <div class="row mt-3">
+
+        <!-- PENDING -->
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+
+            <div class="card">
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Pending Orders
+                    </h6>
+
+                    <h2>
+                        {{ stats.pending_orders }}
+                    </h2>
+
+                    <a href="{% url 'admin:rdf_app_order_changelist' %}?status=pending">
+                        View pending orders
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- PROCESSING -->
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+
+            <div class="card">
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Processing
+                    </h6>
+
+                    <h2>
+                        {{ stats.processing_orders }}
+                    </h2>
+
+                    <a href="{% url 'admin:rdf_app_order_changelist' %}?status=processing">
+                        View processing
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- DELIVERED -->
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+
+            <div class="card">
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Delivered
+                    </h6>
+
+                    <h2>
+                        {{ stats.delivered_orders }}
+                    </h2>
+
+                    <a href="{% url 'admin:rdf_app_order_changelist' %}?status=delivered">
+                        View delivered
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- LOW STOCK -->
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+
+            <div class="card">
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Low Stock
+                    </h6>
+
+                    <h2>
+                        {{ stats.low_stock_products }}
+                    </h2>
+
+                    <a href="{% url 'admin:rdf_app_product_changelist' %}">
+                        Manage inventory
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         RECENT ORDERS
+    ====================================================== -->
+
+    <div class="row mt-4">
+
+        <div class="col-lg-8">
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h3 class="card-title">
+                        Recent Orders
+                    </h3>
+
+                </div>
+
+                <div class="card-body p-0">
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover mb-0">
+
+                            <thead>
+
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Customer</th>
+                                    <th>Total</th>
+                                    <th>Payment</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% for order in recent_orders_list %}
+
+                                <tr>
+
+                                    <td>
+                                        <a href="{% url 'admin:rdf_app_order_change' order.id %}">
+                                            {{ order.order_number }}
+                                        </a>
+                                    </td>
+
+                                    <td>
+                                        {{ order.full_name }}
+                                    </td>
+
+                                    <td>
+                                        ₹{{ order.total_amount|floatformat:2 }}
+                                    </td>
+
+                                    <td>
+                                        {{ order.get_payment_method_display }}
+                                    </td>
+
+                                    <td>
+                                        {{ order.get_status_display }}
+                                    </td>
+
+                                    <td>
+                                        {{ order.created_at|date:"d M Y, h:i A" }}
+                                    </td>
+
+                                </tr>
+
+                                {% empty %}
+
+                                <tr>
+                                    <td colspan="6" class="text-center">
+                                        No orders yet.
+                                    </td>
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <div class="card-footer text-right">
+
+                    <a
+                        href="{% url 'admin:rdf_app_order_changelist' %}"
+                        class="btn btn-primary"
+                    >
+                        View All Orders
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             LOW STOCK PRODUCTS
+        ================================================== -->
+
+        <div class="col-lg-4">
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h3 class="card-title">
+                        Low Stock Products
+                    </h3>
+
+                </div>
+
+                <div class="card-body p-0">
+
+                    <div class="list-group list-group-flush">
+
+                        {% for product in low_stock_list %}
+
+                        <a
+                            href="{% url 'admin:rdf_app_product_change' product.id %}"
+                            class="list-group-item list-group-item-action"
+                        >
+
+                            <div class="d-flex justify-content-between">
+
+                                <strong>
+                                    {{ product.name }}
+                                </strong>
+
+                                <span>
+                                    {{ product.stock_quantity }}
+                                    {{ product.unit }}
+                                </span>
+
+                            </div>
+
+                            <small class="text-muted">
+                                Threshold:
+                                {{ product.low_stock_threshold }}
+                                {{ product.unit }}
+                            </small>
+
+                        </a>
+
+                        {% empty %}
+
+                        <div class="p-3 text-center">
+                            No low-stock products.
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+                <div class="card-footer">
+
+                    <a
+                        href="{% url 'admin:rdf_app_product_changelist' %}"
+                        class="btn btn-primary btn-block"
+                    >
+                        Manage Products
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row mt-4">
+
+    <div class="col-12">
+
+        <div class="card">
+
+            <div class="card-header">
+                <h3 class="card-title">
+                    Sales Overview
+                </h3>
+            </div>
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-lg-3 col-md-6">
+                        <h6 class="text-muted">
+                            Today
+                        </h6>
+
+                        <h3>
+                            ₹{{ stats.today_sales|floatformat:2 }}
+                        </h3>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <h6 class="text-muted">
+                            Last 7 Days
+                        </h6>
+
+                        <h3>
+                            ₹{{ stats.week_sales|floatformat:2 }}
+                        </h3>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <h6 class="text-muted">
+                            This Month
+                        </h6>
+
+                        <h3>
+                            ₹{{ stats.month_sales|floatformat:2 }}
+                        </h3>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <h6 class="text-muted">
+                            This Year
+                        </h6>
+
+                        <h3>
+                            ₹{{ stats.year_sales|floatformat:2 }}
+                        </h3>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row mt-4">
+
+    <div class="col-lg-6">
+
+        <div class="card">
+
+            <div class="card-header">
+                <h3 class="card-title">
+                    Order Status
+                </h3>
+            </div>
+
+            <div class="card-body p-0">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover mb-0">
+
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Orders</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for item in order_status_list %}
+
+                            <tr>
+
+                                <td>
+                                    {{ item.label }}
+                                </td>
+
+                                <td>
+                                    <strong>
+                                        {{ item.count }}
+                                    </strong>
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CUSTOMER ANALYTICS -->
+
+    <div class="col-lg-6">
+
+        <div class="card">
+
+            <div class="card-header">
+                <h3 class="card-title">
+                    Customer Overview
+                </h3>
+            </div>
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-6">
+
+                        <h6 class="text-muted">
+                            Total Customers
+                        </h6>
+
+                        <h2>
+                            {{ customer_data.total_customers }}
+                        </h2>
+
+                    </div>
+
+                    <div class="col-6">
+
+                        <h6 class="text-muted">
+                            Customers With Orders
+                        </h6>
+
+                        <h2>
+                            {{ customer_data.customers_with_orders }}
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<div class="row mt-4">
+
+    <div class="col-12">
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h3 class="card-title">
+                    Best Selling Products
+                </h3>
+
+            </div>
+
+            <div class="card-body p-0">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover mb-0">
+
+                        <thead>
+
+                            <tr>
+                                <th>Product</th>
+                                <th>SKU</th>
+                                <th>Unit</th>
+                                <th>Quantity Sold</th>
+                                <th>Revenue</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {% for product in best_selling_list %}
+
+                            <tr>
+
+                                <td>
+                                    {{ product.product_name }}
+                                </td>
+
+                                <td>
+                                    {{ product.sku }}
+                                </td>
+
+                                <td>
+                                    {{ product.unit }}
+                                </td>
+
+                                <td>
+                                    <strong>
+                                        {{ product.total_quantity }}
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    ₹{{ product.total_revenue|floatformat:2 }}
+                                </td>
+
+                            </tr>
+
+                            {% empty %}
+
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    No sales data available.
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row mt-4">
+
+    <div class="col-lg-6">
+
+        <div class="card">
+
+            <div class="card-header">
+                <h3 class="card-title">
+                    Low Stock Products
+                </h3>
+            </div>
+
+            <div class="card-body p-0">
+
+                <div class="list-group list-group-flush">
+
+                    {% for product in low_stock_list %}
+
+                    <a
+                        href="{% url 'admin:rdf_app_product_change' product.id %}"
+                        class="list-group-item list-group-item-action"
+                    >
+
+                        <div class="d-flex justify-content-between">
+
+                            <strong>
+                                {{ product.name }}
+                            </strong>
+
+                            <span>
+                                {{ product.stock_quantity }}
+                                {{ product.unit }}
+                            </span>
+
+                        </div>
+
+                        <small class="text-muted">
+
+                            Threshold:
+                            {{ product.low_stock_threshold }}
+                            {{ product.unit }}
+
+                        </small>
+
+                    </a>
+
+                    {% empty %}
+
+                    <div class="p-3 text-center">
+                        No low-stock products.
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+        <div class="col-lg-6">
+
+        <div class="card">
+
+            <div class="card-header">
+                <h3 class="card-title">
+                    Out of Stock
+                </h3>
+            </div>
+
+            <div class="card-body p-0">
+
+                <div class="list-group list-group-flush">
+
+                    {% for product in out_of_stock_list %}
+
+                    <a
+                        href="{% url 'admin:rdf_app_product_change' product.id %}"
+                        class="list-group-item list-group-item-action"
+                    >
+
+                        <div class="d-flex justify-content-between">
+
+                            <strong>
+                                {{ product.name }}
+                            </strong>
+
+                            <span>
+                                0 {{ product.unit }}
+                            </span>
+
+                        </div>
+
+                        <small class="text-muted">
+                            {{ product.category.name }}
+                        </small>
+
+                    </a>
+
+                    {% empty %}
+
+                    <div class="p-3 text-center">
+                        No products are currently out of stock.
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+    <!-- =====================================================
+         QUICK MANAGEMENT
+    ====================================================== -->
+
+    <div class="row mt-3">
+
+        <div class="col-12">
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h3 class="card-title">
+                        Quick Management
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <a
+                        href="{% url 'admin:rdf_app_order_changelist' %}"
+                        class="btn btn-primary mr-2 mb-2"
+                    >
+                        Orders
+                    </a>
+
+                    <a
+                        href="{% url 'admin:rdf_app_product_changelist' %}"
+                        class="btn btn-primary mr-2 mb-2"
+                    >
+                        Products
+                    </a>
+
+                    <a
+                        href="{% url 'admin:rdf_app_category_changelist' %}"
+                        class="btn btn-primary mr-2 mb-2"
+                    >
+                        Categories
+                    </a>
+
+                    <a
+                        href="{% url 'admin:rdf_app_user_changelist' %}"
+                        class="btn btn-primary mr-2 mb-2"
+                    >
+                        Customers
+                    </a>
+
+                    <a
+                        href="{% url 'admin:rdf_app_address_changelist' %}"
+                        class="btn btn-primary mr-2 mb-2"
+                    >
+                        Addresses
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %} {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@login_required
+@require_POST
+def address_delete(request, address_id):
+
+    address = (
+        Address.objects
+        .filter(
+            id=address_id,
+            user=request.user
+        )
+        .first()
+    )
+
+    if not address:
+
+        messages.error(
+            request,
+            "Address not found."
+        )
+
+        return redirect("addresses")
+
+    was_default = address.is_default
+
+    with transaction.atomic():
+
+        address.delete()
+
+        # If deleted address was default,
+        # choose another address as default.
+        if was_default:
+
+            next_address = (
+                Address.objects
+                .filter(
+                    user=request.user
+                )
+                .order_by(
+                    "-created_at"
+                )
+                .first()
+            )
+
+            if next_address:
+
+                next_address.is_default = True
+
+                next_address.save(
+                    update_fields=[
+                        "is_default",
+                        "updated_at"
+                    ]
+                )
+
+    messages.success(
+        request,
+        "Address deleted successfully."
+    )
+
+    return redirect("addresses")
+
+
+
+ProtectedError at /addresses/5/delete/
+("Cannot delete some instances of model 'Address' because they are referenced through protected foreign keys: 'MilkSubscription.address'.", {<MilkSubscription: RDFSUB-09DD7DF3FB97>})
+Request Method:	POST
+Request URL:	http://127.0.0.1:8000/addresses/5/delete/
+Django Version:	4.2.30
+Exception Type:	ProtectedError
+Exception Value:	
+("Cannot delete some instances of model 'Address' because they are referenced through protected foreign keys: 'MilkSubscription.address'.", {<MilkSubscription: RDFSUB-09DD7DF3FB97>})
+Exception Location:	C:\Users\akula\OneDrive\Desktop\Rajanna_DairyFarm\venv\Lib\site-packages\django\db\models\deletion.py, line 355, in collect
+Raised during:	rdf_app.views.address_delete
+Python Executable:	C:\Users\akula\OneDrive\Desktop\Rajanna_DairyFarm\venv\Scripts\python.exe
+Python Version:	3.13.5
+Python Path:	
+['C:\\Users\\akula\\OneDrive\\Desktop\\Rajanna_DairyFarm\\rdf_project',
+ 'C:\\Python313\\python313.zip',
+ 'C:\\Python313\\DLLs',
+ 'C:\\Python313\\Lib',
+ 'C:\\Python313',
+ 'C:\\Users\\akula\\OneDrive\\Desktop\\Rajanna_DairyFarm\\venv',
+ 'C:\\Users\\akula\\OneDrive\\Desktop\\Rajanna_DairyFarm\\venv\\Lib\\site-packages']
+Server time:	Thu, 10 Sep 2026 15:02:32 +0000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Task shedular......**************

@@ -1,0 +1,1329 @@
+{% comment %} 
+
+
+
+
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscribe to Fresh Milk | Rajanna Dairy Farm</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Start your daily farm-fresh milk delivery subscription with Rajanna Dairy Farm.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons (Phosphor Icons for clean UI) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0f3d26',    
+                            primary: '#145c3a', 
+                            light: '#2a7a50',   
+                            milk: '#fdfdfc',    
+                            cream: '#f4f4ec',   
+                            sage: '#e6ede9',    
+                            gold: '#d4af37',    
+                            earth: '#5c4a3d',   
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['Lato', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+            background-color: #59db8d; /* Deeper, muted earthy-sage base */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Custom Theme Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #f4f4ec; }
+        ::-webkit-scrollbar-thumb { background: #2a7a50; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #145c3a; }
+
+        /* Ambient background */
+        .ambient-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(135deg, #9fd58d 0%, #dce3de 50%, #d4af37 100%);
+        }
+        
+        @keyframes floatOrbSlow {
+            0% { transform: translateY(0px) scale(1); opacity: 0.15; }
+            50% { transform: translateY(-20px) scale(1.05); opacity: 0.3; }
+            100% { transform: translateY(0px) scale(1); opacity: 0.15; }
+        }
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: -1;
+        }
+
+        /* Animations */
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-up {
+            animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Glassmorphism utility */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Custom Radio Card Styles for Products & Addresses */
+        .radio-card-input:checked + .radio-card-content {
+            border-color: #145c3a; /* brand-primary */
+            background-color: rgba(20, 92, 58, 0.03); /* brand-primary very light */
+            box-shadow: 0 4px 12px rgba(20, 92, 58, 0.08);
+        }
+        .radio-card-input:checked + .radio-card-content .radio-check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        /* Custom form inputs */
+        select, input[type="date"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%235c4a3d' viewBox='0 0 256 256'%3E%3Cpath d='M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            opacity: 0; /* Hide default calendar icon but keep it clickable */
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="text-brand-dark font-sans antialiased relative selection:bg-brand-primary selection:text-brand-milk">
+
+    <!-- Ambient Background -->
+    <div class="ambient-bg"></div>
+    <div class="bg-orb w-96 h-96 bg-brand-light/20 top-0 left-0" style="animation: floatOrbSlow 12s ease-in-out infinite;"></div>
+    <div class="bg-orb w-[30rem] h-[30rem] bg-brand-gold/15 bottom-0 right-0" style="animation: floatOrbSlow 15s ease-in-out infinite reverse;"></div>
+
+
+
+
+
+
+
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-brand-sage shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo & Brand -->
+                <a href="{% url 'shop' %}" class="flex items-center gap-3 group">
+                    <div class="w-12 h-12 rounded-full bg-white border border-brand-sage shadow-sm flex items-center justify-center overflow-hidden transition-transform group-hover:scale-105">
+                        <img src="{% static 'images/Logo.jpeg' %}" alt="Rajanna Dairy Farm Logo" class="w-[90%] h-[90%] object-contain mix-blend-multiply" onerror="this.src='https://placehold.co/100x100/145c3a/ffffff?text=Logo'">
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-serif text-xl md:text-2xl font-bold tracking-wide text-brand-primary leading-tight">RAJANNA</span>
+                        <span class="font-sans text-[0.65rem] md:text-xs tracking-[0.2em] uppercase font-bold text-brand-dark/80">Dairy Farm</span>
+                    </div>
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <!-- Desktop Navigation -->
+<nav class="hidden lg:flex items-center gap-8">
+    {% if user.is_authenticated %}
+        <a href="{% url 'shop' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url 'aboutus' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url 'contactus' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url 'user_profile' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+        <a href="{% url 'orders' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-package"></i> My Orders
+        </a>  
+        <a href=" {% url 'addresses' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-map-pin"></i> My Address
+        </a>
+         <a href="{% url 'my-milk-subscription' %}" 
+   class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+    <i class="ph ph-crown"></i> My Subscriptions
+</a>
+
+    {% else %}
+        <!-- Active Link -->
+        <a href="{% url 'shop' %}" class="flex items-center gap-2 text-sm font-bold text-brand-primary bg-brand-sage/40 px-3 py-1.5 rounded-lg">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url "aboutus" %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url "contactus" %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url "user_profile" %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+       
+    {% endif %}
+</nav>
+
+
+                <!-- Mobile Menu Button & Cart -->
+                <div class="lg:hidden flex items-center gap-4">
+                    <a href="{% url "cart" %}" class="text-brand-dark hover:text-brand-primary transition-colors relative">
+                        <i class="ph ph-shopping-cart text-2xl"></i>
+                          <span class="absolute -top-1 -right-1 w-4 h-4 bg-brand-gold text-brand-dark text-[0.65rem] font-bold rounded-full flex items-center justify-center border border-white">{{ cart_count }}</span>
+                    </a>
+                    <button id="mobile-menu-btn" class="text-brand-dark hover:text-brand-primary focus:outline-none p-2 transition-colors">
+                        <i class="ph ph-list text-2xl" id="mobile-menu-icon"></i>
+                    </button>
+                </div>
+                
+                
+                <!-- Desktop Cart + Auth -->
+<div class="hidden lg:flex items-center gap-4">
+    <!-- Cart -->
+    <a href="{% url "cart" %}" class="w-10 h-10 rounded-full bg-brand-sage/50 flex items-center justify-center text-brand-dark hover:bg-brand-primary hover:text-white transition-all relative">
+        <i class="ph ph-shopping-cart text-xl"></i>
+        <span class="absolute -top-1 -right-1 w-4 h-4 bg-brand-gold text-brand-dark text-[0.65rem] font-bold rounded-full flex items-center justify-center border border-white">{{ cart_count }}</span>
+    </a>
+
+    {% if user.is_authenticated %}
+        <!-- Logout with red icon -->
+        <a href="{% url "logout" %}" class="flex items-center gap-2 text-sm font-bold text-red-600 hover:text-red-800 transition-colors">
+            <i class="ph ph-sign-out text-lg"></i> Logout
+        </a>
+    {% else %}
+        <!-- Login highlighted -->
+<a href="{% url "login" %}" 
+   class="flex items-center gap-2 text-sm font-bold text-white bg-brand-primary px-3 py-1.5 rounded-lg shadow-md hover:bg-brand-dark transition-all">
+   Login
+</a>
+
+
+    {% endif %}
+</div>
+
+            </div>
+        </div>
+
+      
+
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-brand-sage shadow-xl absolute w-full left-0 origin-top">
+    <div class="px-4 pt-4 pb-6 space-y-2 flex flex-col max-w-7xl mx-auto">
+        {% if user.is_authenticated %}
+        <a href="{% url 'shop' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl transition-colors">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url "aboutus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url "contactus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url "user_profile" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+
+
+
+               <a href="{% url "orders" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-info"></i> My Orders
+        </a>
+      
+        <a href="{% url "addresses" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> My Addesses
+        </a>
+          <a href="{% url "my-milk-subscription" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> My Subscriptions
+        </a>
+          <a href="{% url "logout" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-red-600 bg-red-50 rounded-xl transition-colors">
+                <i class="ph ph-sign-out"></i> Logout
+            </a>
+ {% else %}
+  <a href="{% url 'shop' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl transition-colors">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url "aboutus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url "contactus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url "user_profile" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+       
+        
+           
+      
+            <a href="{% url "login" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl transition-colors">
+                Login
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+    </header>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Main Content Area -->
+    <main class="flex-grow w-full relative z-10 py-10 md:py-16 px-4 sm:px-6 lg:px-8">
+        
+        <div class="max-w-6xl mx-auto">
+            
+            <!-- Page Header -->
+            <header class="mb-8 md:mb-12 animate-slide-up flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-full bg-white border border-brand-sage shadow-sm flex items-center justify-center flex-shrink-0">
+                        <i class="ph-fill ph-drop text-3xl text-brand-primary"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl md:text-4xl font-serif font-extrabold text-brand-dark leading-tight">Subscribe to Fresh Milk</h1>
+                        <p class="text-sm md:text-base text-brand-earth font-medium mt-1">Set up your daily farm-to-home deliveries.</p>
+                    </div>
+                </div>
+                <a href="{% url 'user_profile' %}" class="inline-flex items-center text-sm font-bold text-brand-earth hover:text-brand-primary transition-colors group">
+                    <i class="ph-bold ph-arrow-left mr-1.5 group-hover:-translate-x-1 transition-transform"></i> Back to Profile
+                </a>
+            </header>
+
+            <!-- Django Messages -->
+            {% if messages %}
+                <div class="mb-8 space-y-3 animate-slide-up">
+                    {% for message in messages %}
+                        <div class="flex items-center justify-between p-4 rounded-xl shadow-sm text-sm font-bold
+                            {% if message.tags == 'error' %} bg-red-50 text-red-700 border border-red-200 
+                            {% elif message.tags == 'success' %} bg-green-50 text-brand-primary border border-brand-sage 
+                            {% else %} bg-blue-50 text-blue-700 border border-blue-200 {% endif %}" 
+                            role="alert">
+                            <span class="flex items-center gap-2">
+                                {% if message.tags == 'error' %}<i class="ph-fill ph-warning-circle text-lg"></i>
+                                {% elif message.tags == 'success' %}<i class="ph-fill ph-check-circle text-lg"></i>
+                                {% else %}<i class="ph-fill ph-info text-lg"></i>{% endif %}
+                                {{ message }}
+                            </span>
+                            <button type="button" class="opacity-70 hover:opacity-100 transition-opacity focus:outline-none" onclick="this.parentElement.remove();">&times;</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if not addresses %}
+                <!-- Empty State: No Addresses -->
+                <section class="glass-card rounded-[2rem] p-10 md:p-16 text-center animate-slide-up border-t-4 border-brand-primary shadow-lg" style="animation-delay: 0.1s;">
+                    <div class="w-20 h-20 mx-auto bg-brand-cream border-2 border-brand-sage rounded-full flex items-center justify-center mb-5 shadow-inner">
+                        <i class="ph-fill ph-map-pin-line text-4xl text-brand-earth/40"></i>
+                    </div>
+                    <h2 class="text-2xl font-serif font-bold text-brand-dark mb-3">Delivery Address Required</h2>
+                    <p class="text-sm text-brand-earth font-medium mb-8 max-w-sm mx-auto">
+                        Please add a delivery address to your profile before setting up your daily milk subscription.
+                    </p>
+                    <a href="{% url 'address-add' %}" class="inline-flex items-center justify-center px-8 py-3.5 bg-brand-primary hover:bg-brand-dark text-white rounded-xl text-sm font-bold transition-all shadow-md hover:-translate-y-0.5 group">
+                        <i class="ph-bold ph-plus mr-2"></i> Add Delivery Address
+                    </a>
+                </section>
+
+            {% elif not products %}
+                <!-- Empty State: No Products -->
+                <section class="glass-card rounded-[2rem] p-10 md:p-16 text-center animate-slide-up border-t-4 border-brand-gold shadow-lg" style="animation-delay: 0.1s;">
+                    <div class="w-20 h-20 mx-auto bg-brand-cream border-2 border-brand-sage rounded-full flex items-center justify-center mb-5 shadow-inner">
+                        <i class="ph-fill ph-cow text-4xl text-brand-earth/40"></i>
+                    </div>
+                    <h2 class="text-2xl font-serif font-bold text-brand-dark mb-3">Products Unavailable</h2>
+                    <p class="text-sm text-brand-earth font-medium max-w-sm mx-auto">
+                        Milk products are currently unavailable for new subscriptions. Please try again later or contact support.
+                    </p>
+                </section>
+
+            {% else %}
+                
+                <div class="flex flex-col lg:flex-row gap-8 items-start">
+                    
+                    <!-- LEFT COLUMN: The Form -->
+                    <div class="w-full lg:w-2/3 animate-slide-up" style="animation-delay: 0.1s;">
+                        <form method="post" class="space-y-6">
+                            {% csrf_token %}
+
+                            <!-- Step 1: Milk Product -->
+                            <section class="glass-card rounded-[2rem] p-6 sm:p-8 border-t-4 border-brand-primary">
+                                <div class="flex items-center gap-3 mb-5 border-b border-brand-sage pb-3">
+                                    <span class="w-8 h-8 rounded-full bg-brand-cream border border-brand-sage flex items-center justify-center text-xs font-bold text-brand-primary">01</span>
+                                    <h2 class="text-xl font-serif font-bold text-brand-dark">Select Milk Product</h2>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    {% for product in products %}
+                                        <label class="relative block cursor-pointer group h-full">
+                                            <input type="radio" name="product_id" value="{{ product.id }}" class="radio-card-input sr-only peer" {% if forloop.first %}checked{% endif %}>
+                                            <div class="radio-card-content border-2 border-brand-sage bg-white/70 rounded-2xl p-5 h-full transition-all duration-200 hover:border-brand-primary/50 relative flex flex-col">
+                                                
+                                                <div class="radio-check-icon absolute top-4 right-4 text-brand-primary opacity-0 transform scale-50 transition-all duration-200">
+                                                    <i class="ph-fill ph-check-circle text-xl"></i>
+                                                </div>
+
+                                                <div class="flex items-start gap-3 mb-2 flex-grow">
+                                                    <div class="w-10 h-10 rounded-full bg-brand-sage/40 flex items-center justify-center text-brand-primary flex-shrink-0">
+                                                        <i class="ph-fill ph-drop text-lg"></i>
+                                                    </div>
+                                                    <div class="pr-6">
+                                                        <strong class="block text-brand-dark font-bold text-sm mb-1 leading-tight">{{ product.name }}</strong>
+                                                        {% if product.short_description %}
+                                                            <span class="block text-xs text-brand-earth/80 leading-snug">{{ product.short_description }}</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="mt-auto pt-3 border-t border-brand-sage/50">
+                                                    <span class="text-sm font-bold text-brand-primary">₹{{ product.selling_price }}</span>
+                                                    <span class="text-xs text-brand-earth font-medium">/ {{ product.get_unit_display }}</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </section>
+
+                            <!-- Step 2 & 3: Quantity and Date (Side by Side on desktop) -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                
+                                <!-- Quantity -->
+                                <section class="glass-card rounded-[2rem] p-6 sm:p-8">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <span class="w-8 h-8 rounded-full bg-brand-cream border border-brand-sage flex items-center justify-center text-xs font-bold text-brand-primary">02</span>
+                                        <h2 class="text-lg font-serif font-bold text-brand-dark">Daily Quantity</h2>
+                                    </div>
+                                    <div class="relative pl-11">
+                                        <select name="quantity" required class="block w-full pl-4 pr-10 py-3 bg-white/70 border border-brand-sage rounded-xl text-brand-dark text-sm font-bold shadow-sm focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all cursor-pointer">
+                                            <option value="1">1 Unit / Day</option>
+                                            <option value="2">2 Units / Day</option>
+                                            <option value="3">3 Units / Day</option>
+                                            <option value="4">4 Units / Day</option>
+                                            <option value="5">5 Units / Day</option>
+                                        </select>
+                                        <p class="text-[0.65rem] text-brand-earth/80 font-medium mt-2 flex items-center gap-1">
+                                            <i class="ph-fill ph-info text-brand-gold"></i> Delivered to you every single day.
+                                        </p>
+                                    </div>
+                                </section>
+
+                                <!-- Start Date -->
+                                <section class="glass-card rounded-[2rem] p-6 sm:p-8">
+                                    <div class="flex items-center gap-3 mb-4">
+                                        <span class="w-8 h-8 rounded-full bg-brand-cream border border-brand-sage flex items-center justify-center text-xs font-bold text-brand-primary">03</span>
+                                        <h2 class="text-lg font-serif font-bold text-brand-dark">Start Date</h2>
+                                    </div>
+                                    <div class="relative pl-11">
+                                        <div class="relative">
+                                            <input type="date" name="start_date" min="{{ today|date:'Y-m-d' }}" required class="block w-full pl-4 pr-10 py-3 bg-white/70 border border-brand-sage rounded-xl text-brand-dark text-sm font-bold shadow-sm focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all cursor-pointer relative z-10">
+                                        </div>
+                                        <p class="text-[0.65rem] text-brand-earth/80 font-medium mt-2 flex items-center gap-1">
+                                            <i class="ph-fill ph-clock text-brand-gold"></i> Subject to admin approval.
+                                        </p>
+                                    </div>
+                                </section>
+
+                            </div>
+
+                            <!-- Step 4: Delivery Address -->
+                            <section class="glass-card rounded-[2rem] p-6 sm:p-8 border-t-4 border-brand-gold">
+                                <div class="flex items-center justify-between mb-5 border-b border-brand-sage pb-3">
+                                    <div class="flex items-center gap-3">
+                                        <span class="w-8 h-8 rounded-full bg-brand-cream border border-brand-sage flex items-center justify-center text-xs font-bold text-brand-gold">04</span>
+                                        <h2 class="text-xl font-serif font-bold text-brand-dark">Delivery Address</h2>
+                                    </div>
+                                    <a href="{% url 'addresses' %}" class="text-[0.65rem] font-bold tracking-widest uppercase text-brand-primary hover:text-brand-dark transition-colors">
+                                        Manage
+                                    </a>
+                                </div>
+
+                                <div class="space-y-3">
+                                    {% for address in addresses %}
+                                        <label class="relative block cursor-pointer group">
+                                            <input type="radio" name="address_id" value="{{ address.id }}" class="radio-card-input sr-only peer" {% if forloop.first %}checked{% endif %} required>
+                                            <div class="radio-card-content border-2 border-brand-sage bg-white/70 rounded-xl p-4 transition-all duration-200 hover:border-brand-primary/50 relative flex items-start gap-3">
+                                                
+                                                <div class="radio-check-icon absolute top-1/2 -translate-y-1/2 right-4 text-brand-primary opacity-0 transform scale-50 transition-all duration-200">
+                                                    <i class="ph-fill ph-check-circle text-xl"></i>
+                                                </div>
+
+                                                <div class="w-8 h-8 rounded-full bg-brand-sage/50 flex items-center justify-center text-brand-earth/70 flex-shrink-0 mt-0.5">
+                                                    <i class="ph-fill ph-map-pin text-sm"></i>
+                                                </div>
+                                                
+                                                <div class="pr-8">
+                                                    <strong class="block text-brand-dark font-bold text-sm mb-1">{{ address.full_name }}</strong>
+                                                    <span class="block text-xs text-brand-earth/90 leading-snug">
+                                                        {{ address.address_line1 }}{% if address.address_line2 %}, {{ address.address_line2 }}{% endif %}<br>
+                                                        {{ address.city }}, {{ address.state }} - {{ address.pincode }}
+                                                    </span>
+                                                    <span class="block text-[0.65rem] text-brand-earth/70 font-medium mt-1">
+                                                        <i class="ph-fill ph-phone mr-0.5"></i> {{ address.phone_number }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </section>
+
+                            <!-- Submit Area -->
+                            <div class="pt-2">
+                                <button type="submit" class="w-full flex justify-center items-center py-4 px-4 border border-transparent rounded-xl shadow-md text-base font-bold text-white bg-brand-primary hover:bg-brand-dark transform hover:-translate-y-0.5 transition-all duration-200 group">
+                                    <i class="ph-bold ph-check-circle mr-2 text-lg"></i>
+                                    Submit Subscription Request
+                                </button>
+                                <p class="text-center text-xs text-brand-earth/70 mt-3 font-medium">
+                                    By submitting, you agree to our daily delivery terms.
+                                </p>
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <!-- RIGHT COLUMN: How it Works Info Sidebar -->
+                    <div class="w-full lg:w-1/3 animate-slide-up" style="animation-delay: 0.2s;">
+                        <div class="sticky top-28 glass-card rounded-[2rem] p-6 lg:p-8 border-t-4 border-brand-sage">
+                            
+                            <h3 class="text-lg font-serif font-bold text-brand-dark mb-6 flex items-center gap-2 border-b border-brand-sage pb-3">
+                                <i class="ph-fill ph-info text-brand-gold text-xl"></i> How it works
+                            </h3>
+
+                            <div class="space-y-5">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-brand-sage/80 flex items-center justify-center text-[0.65rem] font-bold text-brand-dark flex-shrink-0 mt-0.5">1</div>
+                                    <p class="text-sm text-brand-earth font-medium">Select your milk product, daily quantity, and delivery address.</p>
+                                </div>
+                                
+                                <div class="flex items-start gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-brand-sage/80 flex items-center justify-center text-[0.65rem] font-bold text-brand-dark flex-shrink-0 mt-0.5">2</div>
+                                    <p class="text-sm text-brand-earth font-medium">Choose your preferred start date and submit the request.</p>
+                                </div>
+
+                                <div class="flex items-start gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-brand-gold/20 flex items-center justify-center text-[0.65rem] font-bold text-brand-gold flex-shrink-0 mt-0.5">3</div>
+                                    <p class="text-sm text-brand-dark font-bold">Our team reviews and activates your subscription.</p>
+                                </div>
+
+                                <div class="flex items-start gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-brand-primary/20 flex items-center justify-center text-[0.65rem] font-bold text-brand-primary flex-shrink-0 mt-0.5">4</div>
+                                    <p class="text-sm text-brand-dark font-bold">Fresh milk is delivered to your doorstep every morning.</p>
+                                </div>
+
+                                <div class="flex items-start gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-brand-sage/80 flex items-center justify-center text-[0.65rem] font-bold text-brand-dark flex-shrink-0 mt-0.5">5</div>
+                                    <p class="text-sm text-brand-earth font-medium">A monthly bill is generated and collected via cash or wallet.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8 bg-brand-cream/50 p-4 rounded-xl border border-brand-sage/50 text-center">
+                                <p class="text-xs text-brand-earth/90 font-medium leading-relaxed">
+                                    Need help setting up?<br>
+                                    Call us at <strong class="text-brand-dark">+91 98765 43210</strong>
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            {% endif %}
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark text-brand-cream pt-16 pb-6 mt-auto border-t-4 border-brand-gold relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 mb-12">
+                <!-- Part 1: Brand Info -->
+                <div class="lg:col-span-1 flex flex-col items-start">
+                    <a href="/shop" class="flex items-center gap-3 mb-4 group">
+                        <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden">
+                            <img src="{% static 'images/Logo.jpeg' %}" alt="Rajanna Dairy Farm Logo" class="w-[90%] h-[90%] object-contain mix-blend-multiply" onerror="this.src='https://placehold.co/100x100/145c3a/ffffff?text=Logo'">
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-serif text-xl font-bold tracking-wide text-brand-gold leading-tight">RAJANNA</span>
+                            <span class="font-sans text-[0.65rem] tracking-[0.2em] uppercase font-bold text-brand-cream/80">Dairy Farm</span>
+                        </div>
+                    </a>
+                    <p class="text-sm text-brand-cream/70 mb-6 leading-relaxed">
+                        Delivering pure, fresh, and natural dairy products straight from our farm to your home every morning.
+                    </p>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#1877F2] hover:text-white transition-all duration-300 hover:-translate-y-1"><i class="ph-fill ph-facebook-logo text-lg"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:text-white transition-all duration-300 hover:-translate-y-1" style="transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)'" onmouseout="this.style.background='rgba(244, 244, 236, 0.1)'"><i class="ph-fill ph-instagram-logo text-lg"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#1DA1F2] hover:text-white transition-all duration-300 hover:-translate-y-1"><i class="ph-fill ph-twitter-logo text-lg"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#FF0000] hover:text-white transition-all duration-300 hover:-translate-y-1"><i class="ph-fill ph-youtube-logo text-lg"></i></a>
+                    </div>
+                </div>
+
+                <!-- Part 2: About -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-info text-brand-gold text-xl"></i> About</h3>
+                    <ul class="space-y-3">
+                        <li><a href="/contactus" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Contact Us</a></li>
+                        <li><a href="/aboutus" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> About Us</a></li>
+                        <li><a href="/ourstory" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Our Story</a></li>
+                        <li><a href="/subscribe" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Subscribe</a></li>
+                    </ul>
+                </div>
+
+                <!-- Part 3: Platform -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-squares-four text-brand-gold text-xl"></i> Platform</h3>
+                    <ul class="space-y-3">
+                        <li><a href="/shop" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Shop</a></li>
+                        <li><a href="#" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Services</a></li>
+                        <li><a href="#" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Offers</a></li>
+                    </ul>
+                </div>
+
+                <!-- Part 4: Help -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-question text-brand-gold text-xl"></i> Help</h3>
+                    <ul class="space-y-3">
+                        <li><a href="/terms_conditions" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Terms & Conditions</a></li>
+                        <li><a href="/privacy_policy" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <!-- Part 5: Location -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-map-pin line text-brand-gold text-xl"></i> Location</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i class="ph-fill ph-map-pin text-brand-gold mt-0.5 text-lg"></i>
+                            <span class="text-sm text-brand-cream/70 leading-relaxed">123 Green Pastures Lane,<br>Dairy District, HYD 500001</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="ph-fill ph-phone text-brand-gold text-lg"></i>
+                            <span class="text-sm text-brand-cream/70">+91 98765 43210</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="ph-fill ph-envelope-simple text-brand-gold text-lg"></i>
+                            <span class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors cursor-pointer">hello@rajannadairy.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-brand-cream/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-sm text-brand-cream/60">
+                    &copy; <span id="year"></span> Rajanna Dairy Farms. <span class="text-brand-gold font-medium">Farm to home</span>
+                </div>
+                <div class="text-xs text-brand-cream/40 flex flex-wrap justify-center md:justify-end gap-3 md:gap-6 font-medium tracking-wide uppercase">
+                    <span>Fresh Milk</span><span class="hidden sm:inline text-brand-cream/20">•</span>
+                    <span>Pure Dairy</span><span class="hidden sm:inline text-brand-cream/20">•</span>
+                    <span>Natural Products</span><span class="hidden sm:inline text-brand-cream/20">•</span>
+                    <span>Organic Farming</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Set current year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Mobile Menu Toggle Logic
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileIcon = document.getElementById('mobile-menu-icon');
+
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileIcon.classList.replace('ph-x', 'ph-list');
+            } else {
+                mobileIcon.classList.replace('ph-list', 'ph-x');
+            }
+        });
+    </script>
+</body>
+</html> {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscribe to Fresh Milk | Rajanna Dairy Farm</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Start your daily farm-fresh milk delivery subscription with Rajanna Dairy Farm.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons (Phosphor Icons) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0f3d26',    
+                            primary: '#145c3a', 
+                            light: '#2a7a50',   
+                            milk: '#fdfdfc',    
+                            cream: '#f4f4ec',   
+                            sage: '#e6ede9',    
+                            gold: '#d4af37',    
+                            earth: '#5c4a3d',   
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['Lato', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+            background-color: #59db8d;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #f4f4ec; }
+        ::-webkit-scrollbar-thumb { background: #2a7a50; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #145c3a; }
+
+        /* Ambient background */
+        .ambient-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(135deg, #9fd58d 0%, #dce3de 50%, #d4af37 100%);
+        }
+        
+        @keyframes floatOrbSlow {
+            0% { transform: translateY(0px) scale(1); opacity: 0.15; }
+            50% { transform: translateY(-20px) scale(1.05); opacity: 0.3; }
+            100% { transform: translateY(0px) scale(1); opacity: 0.15; }
+        }
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: -1;
+        }
+
+        /* Animations */
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-up {
+            animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Glassmorphism utility */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Custom Radio Card Selection */
+        .radio-card-input:checked + .radio-card-content {
+            border-color: #145c3a;
+            background-color: rgba(20, 92, 58, 0.04);
+            box-shadow: 0 4px 16px rgba(20, 92, 58, 0.12);
+        }
+        .radio-card-input:checked + .radio-card-content .radio-check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        /* Custom select and date icons */
+        select, input[type="date"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%235c4a3d' viewBox='0 0 256 256'%3E%3Cpath d='M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="text-brand-dark font-sans antialiased relative selection:bg-brand-primary selection:text-brand-milk">
+
+    <!-- Ambient Background -->
+    <div class="ambient-bg"></div>
+    <div class="bg-orb w-96 h-96 bg-brand-light/20 top-0 left-0" style="animation: floatOrbSlow 12s ease-in-out infinite;"></div>
+    <div class="bg-orb w-[30rem] h-[30rem] bg-brand-gold/15 bottom-0 right-0" style="animation: floatOrbSlow 15s ease-in-out infinite reverse;"></div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-brand-sage shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="{% url 'shop' %}" class="flex items-center gap-3 group">
+                    <div class="w-12 h-12 rounded-full bg-white border border-brand-sage shadow-sm flex items-center justify-center overflow-hidden transition-transform group-hover:scale-105">
+                        <img src="{% static 'images/Logo.jpeg' %}" alt="Rajanna Dairy Farm Logo" class="w-[90%] h-[90%] object-contain mix-blend-multiply" onerror="this.src='https://placehold.co/100x100/145c3a/ffffff?text=Logo'">
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-serif text-xl md:text-2xl font-bold tracking-wide text-brand-primary leading-tight">RAJANNA</span>
+                        <span class="font-sans text-[0.65rem] md:text-xs tracking-[0.2em] uppercase font-bold text-brand-dark/80">Dairy Farm</span>
+                    </div>
+                </a>
+                
+                <!-- Desktop Nav -->
+                <nav class="hidden lg:flex items-center gap-8">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'shop' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors"><i class="ph ph-house"></i> Home</a>
+                        <a href="{% url 'aboutus' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors"><i class="ph ph-info"></i> About us</a>
+                        <a href="{% url 'contactus' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors"><i class="ph ph-phone"></i> Contact Us</a>
+                        <a href="{% url 'user_profile' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors"><i class="ph ph-user"></i> Profile</a>
+                        <a href="{% url 'orders' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors"><i class="ph ph-package"></i> My Orders</a>  
+                        <a href="{% url 'addresses' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors"><i class="ph ph-map-pin"></i> My Address</a>
+                        <a href="{% url 'my-milk-subscription' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors"><i class="ph ph-crown"></i> My Subscriptions</a>
+                    {% else %}
+                        <a href="{% url 'shop' %}" class="flex items-center gap-2 text-sm font-bold text-brand-primary bg-brand-sage/40 px-3 py-1.5 rounded-lg"><i class="ph ph-house"></i> Home</a>
+                        <a href="{% url 'aboutus' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors"><i class="ph ph-info"></i> About us</a>
+                        <a href="{% url 'contactus' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors"><i class="ph ph-phone"></i> Contact Us</a>
+                        <a href="{% url 'user_profile' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors"><i class="ph ph-user"></i> Profile</a>
+                    {% endif %}
+                </nav>
+
+                <!-- Mobile Header Right -->
+                <div class="lg:hidden flex items-center gap-4">
+                    <a href="{% url 'cart' %}" class="text-brand-dark hover:text-brand-primary transition-colors relative">
+                        <i class="ph ph-shopping-cart text-2xl"></i>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-brand-gold text-brand-dark text-[0.65rem] font-bold rounded-full flex items-center justify-center border border-white">{{ cart_count }}</span>
+                    </a>
+                    <button id="mobile-menu-btn" class="text-brand-dark hover:text-brand-primary focus:outline-none p-2 transition-colors">
+                        <i class="ph ph-list text-2xl" id="mobile-menu-icon"></i>
+                    </button>
+                </div>
+                
+                <!-- Desktop Cart + Auth -->
+                <div class="hidden lg:flex items-center gap-4">
+                    <a href="{% url 'cart' %}" class="w-10 h-10 rounded-full bg-brand-sage/50 flex items-center justify-center text-brand-dark hover:bg-brand-primary hover:text-white transition-all relative">
+                        <i class="ph ph-shopping-cart text-xl"></i>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-brand-gold text-brand-dark text-[0.65rem] font-bold rounded-full flex items-center justify-center border border-white">{{ cart_count }}</span>
+                    </a>
+
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout' %}" class="flex items-center gap-2 text-sm font-bold text-red-600 hover:text-red-800 transition-colors">
+                            <i class="ph ph-sign-out text-lg"></i> Logout
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="flex items-center gap-2 text-sm font-bold text-white bg-brand-primary px-3 py-1.5 rounded-lg shadow-md hover:bg-brand-dark transition-all">
+                            Login
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-brand-sage shadow-xl absolute w-full left-0 origin-top">
+            <div class="px-4 pt-4 pb-6 space-y-2 flex flex-col max-w-7xl mx-auto">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'shop' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl"><i class="ph ph-house"></i> Home</a>
+                    <a href="{% url 'aboutus' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl"><i class="ph ph-info"></i> About us</a>
+                    <a href="{% url 'contactus' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl"><i class="ph ph-phone"></i> Contact Us</a>
+                    <a href="{% url 'user_profile' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl"><i class="ph ph-user"></i> Profile</a>
+                    <a href="{% url 'orders' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl"><i class="ph ph-package"></i> My Orders</a>
+                    <a href="{% url 'addresses' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl"><i class="ph ph-map-pin"></i> My Addresses</a>
+                    <a href="{% url 'my-milk-subscription' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl"><i class="ph ph-crown"></i> My Subscriptions</a>
+                    <a href="{% url 'logout' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-red-600 bg-red-50 rounded-xl"><i class="ph ph-sign-out"></i> Logout</a>
+                {% else %}
+                    <a href="{% url 'shop' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl"><i class="ph ph-house"></i> Home</a>
+                    <a href="{% url 'aboutus' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl"><i class="ph ph-info"></i> About us</a>
+                    <a href="{% url 'contactus' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl"><i class="ph ph-phone"></i> Contact Us</a>
+                    <a href="{% url 'user_profile' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl"><i class="ph ph-user"></i> Profile</a>
+                    <a href="{% url 'login' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow w-full relative z-10 py-8 md:py-12 px-4 sm:px-6 lg:px-8">
+        
+        <div class="max-w-6xl mx-auto">
+            
+            <!-- Page Header -->
+            <header class="mb-6 md:mb-10 animate-slide-up flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-white border border-brand-sage shadow-sm flex items-center justify-center flex-shrink-0">
+                        <i class="ph-fill ph-drop text-2xl text-brand-primary"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-serif font-extrabold text-brand-dark leading-tight">Subscribe to Fresh Milk</h1>
+                        <p class="text-xs md:text-sm text-brand-earth font-medium">Set up your daily farm-to-home deliveries in a few steps.</p>
+                    </div>
+                </div>
+                <a href="{% url 'user_profile' %}" class="inline-flex items-center text-xs md:text-sm font-bold text-brand-earth hover:text-brand-primary transition-colors group">
+                    <i class="ph-bold ph-arrow-left mr-1.5 group-hover:-translate-x-1 transition-transform"></i> Back to Profile
+                </a>
+            </header>
+
+            <!-- Messages -->
+            {% if messages %}
+                <div class="mb-6 space-y-2 animate-slide-up">
+                    {% for message in messages %}
+                        <div class="flex items-center justify-between p-3.5 rounded-xl shadow-sm text-xs md:text-sm font-bold
+                            {% if message.tags == 'error' %} bg-red-50 text-red-700 border border-red-200 
+                            {% elif message.tags == 'success' %} bg-green-50 text-brand-primary border border-brand-sage 
+                            {% else %} bg-blue-50 text-blue-700 border border-blue-200 {% endif %}" 
+                            role="alert">
+                            <span class="flex items-center gap-2">
+                                {% if message.tags == 'error' %}<i class="ph-fill ph-warning-circle text-base"></i>
+                                {% elif message.tags == 'success' %}<i class="ph-fill ph-check-circle text-base"></i>
+                                {% else %}<i class="ph-fill ph-info text-base"></i>{% endif %}
+                                {{ message }}
+                            </span>
+                            <button type="button" class="opacity-70 hover:opacity-100 transition-opacity focus:outline-none" onclick="this.parentElement.remove();">&times;</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if not addresses %}
+                <!-- Empty State: No Addresses -->
+                <section class="glass-card rounded-[2rem] p-8 md:p-14 text-center animate-slide-up border-t-4 border-brand-primary shadow-lg">
+                    <div class="w-16 h-16 mx-auto bg-brand-cream border border-brand-sage rounded-full flex items-center justify-center mb-4 shadow-inner">
+                        <i class="ph-fill ph-map-pin-line text-3xl text-brand-earth/40"></i>
+                    </div>
+                    <h2 class="text-xl font-serif font-bold text-brand-dark mb-2">Delivery Address Required</h2>
+                    <p class="text-xs sm:text-sm text-brand-earth font-medium mb-6 max-w-sm mx-auto">
+                        Please add a delivery address to your profile before setting up your daily milk subscription.
+                    </p>
+                    <a href="{% url 'address-add' %}" class="inline-flex items-center justify-center px-6 py-3 bg-brand-primary hover:bg-brand-dark text-white rounded-xl text-xs sm:text-sm font-bold transition-all shadow-md hover:-translate-y-0.5">
+                        <i class="ph-bold ph-plus mr-1.5"></i> Add Delivery Address
+                    </a>
+                </section>
+
+            {% elif not products %}
+                <!-- Empty State: No Products -->
+                <section class="glass-card rounded-[2rem] p-8 md:p-14 text-center animate-slide-up border-t-4 border-brand-gold shadow-lg">
+                    <div class="w-16 h-16 mx-auto bg-brand-cream border border-brand-sage rounded-full flex items-center justify-center mb-4 shadow-inner">
+                        <i class="ph-fill ph-cow text-3xl text-brand-earth/40"></i>
+                    </div>
+                    <h2 class="text-xl font-serif font-bold text-brand-dark mb-2">Products Unavailable</h2>
+                    <p class="text-xs sm:text-sm text-brand-earth font-medium max-w-sm mx-auto">
+                        Milk products are currently unavailable for new subscriptions. Please try again later or contact support.
+                    </p>
+                </section>
+
+            {% else %}
+                
+                <div class="flex flex-col lg:flex-row gap-8 items-start">
+                    
+                    <!-- LEFT COLUMN: Subscription Form -->
+                    <div class="w-full lg:w-2/3 animate-slide-up" style="animation-delay: 0.1s;">
+                        <form method="post" class="space-y-6">
+                            {% csrf_token %}
+
+                            <!-- Step 1: Compact Product Selection -->
+                            <section class="glass-card rounded-2xl p-5 sm:p-6 border-t-4 border-brand-primary shadow-sm">
+                                <div class="flex items-center justify-between mb-4 border-b border-brand-sage/60 pb-3">
+                                    <div class="flex items-center gap-2.5">
+                                        <span class="w-7 h-7 rounded-full bg-brand-cream border border-brand-sage flex items-center justify-center text-xs font-bold text-brand-primary">01</span>
+                                        <h2 class="text-lg font-serif font-bold text-brand-dark">Select Milk Product</h2>
+                                    </div>
+                                    <span class="text-[0.65rem] uppercase font-bold text-brand-earth/60 tracking-wider">Tap to choose</span>
+                                </div>
+
+                                <!-- Compact Grid Layout -->
+                                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                    {% for product in products %}
+                                        <label class="relative block cursor-pointer group h-full select-none">
+                                            <input type="radio" name="product_id" value="{{ product.id }}" class="radio-card-input sr-only peer" {% if forloop.first %}checked{% endif %}>
+                                            
+                                            <div class="radio-card-content border-2 border-brand-sage/80 bg-white/90 backdrop-blur-sm rounded-xl p-2.5 sm:p-3 h-full transition-all duration-200 hover:border-brand-primary/60 hover:shadow-sm relative flex flex-col justify-between overflow-hidden">
+                                                
+                                                <!-- Selected Badge -->
+                                                <div class="radio-check-icon absolute top-2 right-2 z-20 bg-brand-primary text-white w-5 h-5 rounded-full shadow flex items-center justify-center opacity-0 transform scale-50 transition-all duration-200">
+                                                    <i class="ph-bold ph-check text-[0.65rem]"></i>
+                                                </div>
+
+                                                <!-- Compact Uncropped Image Container -->
+                                                <div class="w-full h-24 sm:h-28 rounded-lg bg-white border border-brand-sage/40 mb-2 p-1.5 flex items-center justify-center relative overflow-hidden group-hover:bg-brand-cream/30 transition-colors">
+                                                    {% if product.main_image %}
+                                                        <!-- object-contain ensures product image is fully visible without cropping -->
+                                                        <img src="{{ product.get_image_url }}" alt="{{ product.name }}" class="max-w-full max-h-full object-contain">
+                                                    {% else %}
+                                                        <div class="flex flex-col items-center justify-center text-brand-primary/50">
+                                                            <i class="ph-fill ph-drop text-2xl mb-1"></i>
+                                                            <span class="text-[0.6rem] font-semibold text-brand-earth/60">Rajanna Milk</span>
+                                                        </div>
+                                                    {% endif %}
+
+                                                    {% if product.discount_percentage > 0 %}
+                                                        <span class="absolute bottom-1 left-1 bg-brand-gold text-brand-dark text-[0.55rem] font-extrabold px-1.5 py-0.5 rounded shadow-xs">
+                                                            {{ product.discount_percentage }}% OFF
+                                                        </span>
+                                                    {% endif %}
+                                                </div>
+
+                                                <!-- Compact Details (SKU removed) -->
+                                                <div class="flex-grow flex flex-col justify-between pt-1">
+                                                    <h3 class="text-brand-dark font-bold text-xs sm:text-sm leading-tight mb-2 group-hover:text-brand-primary transition-colors line-clamp-2">
+                                                        {{ product.name }}
+                                                    </h3>
+
+                                                    <!-- Pricing -->
+                                                    <div class="pt-1.5 border-t border-brand-sage/40 flex items-baseline justify-between">
+                                                        <span class="text-xs sm:text-sm font-extrabold text-brand-primary">₹{{ product.selling_price }}</span>
+                                                        <span class="text-[0.65rem] font-semibold text-brand-earth/80">/ {{ product.get_unit_display }}</span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </section>
+
+                            <!-- Step 2 & Step 3: Quantity and Date -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                
+                                <!-- Quantity -->
+                                <section class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm">
+                                    <div class="flex items-center gap-2.5 mb-3">
+                                        <span class="w-7 h-7 rounded-full bg-brand-cream border border-brand-sage flex items-center justify-center text-xs font-bold text-brand-primary">02</span>
+                                        <h2 class="text-base font-serif font-bold text-brand-dark">Daily Quantity</h2>
+                                    </div>
+                                    <div class="relative">
+                                        <select name="quantity" required class="block w-full pl-3.5 pr-10 py-2.5 bg-white border border-brand-sage rounded-xl text-brand-dark text-xs sm:text-sm font-bold shadow-xs focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all cursor-pointer">
+                                            <option value="1">1 Unit / Day</option>
+                                            <option value="2">2 Units / Day</option>
+                                            <option value="3">3 Units / Day</option>
+                                            <option value="4">4 Units / Day</option>
+                                            <option value="5">5 Units / Day</option>
+                                        </select>
+                                        <p class="text-[0.65rem] text-brand-earth/80 font-medium mt-2 flex items-center gap-1">
+                                            <i class="ph-fill ph-info text-brand-gold"></i> Fresh doorstep delivery every morning.
+                                        </p>
+                                    </div>
+                                </section>
+
+                                <!-- Start Date -->
+                                <section class="glass-card rounded-2xl p-5 sm:p-6 shadow-sm">
+                                    <div class="flex items-center gap-2.5 mb-3">
+                                        <span class="w-7 h-7 rounded-full bg-brand-cream border border-brand-sage flex items-center justify-center text-xs font-bold text-brand-primary">03</span>
+                                        <h2 class="text-base font-serif font-bold text-brand-dark">Start Date</h2>
+                                    </div>
+                                    <div class="relative">
+                                        <input type="date" name="start_date" min="{{ today|date:'Y-m-d' }}" required class="block w-full pl-3.5 pr-10 py-2.5 bg-white border border-brand-sage rounded-xl text-brand-dark text-xs sm:text-sm font-bold shadow-xs focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all cursor-pointer relative z-10">
+                                        <p class="text-[0.65rem] text-brand-earth/80 font-medium mt-2 flex items-center gap-1">
+                                            <i class="ph-fill ph-clock text-brand-gold"></i> Subject to quick admin approval.
+                                        </p>
+                                    </div>
+                                </section>
+
+                            </div>
+
+                            <!-- Step 4: Delivery Address -->
+                            <section class="glass-card rounded-2xl p-5 sm:p-6 border-t-4 border-brand-gold shadow-sm">
+                                <div class="flex items-center justify-between mb-4 border-b border-brand-sage/60 pb-3">
+                                    <div class="flex items-center gap-2.5">
+                                        <span class="w-7 h-7 rounded-full bg-brand-cream border border-brand-sage flex items-center justify-center text-xs font-bold text-brand-gold">04</span>
+                                        <h2 class="text-lg font-serif font-bold text-brand-dark">Delivery Address</h2>
+                                    </div>
+                                    <a href="{% url 'addresses' %}" class="text-[0.65rem] font-bold tracking-wider uppercase text-brand-primary hover:text-brand-dark transition-colors">
+                                        + Manage
+                                    </a>
+                                </div>
+
+                                <div class="space-y-2.5">
+                                    {% for address in addresses %}
+                                        <label class="relative block cursor-pointer group">
+                                            <input type="radio" name="address_id" value="{{ address.id }}" class="radio-card-input sr-only peer" {% if forloop.first %}checked{% endif %} required>
+                                            <div class="radio-card-content border border-brand-sage bg-white rounded-xl p-3 sm:p-3.5 transition-all duration-200 hover:border-brand-primary/50 relative flex items-start gap-3">
+                                                
+                                                <div class="radio-check-icon absolute top-1/2 -translate-y-1/2 right-3 text-brand-primary opacity-0 transform scale-50 transition-all duration-200">
+                                                    <i class="ph-fill ph-check-circle text-lg"></i>
+                                                </div>
+
+                                                <div class="w-7 h-7 rounded-full bg-brand-sage/50 flex items-center justify-center text-brand-earth/70 flex-shrink-0 mt-0.5">
+                                                    <i class="ph-fill ph-map-pin text-xs"></i>
+                                                </div>
+                                                
+                                                <div class="pr-6">
+                                                    <strong class="block text-brand-dark font-bold text-xs sm:text-sm mb-0.5">{{ address.full_name }}</strong>
+                                                    <span class="block text-xs text-brand-earth/90 leading-snug">
+                                                        {{ address.address_line1 }}{% if address.address_line2 %}, {{ address.address_line2 }}{% endif %}, {{ address.city }} - {{ address.pincode }}
+                                                    </span>
+                                                    <span class="block text-[0.65rem] text-brand-earth/70 font-medium mt-1">
+                                                        <i class="ph-fill ph-phone mr-0.5"></i> {{ address.phone_number }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </section>
+
+                            <!-- Submit Button -->
+                            <div class="pt-2">
+                                <button type="submit" class="w-full flex justify-center items-center py-3.5 px-4 border border-transparent rounded-xl shadow-md text-sm sm:text-base font-bold text-white bg-brand-primary hover:bg-brand-dark transform hover:-translate-y-0.5 transition-all duration-200 group cursor-pointer">
+                                    <i class="ph-bold ph-check-circle mr-2 text-lg"></i>
+                                    Confirm Subscription Request
+                                </button>
+                                <p class="text-center text-[0.65rem] sm:text-xs text-brand-earth/70 mt-2.5 font-medium">
+                                    By submitting, you agree to our daily delivery schedule and terms.
+                                </p>
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <!-- RIGHT COLUMN: How it Works Sidebar -->
+                    <div class="w-full lg:w-1/3 animate-slide-up" style="animation-delay: 0.2s;">
+                        <div class="sticky top-28 glass-card rounded-2xl p-5 sm:p-6 border-t-4 border-brand-sage shadow-sm">
+                            
+                            <h3 class="text-base font-serif font-bold text-brand-dark mb-4 flex items-center gap-2 border-b border-brand-sage/60 pb-3">
+                                <i class="ph-fill ph-info text-brand-gold text-lg"></i> How it works
+                            </h3>
+
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-2.5">
+                                    <div class="w-5 h-5 rounded-full bg-brand-sage flex items-center justify-center text-[0.6rem] font-bold text-brand-dark flex-shrink-0 mt-0.5">1</div>
+                                    <p class="text-xs text-brand-earth font-medium">Select product, daily quantity, and address.</p>
+                                </div>
+                                
+                                <div class="flex items-start gap-2.5">
+                                    <div class="w-5 h-5 rounded-full bg-brand-sage flex items-center justify-center text-[0.6rem] font-bold text-brand-dark flex-shrink-0 mt-0.5">2</div>
+                                    <p class="text-xs text-brand-earth font-medium">Choose start date and submit the request.</p>
+                                </div>
+
+                                <div class="flex items-start gap-2.5">
+                                    <div class="w-5 h-5 rounded-full bg-brand-gold/20 flex items-center justify-center text-[0.6rem] font-bold text-brand-gold flex-shrink-0 mt-0.5">3</div>
+                                    <p class="text-xs text-brand-dark font-bold">Admin reviews & activates your subscription.</p>
+                                </div>
+
+                                <div class="flex items-start gap-2.5">
+                                    <div class="w-5 h-5 rounded-full bg-brand-primary/20 flex items-center justify-center text-[0.6rem] font-bold text-brand-primary flex-shrink-0 mt-0.5">4</div>
+                                    <p class="text-xs text-brand-dark font-bold">Fresh milk delivered every morning.</p>
+                                </div>
+
+                                <div class="flex items-start gap-2.5">
+                                    <div class="w-5 h-5 rounded-full bg-brand-sage flex items-center justify-center text-[0.6rem] font-bold text-brand-dark flex-shrink-0 mt-0.5">5</div>
+                                    <p class="text-xs text-brand-earth font-medium">Easy monthly payments via cash or digital options.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 bg-brand-cream/60 p-3 rounded-xl border border-brand-sage/50 text-center">
+                                <p class="text-[0.65rem] sm:text-xs text-brand-earth/90 font-medium">
+                                    Need help? Call us at <strong class="text-brand-dark">+91 98765 43210</strong>
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            {% endif %}
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark text-brand-cream pt-12 pb-6 mt-auto border-t-4 border-brand-gold relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-10">
+                <!-- Brand -->
+                <div class="lg:col-span-1 flex flex-col items-start">
+                    <a href="{% url 'shop' %}" class="flex items-center gap-3 mb-3 group">
+                        <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden">
+                            <img src="{% static 'images/Logo.jpeg' %}" alt="Rajanna Dairy Farm Logo" class="w-[90%] h-[90%] object-contain mix-blend-multiply" onerror="this.src='https://placehold.co/100x100/145c3a/ffffff?text=Logo'">
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-serif text-lg font-bold tracking-wide text-brand-gold leading-tight">RAJANNA</span>
+                            <span class="font-sans text-[0.6rem] tracking-[0.2em] uppercase font-bold text-brand-cream/80">Dairy Farm</span>
+                        </div>
+                    </a>
+                    <p class="text-xs text-brand-cream/70 mb-4 leading-relaxed">
+                        Pure, fresh, and natural dairy products delivered straight from our farm to your home.
+                    </p>
+                    <div class="flex gap-2.5">
+                        <a href="#" class="w-8 h-8 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#1877F2] hover:text-white transition-all"><i class="ph-fill ph-facebook-logo text-base"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:text-white transition-all" onmouseover="this.style.background='linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)'" onmouseout="this.style.background='rgba(244, 244, 236, 0.1)'"><i class="ph-fill ph-instagram-logo text-base"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#1DA1F2] hover:text-white transition-all"><i class="ph-fill ph-twitter-logo text-base"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#FF0000] hover:text-white transition-all"><i class="ph-fill ph-youtube-logo text-base"></i></a>
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h3 class="text-sm font-serif font-bold text-white mb-3 flex items-center gap-1.5"><i class="ph-fill ph-info text-brand-gold"></i> About</h3>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="{% url 'contactus' %}" class="text-brand-cream/70 hover:text-brand-gold transition-colors">Contact Us</a></li>
+                        <li><a href="{% url 'aboutus' %}" class="text-brand-cream/70 hover:text-brand-gold transition-colors">About Us</a></li>
+                        <li><a href="{% url 'my-milk-subscription' %}" class="text-brand-cream/70 hover:text-brand-gold transition-colors">Subscriptions</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-serif font-bold text-white mb-3 flex items-center gap-1.5"><i class="ph-fill ph-squares-four text-brand-gold"></i> Platform</h3>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="{% url 'shop' %}" class="text-brand-cream/70 hover:text-brand-gold transition-colors">Shop</a></li>
+                        <li><a href="#" class="text-brand-cream/70 hover:text-brand-gold transition-colors">Services</a></li>
+                        <li><a href="#" class="text-brand-cream/70 hover:text-brand-gold transition-colors">Offers</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-serif font-bold text-white mb-3 flex items-center gap-1.5"><i class="ph-fill ph-question text-brand-gold"></i> Help</h3>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#" class="text-brand-cream/70 hover:text-brand-gold transition-colors">Terms & Conditions</a></li>
+                        <li><a href="#" class="text-brand-cream/70 hover:text-brand-gold transition-colors">Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-serif font-bold text-white mb-3 flex items-center gap-1.5"><i class="ph-fill ph-map-pin text-brand-gold"></i> Location</h3>
+                    <ul class="space-y-2 text-xs text-brand-cream/70">
+                        <li>123 Green Pastures Lane, Dairy District, HYD</li>
+                        <li>+91 98765 43210</li>
+                        <li>hello@rajannadairy.com</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-brand-cream/10 pt-5 flex flex-col md:flex-row justify-between items-center gap-3">
+                <div class="text-xs text-brand-cream/60">
+                    &copy; <span id="year"></span> Rajanna Dairy Farms. <span class="text-brand-gold font-medium">Farm to home</span>
+                </div>
+                <div class="text-[0.65rem] text-brand-cream/40 flex gap-4 uppercase font-bold tracking-wider">
+                    <span>Fresh Milk</span>
+                    <span>Pure Dairy</span>
+                    <span>Organic Farming</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileIcon = document.getElementById('mobile-menu-icon');
+
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileIcon.classList.replace('ph-x', 'ph-list');
+            } else {
+                mobileIcon.classList.replace('ph-list', 'ph-x');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    /* Minimal custom styles to layout the toolbar, utilizing Django Admin's native CSS variables */
+    .report-toolbar {
+        background: var(--darkened-bg, #f8f8f8);
+        border: 1px solid var(--hairline-color, #eee);
+        padding: 10px 15px;
+        margin-bottom: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        align-items: flex-end;
+        border-radius: 4px;
+    }
+    .report-toolbar .filter-group {
+        display: flex;
+        flex-direction: column;
+    }
+    .report-toolbar label {
+        font-weight: 600;
+        margin-bottom: 4px;
+        color: var(--body-fg, #333);
+        font-size: 13px;
+    }
+    .report-toolbar select, .report-toolbar input[type="text"] {
+        padding: 6px;
+        border: 1px solid var(--border-color, #ccc);
+        border-radius: 4px;
+        min-width: 120px;
+        height: 32px;
+        font-size: 13px;
+    }
+    .report-toolbar input[type="text"] {
+        min-width: 250px;
+    }
+    .report-toolbar .button {
+        margin: 0;
+        padding: 6px 12px;
+        height: 32px;
+        line-height: 1;
+    }
+    .summary-table {
+        width: 100%;
+        max-width: 600px;
+        margin-bottom: 30px;
+    }
+    .summary-table th {
+        width: 200px;
+        font-weight: 600;
+        background: var(--darkened-bg, #f8f8f8);
+    }
+    /* Status Colors matching Admin standards */
+    .status-paid { color: #28a745; font-weight: bold; }
+    .status-partial { color: #ffc107; font-weight: bold; }
+    .status-pending { color: var(--error-fg, #ba2121); font-weight: bold; }
+    
+    .empty-message {
+        padding: 30px;
+        background: var(--darkened-bg, #f8f8f8);
+        border-top: 1px solid var(--hairline-color, #eee);
+        text-align: center;
+        color: var(--body-quiet-color, #666);
+        font-size: 14px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="text-2xl font-bold text-gray-800">Milk Collection Report</h1>
+<div id="content-main">
+    
+    <!-- Report Filters & Search Toolbar -->
+    <form method="get" class="report-toolbar">
+        <div class="filter-group">
+            <label for="month">Month</label>
+            <select name="month" id="month">
+                {% for m in month_choices %}
+                    <option value="{{ m }}" {% if m == month %}selected{% endif %}>
+                        {{ m|stringformat:"02d" }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="year">Year</label>
+            <select name="year" id="year">
+                {% for y in year_choices %}
+                    <option value="{{ y }}" {% if y == year %}selected{% endif %}>
+                        {{ y }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="search">Search Customer</label>
+            <input type="text" id="search" name="search" value="{{ request.GET.search }}" placeholder="Name, phone or subscription...">
+        </div>
+
+        <div class="filter-group">
+            <input type="submit" value="Generate / Search" class="button default">
+        </div>
+    </form>
+
+    <!-- Collection Summary Module -->
+    <div class="module summary-table">
+        <h2>Collection Summary</h2>
+        <table>
+            <tbody>
+                <tr class="row1"><th>Total Bills</th><td>{{ total_bills }}</td></tr>
+                <tr class="row2"><th>Total Billed</th><td>₹{{ total_billed }}</td></tr>
+                <tr class="row1"><th>Total Collected</th><td style="color: #28a745; font-weight: bold;">₹{{ total_collected }}</td></tr>
+                <tr class="row2"><th>Total Pending</th><td style="color: var(--error-fg, #ba2121); font-weight: bold;">₹{{ total_pending }}</td></tr>
+                <tr class="row1"><th>Paid Bills</th><td>{{ paid_bills }}</td></tr>
+                <tr class="row2"><th>Partially Paid Bills</th><td>{{ partial_bills }}</td></tr>
+                <tr class="row1"><th>Pending Bills</th><td>{{ pending_bills }}</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Customer-wise Payment Details Module -->
+    <div class="module" id="changelist">
+        <h2>Customer-wise Payment Details</h2>
+        
+        {% if bills %}
+            <div class="results">
+                <table id="result_list">
+                    <thead>
+                        <tr>
+                            <th><div class="text">Customer</div></th>
+                            <th><div class="text">Phone</div></th>
+                            <th><div class="text">Subscription</div></th>
+                            <th><div class="text">Bill Amt</div></th>
+                            <th><div class="text">Paid</div></th>
+                            <th><div class="text">Pending</div></th>
+                            <th><div class="text">Status</div></th>
+                            <th><div class="text">Action</div></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bill in bills %}
+                        <tr class="{% cycle 'row1' 'row2' %}">
+                            <td>
+                                {% if bill.subscription.user.full_name %}
+                                    <strong>{{ bill.subscription.user.full_name }}</strong>
+                                {% else %}
+                                    <strong>{{ bill.subscription.user.email }}</strong>
+                                {% endif %}
+                            </td>
+                            <td>{{ bill.subscription.user.phone }}</td>
+                            <td>{{ bill.subscription.subscription_number }}</td>
+                            <td>₹{{ bill.total_amount }}</td>
+                            <td>₹{{ bill.paid_amount }}</td>
+                            <td>₹{{ bill.pending_amount }}</td>
+                            <td>
+                                {% if bill.status == "paid" %}
+                                    <span class="status-paid">Paid</span>
+                                {% elif bill.status == "partial" %}
+                                    <span class="status-partial">Partial</span>
+                                {% else %}
+                                    <span class="status-pending">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if bill.pending_amount > 0 %}
+                                    <!-- Using Django's native button class -->
+                                    <a href="{% url 'admin:milk-bill-record-payment' bill.id %}" class="button" style="padding: 4px 8px; font-size: 11px;">
+                                        Record Payment
+                                    </a>
+                                {% else %}
+                                    <span style="color: var(--body-quiet-color, #999);">-</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="empty-message">
+                <p>No milk bills found for the period <strong>{{ month|stringformat:"02d" }}/{{ year }}</strong>.</p>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

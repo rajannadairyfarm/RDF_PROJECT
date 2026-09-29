@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.log
+venv/
+.venv/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Django
+staticfiles/
+media/
+
+# Local development
+.vscode/
+.idea/

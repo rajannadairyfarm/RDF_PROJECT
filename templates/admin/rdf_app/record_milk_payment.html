@@ -1,0 +1,184 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    #content-main {
+        max-width: 800px;
+        margin-top: 10px;
+    }
+
+    .page-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--body-fg, #333);
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--hairline-color, #eee);
+        padding-bottom: 10px;
+    }
+
+    /* Info Tables matching Django Admin 'module' aesthetic */
+    .info-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .info-table th, .info-table td {
+        padding: 12px 15px;
+        text-align: left;
+        font-size: 13px;
+        border-bottom: 1px solid var(--hairline-color, #eee);
+    }
+
+    .info-table th {
+        width: 250px;
+        font-weight: 600;
+        color: var(--body-quiet-color, #666);
+        background: var(--darkened-bg, #f8f8f8);
+    }
+
+    .info-table tr:last-child th, .info-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Status colors */
+    .val-success { color: #28a745; font-weight: bold; }
+    .val-error { color: var(--error-fg, #ba2121); font-weight: bold; }
+    .val-default { font-weight: bold; color: var(--body-fg, #333); }
+
+    /* Customizing the form inputs */
+    .form-row input[type="number"] {
+        padding: 8px;
+        border: 1px solid var(--border-color, #ccc);
+        border-radius: 4px;
+        font-size: 14px;
+        min-width: 250px;
+        color: var(--body-fg, #333);
+        background: var(--body-bg, #fff);
+    }
+
+    .form-row input[type="number"]:focus {
+        border-color: var(--default-button-bg, #417690);
+        outline: none;
+    }
+
+    .help {
+        color: var(--body-quiet-color, #666);
+        font-size: 11px;
+        margin-top: 6px;
+        display: block;
+        font-weight: normal;
+    }
+
+    /* Action buttons alignment */
+    .submit-row {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        background: var(--darkened-bg, #f8f8f8);
+        border: 1px solid var(--hairline-color, #eee);
+        border-radius: 0 0 4px 4px;
+        padding: 12px 14px;
+        margin: 0;
+    }
+    
+    .cancel-link {
+        background: var(--button-bg, #79aec8);
+        color: var(--button-fg, #fff);
+        padding: 10px 15px;
+        border-radius: 4px;
+        text-transform: uppercase;
+        font-size: 11px;
+        font-weight: 500;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        line-height: 1;
+        transition: opacity 0.2s;
+    }
+
+    .cancel-link:hover {
+        opacity: 0.85;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+
+    <h1 class="page-title">Record Cash Payment</h1>
+
+    <div class="module">
+        <h2>Bill Information</h2>
+        <table class="info-table">
+            <tbody>
+                <tr>
+                    <th>Customer:</th>
+                    <td class="val-default">{{ customer_name }}</td>
+                </tr>
+                <tr>
+                    <th>Subscription:</th>
+                    <td class="val-default">{{ bill.subscription.subscription_number }}</td>
+                </tr>
+                <tr>
+                    <th>Billing Period:</th>
+                    <td class="val-default">{{ bill.billing_month|stringformat:"02d" }}/{{ bill.billing_year }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="module">
+        <h2>Payment Summary</h2>
+        <table class="info-table">
+            <tbody>
+                <tr>
+                    <th>Total Bill:</th>
+                    <td class="val-default">₹{{ bill.total_amount }}</td>
+                </tr>
+                <tr>
+                    <th>Already Paid:</th>
+                    <td class="val-success">₹{{ bill.paid_amount }}</td>
+                </tr>
+                <tr>
+                    <th>Pending:</th>
+                    <td class="val-error">₹{{ bill.pending_amount }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <form method="post" id="cash_payment_form">
+        {% csrf_token %}
+        
+        <fieldset class="module aligned">
+            <h2>Cash Payment</h2>
+            
+            <div class="form-row">
+                <div>
+                    <label for="payment_amount" class="required">Cash Amount Received:</label>
+                    <input 
+                        type="number" 
+                        id="payment_amount" 
+                        name="payment_amount" 
+                        step="0.01" 
+                        min="0.01" 
+                        max="{{ bill.pending_amount }}" 
+                        value="{{ payment_amount }}" 
+                        required
+                    >
+                    <span class="help">Maximum payment: ₹{{ bill.pending_amount }}</span>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Form Submission Row -->
+        <div class="submit-row">
+            <input type="submit" value="Record Payment" class="default" name="_save">
+            <a href="{% url 'admin:rdf_app_milkbill_changelist' %}" class="cancel-link">Cancel</a>
+        </div>
+        
+    </form>
+
+</div>
+{% endblock %}

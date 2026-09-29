@@ -1,0 +1,857 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en"  class="overflow-x-hidden">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Rajanna Dairy Farm</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Learn about Rajanna Dairy Farm, our services, our founders, and our commitment to bringing pure, farm-fresh dairy to your doorstep.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons (Phosphor Icons) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0f3d26',    
+                            primary: '#145c3a', 
+                            light: '#2a7a50',   
+                            milk: '#fdfdfc',    
+                            cream: '#f4f4ec',   
+                            sage: '#e6ede9',    
+                            gold: '#d4af37',    
+                            earth: '#5c4a3d',   
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['Lato', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+            background-color: #59db8d; /* Restored: Deeper, muted earthy-sage base */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Custom Theme Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #f4f4ec; }
+        ::-webkit-scrollbar-thumb { background: #2a7a50; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #145c3a; }
+
+        /* Restored: Ambient background from Contact/Login */
+        .ambient-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(135deg, #9fd58d 0%, #dce3de 50%, #d4af37 100%);
+        }
+        
+        @keyframes floatOrbSlow {
+            0% { transform: translateY(0px) scale(1); opacity: 0.15; }
+            50% { transform: translateY(-20px) scale(1.05); opacity: 0.3; }
+            100% { transform: translateY(0px) scale(1); opacity: 0.15; }
+        }
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: -1;
+        }
+
+        /* Header Link Underline Animation */
+        .nav-link {
+            position: relative;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #145c3a; 
+            transform-origin: bottom right;
+            transition: transform 0.3s ease-out;
+        }
+        .nav-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* Footer Social Media Brand Colors */
+        .social-fb:hover { background-color: #1877F2 !important; color: white !important; }
+        .social-ig:hover { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%) !important; color: white !important; }
+        .social-tw:hover { background-color: #1DA1F2 !important; color: white !important; }
+        .social-yt:hover { background-color: #FF0000 !important; color: white !important; }
+
+        /* Scroll Reveal Animation */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .scroll-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* NEW LOGO ANIMATION: Shimmer & Aura Ring */
+        @keyframes rotateRing {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes shimmerSweep {
+            0% { transform: translateX(-150%) skewX(-25deg); opacity: 0; }
+            30% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { transform: translateX(250%) skewX(-25deg); opacity: 0; }
+        }
+
+        .aura-ring {
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 1.5px dashed rgba(212, 175, 55, 0.6); /* Gold dashed border */
+            animation: rotateRing 15s linear infinite;
+        }
+        .shimmer-box {
+            position: relative;
+            overflow: hidden;
+            border-radius: 50%;
+        }
+        .shimmer-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 30%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            animation: shimmerSweep 4s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        /* Glassmorphism utility */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+
+<body class="text-brand-dark font-sans antialiased relative selection:bg-brand-primary selection:text-brand-milk">
+    <!-- Ambient Background Restored -->
+    <div class="ambient-bg"></div>
+    <div class="bg-orb w-96 h-96 bg-brand-light/20 top-0 left-0" style="animation: floatOrbSlow 12s ease-in-out infinite;"></div>
+    <div class="bg-orb w-[30rem] h-[30rem] bg-brand-gold/15 bottom-40 right-0" style="animation: floatOrbSlow 15s ease-in-out infinite reverse;"></div>
+    <div class="bg-orb w-80 h-80 bg-brand-milk/30 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" style="animation: floatOrbSlow 18s ease-in-out infinite;"></div>
+
+
+
+
+
+
+
+
+
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-brand-sage shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo & Brand -->
+                <a href="{% url 'shop' %}" class="flex items-center gap-3 group">
+                    <div class="w-12 h-12 rounded-full bg-white border border-brand-sage shadow-sm flex items-center justify-center overflow-hidden transition-transform group-hover:scale-105">
+                        <img src="{% static 'images/Logo.jpeg' %}" alt="Rajanna Dairy Farm Logo" class="w-[90%] h-[90%] object-contain mix-blend-multiply" onerror="this.src='https://placehold.co/100x100/145c3a/ffffff?text=Logo'">
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-serif text-xl md:text-2xl font-bold tracking-wide text-brand-primary leading-tight">RAJANNA</span>
+                        <span class="font-sans text-[0.65rem] md:text-xs tracking-[0.2em] uppercase font-bold text-brand-dark/80">Dairy Farm</span>
+                    </div>
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <!-- Desktop Navigation -->
+<nav class="hidden lg:flex items-center gap-8">
+    {% if user.is_authenticated %}
+        <a href="{% url 'shop' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url 'aboutus' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url 'contactus' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url 'user_profile' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+        <a href="{% url 'orders' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-package"></i> My Orders
+        </a>  
+        <a href=" {% url 'addresses' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-map-pin"></i> My Address
+        </a>
+         <a href="{% url 'my-milk-subscription' %}" 
+   class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+    <i class="ph ph-crown"></i> My Subscriptions
+</a>
+
+    {% else %}
+        <!-- Active Link -->
+        <a href="{% url 'shop' %}" class="flex items-center gap-2 text-sm font-bold text-brand-primary bg-brand-sage/40 px-3 py-1.5 rounded-lg">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url "aboutus" %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url "contactus" %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url "user_profile" %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+       
+    {% endif %}
+</nav>
+
+
+                <!-- Mobile Menu Button & Cart -->
+                <div class="lg:hidden flex items-center gap-4">
+                    <a href="{% url "cart" %}" class="text-brand-dark hover:text-brand-primary transition-colors relative">
+                        <i class="ph ph-shopping-cart text-2xl"></i>
+                          <span class="absolute -top-1 -right-1 w-4 h-4 bg-brand-gold text-brand-dark text-[0.65rem] font-bold rounded-full flex items-center justify-center border border-white">{{ cart_count }}</span>
+                    </a>
+                    <button id="mobile-menu-btn" class="text-brand-dark hover:text-brand-primary focus:outline-none p-2 transition-colors">
+                        <i class="ph ph-list text-2xl" id="mobile-menu-icon"></i>
+                    </button>
+                </div>
+                
+                
+                <!-- Desktop Cart + Auth -->
+<div class="hidden lg:flex items-center gap-4">
+    <!-- Cart -->
+    <a href="{% url "cart" %}" class="w-10 h-10 rounded-full bg-brand-sage/50 flex items-center justify-center text-brand-dark hover:bg-brand-primary hover:text-white transition-all relative">
+        <i class="ph ph-shopping-cart text-xl"></i>
+        <span class="absolute -top-1 -right-1 w-4 h-4 bg-brand-gold text-brand-dark text-[0.65rem] font-bold rounded-full flex items-center justify-center border border-white">{{ cart_count }}</span>
+    </a>
+
+    {% if user.is_authenticated %}
+        <!-- Logout with red icon -->
+        <a href="{% url "logout" %}" class="flex items-center gap-2 text-sm font-bold text-red-600 hover:text-red-800 transition-colors">
+            <i class="ph ph-sign-out text-lg"></i> Logout
+        </a>
+    {% else %}
+        <!-- Login highlighted -->
+<a href="{% url "login" %}" 
+   class="flex items-center gap-2 text-sm font-bold text-white bg-brand-primary px-3 py-1.5 rounded-lg shadow-md hover:bg-brand-dark transition-all">
+   Login
+</a>
+
+
+    {% endif %}
+</div>
+
+            </div>
+        </div>
+
+      
+
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-brand-sage shadow-xl absolute w-full left-0 origin-top">
+    <div class="px-4 pt-4 pb-6 space-y-2 flex flex-col max-w-7xl mx-auto">
+        {% if user.is_authenticated %}
+        <a href="{% url 'shop' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl transition-colors">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url "aboutus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url "contactus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url "user_profile" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+
+
+
+               <a href="{% url "orders" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-info"></i> My Orders
+        </a>
+      
+        <a href="{% url "addresses" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> My Addesses
+        </a>
+          <a href="{% url "my-milk-subscription" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> My Subscriptions
+        </a>
+          <a href="{% url "logout" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-red-600 bg-red-50 rounded-xl transition-colors">
+                <i class="ph ph-sign-out"></i> Logout
+            </a>
+ {% else %}
+  <a href="{% url 'shop' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl transition-colors">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url "aboutus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url "contactus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url "user_profile" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+       
+        
+           
+      
+            <a href="{% url "login" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl transition-colors">
+                Login
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+    </header>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <main class="flex-grow w-full relative z-10 overflow-hidden py-10 md:py-16">
+        
+        <section class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
+            <div class="flex flex-col md:flex-row items-center gap-10 md:gap-16">
+                
+                <!-- Left: Information (Restructured as requested) -->
+                <div class="w-full md:w-1/2 scroll-reveal">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="h-[2px] w-8 bg-brand-gold"></div>
+                        <span class="text-brand-dark font-bold tracking-widest uppercase text-xs">Who We Are</span>
+                    </div>
+                    <!-- Smaller, more refined typography -->
+                    <h1 class="text-3xl lg:text-4xl font-serif font-extrabold text-brand-dark mb-5 leading-tight">
+                        Nurturing Nature,<br>Nourishing You.
+                    </h1>
+                    <p class="text-base text-brand-earth/90 mb-4 leading-relaxed font-medium">
+                        At Rajanna Dairy Farm, we believe that true health begins at the roots. Nestled in the heart of pristine pastures, our farm is a sanctuary where traditional values meet ethical farming.
+                    </p>
+                    <p class="text-base text-brand-earth/90 mb-6 leading-relaxed">
+                        By prioritizing the well-being of our indigenous cattle and sustaining the soil that feeds them, we ensure that every drop of milk reaching your home is as pure and untouched as nature intended.
+                    </p>
+                    
+                    <a href="#services" class="inline-flex items-center justify-center px-6 py-2.5 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-brand-primary hover:bg-brand-dark hover:shadow-md transform hover:-translate-y-0.5 transition-all duration-300">
+                        Explore Services
+                        <i class="ph ph-arrow-down ml-2 text-lg"></i>
+                    </a>
+                </div>
+
+                <!-- Right: Refined Image (Smaller, elegant framing) -->
+                <div class="w-full md:w-1/2 relative scroll-reveal" style="transition-delay: 150ms;">
+                    <div class="relative w-full max-w-sm mx-auto aspect-[4/5] rounded-[2rem] p-2 bg-white/40 backdrop-blur-md shadow-lg border border-white/50">
+                        <div class="w-full h-full rounded-[1.5rem] overflow-hidden relative z-10">
+                            <img src="{% static 'images/farm.jpeg' %}" alt="Farm Scenery" class="w-full h-full object-cover">
+                        </div>
+                        <!-- Elegant offset accent -->
+                        <div class="absolute -bottom-4 -right-4 w-32 h-32 border-b-4 border-r-4 border-brand-gold rounded-br-[2rem] z-0 opacity-70"></div>
+                        <div class="absolute -top-4 -left-4 w-32 h-32 border-t-4 border-l-4 border-brand-primary rounded-tl-[2rem] z-0 opacity-70"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="w-full max-w-5xl mx-auto px-4 mb-24">
+            <div class="glass-card rounded-3xl p-8 md:p-12 text-center flex flex-col items-center border border-white/40 relative overflow-hidden">
+                
+                <!-- NEW ANIMATION: Aura Ring & Shimmer -->
+                <div class="relative w-32 h-32 md:w-40 md:h-40 mb-8 mt-4 scroll-reveal">
+                    <!-- Rotating dashed gold ring -->
+                    <div class="aura-ring"></div>
+                    <!-- Solid inner frame with light sweep -->
+                    <div class="shimmer-box w-full h-full bg-white rounded-full border-4 border-brand-primary shadow-lg flex items-center justify-center z-10 p-2">
+                        <img src="{% static 'images/Logo.jpeg' %}" alt="Rajanna Dairy Farm Logo" class="w-full h-full object-contain mix-blend-multiply rounded-full">
+                    </div>
+                </div>
+
+                <!-- Impact Lines -->
+                <div class="scroll-reveal" style="transition-delay: 150ms;">
+                    <i class="ph-fill ph-quotes text-3xl text-brand-gold/60 mb-3 mx-auto block"></i>
+                    <h2 class="text-2xl md:text-3xl font-serif font-bold text-brand-dark leading-tight mb-4">
+                        More than just a farm.<br>
+                        <span class="text-brand-primary">A legacy of absolute purity.</span>
+                    </h2>
+                    <p class="text-base md:text-lg text-brand-earth max-w-xl mx-auto font-medium">
+                        Bridging the gap between honest dairy farming and modern families who demand nothing but the best.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
+            <div class="text-center mb-10 scroll-reveal">
+                <span class="text-brand-gold font-bold tracking-widest uppercase text-xs mb-1 block">What We Do</span>
+                <h2 class="text-3xl font-serif font-bold text-brand-dark">Our Farm Services</h2>
+            </div>
+
+            <!-- GRID: 2 columns on mobile (grid-cols-2), 3 on desktop -->
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                
+                <!-- Service 1 -->
+                <div class="glass-card group rounded-2xl overflow-hidden scroll-reveal flex flex-col h-full hover:-translate-y-1 transition-transform duration-300">
+                    <div class="w-full aspect-[4/3] overflow-hidden relative">
+                        <img src="{% static 'images/milk.webp' %}" alt="Fresh Milk" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-brand-dark/10 group-hover:bg-transparent transition-colors"></div>
+                    </div>
+                    <!-- Smaller padding (p-3/4) to fit 2 items on mobile cleanly -->
+                    <div class="p-3 sm:p-5 flex flex-col flex-grow">
+                        <h3 class="text-sm sm:text-lg font-serif font-bold text-brand-dark mb-1 group-hover:text-brand-primary transition-colors">Daily Milk Delivery</h3>
+                        <p class="text-[0.65rem] sm:text-sm text-brand-earth/90 mb-3 line-clamp-3 flex-grow">Raw, unpasteurized A2 milk delivered straight from our milking parlors to your doorstep.</p>
+                        <a href="products.html" class="inline-flex items-center text-brand-gold font-bold text-[10px] sm:text-xs uppercase tracking-wider group-hover:text-brand-primary transition-colors mt-auto">Learn More <i class="ph ph-arrow-right ml-1"></i></a>
+                    </div>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="glass-card group rounded-2xl overflow-hidden scroll-reveal flex flex-col h-full hover:-translate-y-1 transition-transform duration-300" style="transition-delay: 100ms;">
+                    <div class="w-full aspect-[4/3] overflow-hidden relative">
+                        <img src="{% static 'images/diary.jpg' %}" alt="Artisanal Dairy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-brand-dark/10 group-hover:bg-transparent transition-colors"></div>
+                    </div>
+                    <div class="p-3 sm:p-5 flex flex-col flex-grow">
+                        <h3 class="text-sm sm:text-lg font-serif font-bold text-brand-dark mb-1 group-hover:text-brand-primary transition-colors">Artisanal Products</h3>
+                        <p class="text-[0.65rem] sm:text-sm text-brand-earth/90 mb-3 line-clamp-3 flex-grow">Traditional Bilona ghee, thick natural curd, and fresh paneer crafted using time-honored methods.</p>
+                        <a href="products.html" class="inline-flex items-center text-brand-gold font-bold text-[10px] sm:text-xs uppercase tracking-wider group-hover:text-brand-primary transition-colors mt-auto">Learn More <i class="ph ph-arrow-right ml-1"></i></a>
+                    </div>
+                </div>
+
+                <!-- Service 3 (On mobile, this centers or wraps to next row) -->
+                <div class="glass-card group rounded-2xl overflow-hidden scroll-reveal flex flex-col h-full hover:-translate-y-1 transition-transform duration-300 col-span-2 lg:col-span-1" style="transition-delay: 200ms;">
+                    <!-- Adjust aspect ratio for mobile full-width wrap, keeping normal on desktop -->
+                    <div class="w-full aspect-[21/9] lg:aspect-[4/3] overflow-hidden relative">
+                        <img src="{% static 'images/visit.jpg' %}" alt="Farm Visits" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-brand-dark/10 group-hover:bg-transparent transition-colors"></div>
+                    </div>
+                    <div class="p-3 sm:p-5 flex flex-col flex-grow">
+                        <h3 class="text-sm sm:text-lg font-serif font-bold text-brand-dark mb-1 group-hover:text-brand-primary transition-colors">Farm Experiences</h3>
+                        <p class="text-[0.65rem] sm:text-sm text-brand-earth/90 mb-3 line-clamp-3 flex-grow">Connect with nature. Bring your family for weekend farm tours to see our happy cattle.</p>
+                        <a href="contact.html" class="inline-flex items-center text-brand-gold font-bold text-[10px] sm:text-xs uppercase tracking-wider group-hover:text-brand-primary transition-colors mt-auto">Book a Visit <i class="ph ph-arrow-right ml-1"></i></a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
+            <div class="text-center mb-10 scroll-reveal">
+                <span class="text-brand-gold font-bold tracking-widest uppercase text-xs mb-1 block">The Founders</span>
+                <h2 class="text-3xl font-serif font-bold text-brand-dark">Meet The Pillars</h2>
+            </div>
+
+            <!-- New 2-Column sleek profile cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
+                
+                <!-- Founder 1 -->
+                <div class="glass-card rounded-[2rem] p-6 flex flex-col sm:flex-row items-center sm:items-start gap-6 scroll-reveal border-t-4 border-t-brand-primary">
+                    <div class="w-24 h-24 sm:w-28 sm:h-28 flex-shrink-0 rounded-full border-4 border-white shadow-md overflow-hidden relative">
+                        <img src="{% static 'images/ramanakar.heic' %}" alt="P Ramanakar" class="w-full h-full object-cover">
+                    </div>
+                    <div class="text-center sm:text-left flex-grow">
+                        <h3 class="text-xl font-serif font-bold text-brand-dark mb-1">P Ramanakar</h3>
+                        <p class="text-xs font-bold text-brand-gold tracking-widest uppercase mb-3">Co-Founder & Operations</p>
+                        <p class="text-sm text-brand-earth/90 italic leading-relaxed">
+                            "Dedicated to soil, soul, and sustainable farming. Every cow is treated as family."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Founder 2 -->
+                <div class="glass-card rounded-[2rem] p-6 flex flex-col sm:flex-row items-center sm:items-start gap-6 scroll-reveal border-t-4 border-t-brand-gold" style="transition-delay: 150ms;">
+                    <div class="w-24 h-24 sm:w-28 sm:h-28 flex-shrink-0 rounded-full border-4 border-white shadow-md overflow-hidden relative">
+                        <img src="{% static 'images/ramanakar.heic' %}" alt="P RajKumar" class="w-full h-full object-cover">
+                    </div>
+                    <div class="text-center sm:text-left flex-grow">
+                        <h3 class="text-xl font-serif font-bold text-brand-dark mb-1">P RajKumar</h3>
+                        <p class="text-xs font-bold text-brand-primary tracking-widest uppercase mb-3">Co-Founder & Logistics</p>
+                        <p class="text-sm text-brand-earth/90 italic leading-relaxed">
+                            "Ensuring unmatched freshness travels from our milking parlors directly to your doorstep, daily."
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+            <!-- Glassmorphism Subscribe Box -->
+            <div class="glass-card rounded-3xl p-6 md:p-10 mb-8 flex flex-col md:flex-row items-center justify-between gap-6 scroll-reveal border border-white/50 shadow-xl">
+                <div class="md:w-1/2 text-center md:text-left">
+                    <h2 class="text-2xl font-serif font-bold text-brand-dark mb-2">Join the Family</h2>
+                    <p class="text-sm text-brand-earth/80">Subscribe for farm updates and health insights.</p>
+                </div>
+                <div class="md:w-1/2 w-full">
+                    <form  class="flex flex-col sm:flex-row gap-2" method="POST" action="{% url 'subscribe' %}">
+    {% csrf_token %}
+
+      <input
+        type="hidden"
+        name="next"
+        value="{{ request.get_full_path }}"
+    >
+                        <input type="email" name="email" placeholder="Your email address" required 
+                            class="flex-grow px-4 py-3 rounded-xl text-sm text-brand-dark bg-white/70 border border-brand-sage focus:outline-none focus:ring-2 focus:ring-brand-primary/40 placeholder-brand-earth/50">
+                        <button type="submit" class="px-6 py-3 rounded-xl bg-brand-primary text-white text-sm font-bold hover:bg-brand-dark transition-colors shadow-sm whitespace-nowrap">
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Compact Community Numbers -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 scroll-reveal" style="transition-delay: 100ms;">
+                <div class="glass-card p-4 rounded-2xl text-center border border-white/40">
+                    <i class="ph-fill ph-house-line text-2xl text-brand-primary mb-1"></i>
+                    <h3 class="text-2xl font-bold text-brand-dark font-serif"><span class="counter" data-target="5000" data-suffix="+">0</span></h3>
+                    <p class="text-[0.65rem] uppercase tracking-wider text-brand-earth font-bold">Families</p>
+                </div>
+                <div class="glass-card p-4 rounded-2xl text-center border border-white/40">
+                    <i class="ph-fill ph-drop text-2xl text-brand-gold mb-1"></i>
+                    <h3 class="text-2xl font-bold text-brand-dark font-serif"><span class="counter" data-target="15000" data-suffix="L">0</span></h3>
+                    <p class="text-[0.65rem] uppercase tracking-wider text-brand-earth font-bold">Liters/Day</p>
+                </div>
+                <div class="glass-card p-4 rounded-2xl text-center border border-white/40">
+                    <i class="ph-fill ph-cow text-2xl text-brand-primary mb-1"></i>
+                    <h3 class="text-2xl font-bold text-brand-dark font-serif"><span class="counter" data-target="500" data-suffix="+">0</span></h3>
+                    <p class="text-[0.65rem] uppercase tracking-wider text-brand-earth font-bold">Happy Cattle</p>
+                </div>
+                <div class="glass-card p-4 rounded-2xl text-center border border-white/40">
+                    <i class="ph-fill ph-calendar-check text-2xl text-brand-gold mb-1"></i>
+                    <h3 class="text-2xl font-bold text-brand-dark font-serif"><span class="counter" data-target="15" data-suffix="+">0</span></h3>
+                    <p class="text-[0.65rem] uppercase tracking-wider text-brand-earth font-bold">Years Trust</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+ <!-- Footer -->
+    <footer class="bg-brand-dark text-brand-cream pt-16 pb-6 mt-auto border-t-4 border-brand-gold relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 mb-12">
+                <!-- Part 1: Brand Info -->
+                <div class="lg:col-span-1 flex flex-col items-start">
+                    <a href="{% url "shop" %}" class="flex items-center gap-3 mb-4 group">
+                        <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden">
+                            <img  src="{% static 'images/Logo.jpeg' %}" alt="Rajanna Dairy Farm Logo" class="w-[90%] h-[90%] object-contain mix-blend-multiply" onerror="this.src='https://placehold.co/100x100/145c3a/ffffff?text=Logo'">
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-serif text-xl font-bold tracking-wide text-brand-gold leading-tight">RAJANNA</span>
+                            <span class="font-sans text-[0.65rem] tracking-[0.2em] uppercase font-bold text-brand-cream/80">Dairy Farm</span>
+                        </div>
+                    </a>
+                    <p class="text-sm text-brand-cream/70 mb-6 leading-relaxed">
+                        Delivering pure, fresh, and natural dairy products straight from our farm to your home every morning.
+                    </p>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#1877F2] hover:text-white transition-all duration-300 hover:-translate-y-1"><i class="ph-fill ph-facebook-logo text-lg"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:text-white transition-all duration-300 hover:-translate-y-1" style="transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)'" onmouseout="this.style.background='rgba(244, 244, 236, 0.1)'"><i class="ph-fill ph-instagram-logo text-lg"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#1DA1F2] hover:text-white transition-all duration-300 hover:-translate-y-1"><i class="ph-fill ph-twitter-logo text-lg"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#FF0000] hover:text-white transition-all duration-300 hover:-translate-y-1"><i class="ph-fill ph-youtube-logo text-lg"></i></a>
+                    </div>
+                </div>
+
+                <!-- Part 2: About -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-info text-brand-gold text-xl"></i> About</h3>
+                    <ul class="space-y-3">
+                        <li><a href="{% url "contactus" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Contact Us</a></li>
+                        <li><a href="{% url "aboutus" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> About Us</a></li>
+                        <li><a href="{% url "ourstory" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Our Story</a></li>
+                        <li><a href="{% url 'subscribe' %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Subscribe</a></li>
+                    </ul>
+                </div>
+
+                <!-- Part 3: Platform -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-squares-four text-brand-gold text-xl"></i> Platform</h3>
+                    <ul class="space-y-3">
+                        <li><a href="{% url "shop" %}" class="text-sm text-brand-gold hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold transition-colors"></i> Shop</a></li>
+                        <li><a href="#" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Services</a></li>
+                        <li><a href="#" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Offers</a></li>
+                    </ul>
+                </div>
+
+                <!-- Part 4: Help -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-question text-brand-gold text-xl"></i> Help</h3>
+                    <ul class="space-y-3">
+                        <li><a href="{% url "terms_conditions" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Terms & Conditions</a></li>
+                        <li><a href="{% url "privacy_policy" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <!-- Part 5: Location -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-map-pin line text-brand-gold text-xl"></i> Location</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i class="ph-fill ph-map-pin text-brand-gold mt-0.5 text-lg"></i>
+                            <span class="text-sm text-brand-cream/70 leading-relaxed">123 Green Pastures Lane,<br>Dairy District, HYD 500001</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="ph-fill ph-phone text-brand-gold text-lg"></i>
+                            <span class="text-sm text-brand-cream/70">+91 98765 43210</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="ph-fill ph-envelope-simple text-brand-gold text-lg"></i>
+                            <span class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors cursor-pointer">hello@rajannadairy.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Copyright Bar -->
+            <div class="border-t border-brand-cream/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-sm text-brand-cream/60">
+                    &copy; <span id="year"></span> Rajanna Dairy Farms. <span class="text-brand-gold font-medium">Farm to home</span>
+                </div>
+                <div class="text-xs text-brand-cream/40 flex flex-wrap justify-center md:justify-end gap-3 md:gap-6 font-medium tracking-wide uppercase">
+                    <span>Fresh Milk</span><span class="hidden sm:inline text-brand-cream/20">•</span>
+                    <span>Pure Dairy</span><span class="hidden sm:inline text-brand-cream/20">•</span>
+                    <span>Natural Products</span><span class="hidden sm:inline text-brand-cream/20">•</span>
+                    <span>Organic Farming</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+        <!-- ============================================
+     DYNAMIC TOAST NOTIFICATIONS (DJANGO MESSAGES)
+============================================= -->
+{% if messages %}
+
+    <style>
+        /* Toast Entrance Animation */
+        @keyframes toastSlideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Progress Bar Draining Animation (3 seconds) */
+        @keyframes toastProgress {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+        
+        /* Toast Exit Animation */
+        @keyframes toastFadeOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        .animate-toast-slide-in {
+            animation: toastSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        
+        .animate-toast-progress {
+            /* 3s duration for the loading bar */
+            animation: toastProgress 3s linear forwards; 
+        }
+        
+        .animate-toast-fade-out {
+            animation: toastFadeOut 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+
+    <!-- Fixed Container at Top Right -->
+    <div id="toast-container" class="fixed top-24 right-4 sm:right-6 z-[9999] flex flex-col gap-3 w-full max-w-sm pointer-events-none px-4 sm:px-0">
+        
+        {% for message in messages %}
+            
+            <!-- Individual Toast Card -->
+            <div class="toast-message relative overflow-hidden bg-white/95 backdrop-blur-md shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-xl border-l-4 flex items-center justify-between p-4 transform transition-all duration-300 translate-x-full opacity-0 pointer-events-auto
+                {% if message.tags == 'error' %} border-red-500 text-red-600
+                {% elif message.tags == 'success' %} border-green-500 text-brand-primary
+                {% elif message.tags == 'warning' %} border-yellow-500 text-yellow-600
+                {% else %} border-blue-500 text-blue-600 {% endif %}"
+                role="alert">
+
+                <div class="flex items-center gap-3 z-10">
+                    <!-- Dynamic Icons based on tags -->
+                    {% if message.tags == 'error' %}
+                        <i class="ph-fill ph-warning-circle text-2xl"></i>
+                    {% elif message.tags == 'success' %}
+                        <i class="ph-fill ph-check-circle text-2xl"></i>
+                    {% elif message.tags == 'warning' %}
+                        <i class="ph-fill ph-warning text-2xl"></i>
+                    {% else %}
+                        <i class="ph-fill ph-info text-2xl"></i>
+                    {% endif %}
+
+                    <!-- Message Text -->
+                    <span class="text-sm font-bold text-brand-dark">{{ message }}</span>
+                </div>
+
+                <!-- Close Button -->
+                <button class="toast-close ml-4 text-brand-earth/50 hover:text-brand-dark focus:outline-none z-10 transition-colors" aria-label="Close">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+
+                <!-- 3-Second Loading/Progress Bar at bottom edge -->
+                <!-- Uses 'bg-current' to automatically match the parent's text color -->
+                <div class="absolute bottom-0 left-0 h-1 bg-current animate-toast-progress opacity-70"></div>
+                
+            </div>
+            
+        {% endfor %}
+        
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toasts = document.querySelectorAll('.toast-message');
+
+            toasts.forEach((toast, index) => {
+                // Stagger the entrance animation if there are multiple messages
+                setTimeout(() => {
+                    toast.classList.remove('translate-x-full', 'opacity-0');
+                    toast.classList.add('animate-toast-slide-in');
+
+                    // Auto dismiss exactly after 3 seconds (matching the progress bar CSS)
+                    const dismissTimeout = setTimeout(() => {
+                        dismissToast(toast);
+                    }, 3000);
+
+                    // Allow user to manually close it early
+                    const closeBtn = toast.querySelector('.toast-close');
+                    if (closeBtn) {
+                        closeBtn.addEventListener('click', () => {
+                            clearTimeout(dismissTimeout);
+                            dismissToast(toast);
+                        });
+                    }
+                }, index * 150); // 150ms delay between each toast popping up
+            });
+
+            function dismissToast(toastElement) {
+                // Swap entrance animation for exit animation
+                toastElement.classList.remove('animate-toast-slide-in');
+                toastElement.classList.add('animate-toast-fade-out');
+                
+                // Completely remove the element from the DOM after exit animation finishes
+                setTimeout(() => {
+                    toastElement.remove();
+                }, 400); // 400ms matches the CSS transition duration
+            }
+        });
+    </script>
+
+{% endif %}
+    <script>
+        // Set current year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileIcon = document.getElementById('mobile-menu-icon');
+
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileIcon.classList.replace('ph-x', 'ph-list');
+            } else {
+                mobileIcon.classList.replace('ph-list', 'ph-x');
+            }
+        });
+
+        // Scroll Reveal Animation Observer
+        const revealElements = document.querySelectorAll('.scroll-reveal');
+        const revealCallback = (entries, observer) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        };
+        const revealObserver = new IntersectionObserver(revealCallback, {
+            root: null,
+            threshold: 0.1,
+            rootMargin: "0px 0px -30px 0px"
+        });
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Animated Number Counters Logic
+        const counters = document.querySelectorAll('.counter');
+        const speed = 100;
+
+        const startCounters = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target;
+                    const updateCount = () => {
+                        const target = +counter.getAttribute('data-target');
+                        const count = +counter.innerText.replace(/\D/g,'');
+                        const suffix = counter.getAttribute('data-suffix') || '';
+                        
+                        const inc = target / speed;
+
+                        if (count < target) {
+                            counter.innerText = Math.ceil(count + inc) + suffix;
+                            setTimeout(updateCount, 25);
+                        } else {
+                            counter.innerText = target + suffix;
+                        }
+                    };
+                    updateCount();
+                    observer.unobserve(counter);
+                }
+            });
+        };
+
+        const counterObserver = new IntersectionObserver(startCounters, {
+            root: null,
+            threshold: 0.5 
+        });
+
+        counters.forEach(counter => {
+            counterObserver.observe(counter);
+        });
+    </script>
+</body>
+</html>

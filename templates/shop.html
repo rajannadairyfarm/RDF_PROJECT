@@ -1,0 +1,1040 @@
+
+
+
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en"  class="overflow-x-hidden">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Shop fresh, pure, and natural dairy products directly from Rajanna Dairy Farm.">
+    <title>Shop | Rajanna Dairy Farm</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons (Phosphor Icons for clean UI) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0f3d26',    
+                            primary: '#145c3a', 
+                            light: '#2a7a50',   
+                            milk: '#fdfdfc',    
+                            cream: '#f4f4ec',   
+                            sage: '#e6ede9',    
+                            gold: '#d4af37',    
+                            earth: '#5c4a3d',   
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['Lato', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+            background-color: #59db8d; /* Deeper, muted earthy-sage base */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Custom Theme Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #f4f4ec; }
+        ::-webkit-scrollbar-thumb { background: #2a7a50; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #145c3a; }
+
+        /* Ambient background */
+        .ambient-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(135deg, #9fd58d 0%, #dce3de 50%, #d4af37 100%);
+        }
+        
+        @keyframes floatOrbSlow {
+            0% { transform: translateY(0px) scale(1); opacity: 0.15; }
+            50% { transform: translateY(-20px) scale(1.05); opacity: 0.3; }
+            100% { transform: translateY(0px) scale(1); opacity: 0.15; }
+        }
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: -1;
+        }
+
+        /* Form entrance animation */
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-up {
+            animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Header Link Underline Animation */
+        .nav-link {
+            position: relative;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #145c3a; 
+            transform-origin: bottom right;
+            transition: transform 0.3s ease-out;
+        }
+        .nav-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* Glassmorphism utility */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.90);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Category Scroll hiding for cleaner look */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="text-brand-dark font-sans antialiased relative selection:bg-brand-primary selection:text-brand-milk">
+
+    <!-- Ambient Background -->
+    <div class="ambient-bg"></div>
+    <div class="bg-orb w-96 h-96 bg-brand-light/20 top-0 left-0" style="animation: floatOrbSlow 12s ease-in-out infinite;"></div>
+    <div class="bg-orb w-[30rem] h-[30rem] bg-brand-gold/15 bottom-0 right-0" style="animation: floatOrbSlow 15s ease-in-out infinite reverse;"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-brand-sage shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo & Brand -->
+                <a href="{% url 'shop' %}" class="flex items-center gap-3 group">
+                    <div class="w-12 h-12 rounded-full bg-white border border-brand-sage shadow-sm flex items-center justify-center overflow-hidden transition-transform group-hover:scale-105">
+                        <img src="{% static 'images/Logo.jpeg' %}" alt="Rajanna Dairy Farm Logo" class="w-[90%] h-[90%] object-contain mix-blend-multiply" onerror="this.src='https://placehold.co/100x100/145c3a/ffffff?text=Logo'">
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-serif text-xl md:text-2xl font-bold tracking-wide text-brand-primary leading-tight">RAJANNA</span>
+                        <span class="font-sans text-[0.65rem] md:text-xs tracking-[0.2em] uppercase font-bold text-brand-dark/80">Dairy Farm</span>
+                    </div>
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <!-- Desktop Navigation -->
+<nav class="hidden lg:flex items-center gap-8">
+    {% if user.is_authenticated %}
+        <a href="{% url 'shop' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url 'aboutus' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url 'contactus' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url 'user_profile' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+        <a href="{% url 'orders' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-package"></i> My Orders
+        </a>  
+        <a href=" {% url 'addresses' %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-map-pin"></i> My Address
+        </a>
+         <a href="{% url 'my-milk-subscription' %}" 
+   class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+    <i class="ph ph-crown"></i> My Subscriptions
+</a>
+
+    {% else %}
+        <!-- Active Link -->
+        <a href="{% url 'shop' %}" class="flex items-center gap-2 text-sm font-bold text-brand-primary bg-brand-sage/40 px-3 py-1.5 rounded-lg">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url "aboutus" %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url "contactus" %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url "user_profile" %}" class="flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+       
+    {% endif %}
+</nav>
+
+
+                <!-- Mobile Menu Button & Cart -->
+                <div class="lg:hidden flex items-center gap-4">
+                    <a href="{% url "cart" %}" class="text-brand-dark hover:text-brand-primary transition-colors relative">
+                        <i class="ph ph-shopping-cart text-2xl"></i>
+                          <span class="absolute -top-1 -right-1 w-4 h-4 bg-brand-gold text-brand-dark text-[0.65rem] font-bold rounded-full flex items-center justify-center border border-white">{{ cart_count }}</span>
+                    </a>
+                    <button id="mobile-menu-btn" class="text-brand-dark hover:text-brand-primary focus:outline-none p-2 transition-colors">
+                        <i class="ph ph-list text-2xl" id="mobile-menu-icon"></i>
+                    </button>
+                </div>
+                
+                
+                <!-- Desktop Cart + Auth -->
+<div class="hidden lg:flex items-center gap-4">
+    <!-- Cart -->
+    <a href="{% url "cart" %}" class="w-10 h-10 rounded-full bg-brand-sage/50 flex items-center justify-center text-brand-dark hover:bg-brand-primary hover:text-white transition-all relative">
+        <i class="ph ph-shopping-cart text-xl"></i>
+        <span class="absolute -top-1 -right-1 w-4 h-4 bg-brand-gold text-brand-dark text-[0.65rem] font-bold rounded-full flex items-center justify-center border border-white">{{ cart_count }}</span>
+    </a>
+
+    {% if user.is_authenticated %}
+        <!-- Logout with red icon -->
+        <a href="{% url "logout" %}" class="flex items-center gap-2 text-sm font-bold text-red-600 hover:text-red-800 transition-colors">
+            <i class="ph ph-sign-out text-lg"></i> Logout
+        </a>
+    {% else %}
+        <!-- Login highlighted -->
+<a href="{% url "login" %}" 
+   class="flex items-center gap-2 text-sm font-bold text-white bg-brand-primary px-3 py-1.5 rounded-lg shadow-md hover:bg-brand-dark transition-all">
+   Login
+</a>
+
+
+    {% endif %}
+</div>
+
+            </div>
+        </div>
+
+      
+
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-brand-sage shadow-xl absolute w-full left-0 origin-top">
+    <div class="px-4 pt-4 pb-6 space-y-2 flex flex-col max-w-7xl mx-auto">
+        {% if user.is_authenticated %}
+        <a href="{% url 'shop' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl transition-colors">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url "aboutus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url "contactus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url "user_profile" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+
+
+
+               <a href="{% url "orders" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-info"></i> My Orders
+        </a>
+      
+        <a href="{% url "addresses" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> My Addesses
+        </a>
+          <a href="{% url "my-milk-subscription" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> My Subscriptions
+        </a>
+          <a href="{% url "logout" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-red-600 bg-red-50 rounded-xl transition-colors">
+                <i class="ph ph-sign-out"></i> Logout
+            </a>
+ {% else %}
+  <a href="{% url 'shop' %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl transition-colors">
+            <i class="ph ph-house"></i> Home
+        </a>
+        <a href="{% url "aboutus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-info"></i> About us
+        </a>
+        <a href="{% url "contactus" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-phone"></i> Contact Us
+        </a>
+        <a href="{% url "user_profile" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-dark hover:bg-brand-sage/40 rounded-xl transition-colors">
+            <i class="ph ph-user"></i> Profile
+        </a>
+       
+        
+           
+      
+            <a href="{% url "login" %}" class="flex items-center gap-2 px-4 py-3 text-base font-bold text-brand-primary bg-brand-sage/30 rounded-xl transition-colors">
+                Login
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+    </header>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+    <!-- Main Storefront Content -->
+    <main class="flex-grow w-full relative z-10 py-8 md:py-12 px-4 sm:px-6 lg:px-8">
+
+        <!-- =========================
+     CATEGORIES SECTION
+========================== -->
+<section class="mb-8 md:mb-12 animate-slide-up w-full" style="animation-delay: 0.1s;">
+    {% if categories %}
+        <!-- Single-Line Horizontal Scroll Container (Centered when fits, Side-Scrollable when overflows) -->
+        <div class="w-full overflow-x-auto no-scrollbar py-2">
+            <div class="flex flex-nowrap items-center gap-2.5 md:gap-3.5 w-max mx-auto px-4">
+                
+                <!-- All Products Pill (Static) -->
+                <a href="/shop" class="shrink-0">
+                    <div class="flex items-center gap-2.5 px-3.5 py-2 md:px-4 md:py-2.5 glass-card rounded-xl border border-brand-primary bg-brand-sage/40 hover:bg-brand-sage/70 group transition-all shadow-sm cursor-pointer whitespace-nowrap">
+                        <div class="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-brand-primary text-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                            <i class="ph-fill ph-squares-four text-base md:text-lg"></i>
+                        </div>
+                        <h3 class="font-bold text-brand-dark text-xs md:text-sm whitespace-nowrap">
+                            All Products
+                        </h3>
+                    </div>
+                </a>
+
+                <!-- Django Categories Loop -->
+                {% for category in categories %}
+                <a href="{% url 'category-products' category.slug %}" class="shrink-0">
+                    <div class="flex items-center gap-2.5 px-3.5 py-2 md:px-4 md:py-2.5 glass-card rounded-xl border border-brand-sage/50 hover:border-brand-primary/50 hover:bg-white/90 shadow-sm hover:shadow transition-all group cursor-pointer whitespace-nowrap">
+                        {% if category.image %}
+                            <div class="w-7 h-7 md:w-8 md:h-8 rounded-lg overflow-hidden shrink-0 border border-brand-sage/60 bg-white p-0.5 shadow-sm group-hover:scale-105 transition-transform">
+                                <img src="{{ category.image.url }}" alt="{{ category.name }}" loading="lazy" class="w-full h-full object-contain">
+                            </div>
+                        {% else %}
+                            <div class="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-brand-cream border border-brand-sage text-brand-primary flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                                <i class="ph-fill ph-farm text-base md:text-lg"></i>
+                            </div>
+                        {% endif %}
+                        
+                        <h3 class="font-bold text-brand-dark text-xs md:text-sm whitespace-nowrap">
+                            {{ category.name }}
+                        </h3>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <div class="glass-card rounded-xl p-4 text-center text-brand-earth italic border border-brand-sage/50 text-xs md:text-sm max-w-md mx-auto">
+            <p>No categories available.</p>
+        </div>
+    {% endif %}
+</section>
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 items-start">
+            
+            <!-- =========================
+                 SIDEBAR FILTERS (Desktop Left, Mobile Off-canvas/Accordion)
+            ========================== -->
+            <aside class="w-full lg:w-1/4 flex-shrink-0 animate-slide-up">
+                
+                <!-- Search Bar (Moved OUTSIDE the toggle so it's always visible) -->
+                <div class="glass-card rounded-2xl md:rounded-[1.5rem] p-4 md:p-5 border-t-4 border-brand-primary mb-4 lg:mb-6">
+                    <form method="GET" action="{% url 'shop-filter' %}" class="relative">
+                        <input type="text" name="q" value="{{ search_query|default:'' }}" placeholder="Search products..." 
+                            class="w-full pl-10 pr-4 py-2.5 bg-white border border-brand-sage rounded-xl text-sm focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary shadow-sm text-brand-dark">
+                        <i class="ph ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-earth/60 text-lg"></i>
+                        
+                        <!-- Hidden inputs to preserve existing filters during search -->
+                        <input type="hidden" name="category" value="{{ selected_category|default:'' }}">
+                        <input type="hidden" name="stock" value="{{ stock_filter|default:'' }}">
+                        <input type="hidden" name="featured" value="{{ featured_filter|default:'' }}">
+                        <input type="hidden" name="sort" value="{{ selected_sort|default:'' }}">
+                        <input type="hidden" name="min_price" value="{{ min_price|default:'' }}">
+                        <input type="hidden" name="max_price" value="{{ max_price|default:'' }}">
+                        
+                        <button type="submit" class="hidden">Search</button>
+                    </form>
+                </div>
+
+                <!-- Mobile Filter Toggle -->
+                <button id="mobile-filter-btn" class="lg:hidden w-full flex items-center justify-between glass-card p-4 rounded-xl text-brand-dark font-bold mb-4 border border-brand-sage/50">
+                    <span class="flex items-center gap-2"><i class="ph-bold ph-faders"></i> Filters & Categories</span>
+                    <i class="ph-bold ph-caret-down transition-transform" id="mobile-filter-icon"></i>
+                </button>
+
+                <div id="filter-container" class="hidden lg:block space-y-4 md:space-y-6">
+                    
+                    <!-- Categories Filter -->
+                    <div class="glass-card rounded-2xl md:rounded-[1.5rem] p-5 md:p-6">
+                        <h3 class="font-serif font-bold text-base md:text-lg text-brand-dark mb-3 md:mb-4 border-b border-brand-sage pb-2">Categories</h3>
+                        <div class="flex flex-col space-y-2">
+                            <a href="{% url 'shop-filter' %}?q={{ search_query|urlencode }}&min_price={{ min_price }}&max_price={{ max_price }}&stock={{ stock_filter }}&featured={{ featured_filter }}&sort={{ selected_sort }}" 
+                               class="text-sm font-medium transition-colors {% if not selected_category %}text-brand-primary font-bold{% else %}text-brand-earth hover:text-brand-primary{% endif %}">
+                                All Categories
+                            </a>
+                            {% for category in categories %}
+                                <a href="{% url 'shop-filter' %}?q={{ search_query|urlencode }}&category={{ category.slug }}&min_price={{ min_price }}&max_price={{ max_price }}&stock={{ stock_filter }}&featured={{ featured_filter }}&sort={{ selected_sort }}" 
+                                   class="text-sm font-medium transition-colors {% if selected_category == category.slug %}text-brand-primary font-bold{% else %}text-brand-earth hover:text-brand-primary{% endif %} flex items-center gap-2">
+                                    {% if selected_category == category.slug %}<span class="w-1.5 h-1.5 rounded-full bg-brand-primary"></span>{% endif %}
+                                    {{ category.name }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Price Filter -->
+                    <div class="glass-card rounded-2xl md:rounded-[1.5rem] p-5 md:p-6">
+                        <h3 class="font-serif font-bold text-base md:text-lg text-brand-dark mb-3 md:mb-4 border-b border-brand-sage pb-2">Price Range</h3>
+                        <form method="GET" action="{% url 'shop-filter' %}" class="space-y-4">
+                            <!-- Preserve existing filters -->
+                            <input type="hidden" name="q" value="{{ search_query|default:'' }}">
+                            <input type="hidden" name="category" value="{{ selected_category|default:'' }}">
+                            <input type="hidden" name="stock" value="{{ stock_filter|default:'' }}">
+                            <input type="hidden" name="featured" value="{{ featured_filter|default:'' }}">
+                            <input type="hidden" name="sort" value="{{ selected_sort|default:'' }}">
+
+                            <div class="flex items-center gap-2">
+                                <div class="relative w-1/2">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-brand-earth/50 text-xs font-bold">₹</span>
+                                    <input type="number" name="min_price" value="{{ min_price }}" min="0" step="0.01" placeholder="Min" 
+                                        class="w-full pl-6 pr-2 py-2 bg-white border border-brand-sage rounded-lg text-sm text-brand-dark focus:outline-none focus:border-brand-primary">
+                                </div>
+                                <span class="text-brand-earth/50">-</span>
+                                <div class="relative w-1/2">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-brand-earth/50 text-xs font-bold">₹</span>
+                                    <input type="number" name="max_price" value="{{ max_price }}" min="0" step="0.01" placeholder="Max" 
+                                        class="w-full pl-6 pr-2 py-2 bg-white border border-brand-sage rounded-lg text-sm text-brand-dark focus:outline-none focus:border-brand-primary">
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full py-2 bg-brand-sage/50 hover:bg-brand-primary hover:text-white border border-brand-sage rounded-lg text-sm font-bold text-brand-dark transition-colors">
+                                Apply Price
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Status Filters -->
+                    <div class="glass-card rounded-2xl md:rounded-[1.5rem] p-5 md:p-6">
+                        <h3 class="font-serif font-bold text-base md:text-lg text-brand-dark mb-3 md:mb-4 border-b border-brand-sage pb-2">Status</h3>
+                        <div class="flex flex-col space-y-3">
+                            <a href="{% url 'shop-filter' %}?q={{ search_query|urlencode }}&category={{ selected_category }}&min_price={{ min_price }}&max_price={{ max_price }}&stock={% if stock_filter == 'in_stock' %}{% else %}in_stock{% endif %}&featured={{ featured_filter }}&sort={{ selected_sort }}" 
+                               class="flex items-center gap-2 text-sm font-medium {% if stock_filter == 'in_stock' %}text-brand-primary{% else %}text-brand-earth hover:text-brand-primary{% endif %}">
+                                <div class="w-4 h-4 rounded border flex items-center justify-center {% if stock_filter == 'in_stock' %}border-brand-primary bg-brand-primary text-white{% else %}border-brand-sage bg-white{% endif %}">
+                                    {% if stock_filter == 'in_stock' %}<i class="ph-bold ph-check text-[10px]"></i>{% endif %}
+                                </div>
+                                In Stock Only
+                            </a>
+                            <a href="{% url 'shop-filter' %}?q={{ search_query|urlencode }}&category={{ selected_category }}&min_price={{ min_price }}&max_price={{ max_price }}&stock={{ stock_filter }}&featured={% if featured_filter == 'true' %}{% else %}true{% endif %}&sort={{ selected_sort }}" 
+                               class="flex items-center gap-2 text-sm font-medium {% if featured_filter == 'true' %}text-brand-gold font-bold{% else %}text-brand-earth hover:text-brand-gold{% endif %}">
+                                <div class="w-4 h-4 rounded border flex items-center justify-center {% if featured_filter == 'true' %}border-brand-gold bg-brand-gold text-white{% else %}border-brand-sage bg-white{% endif %}">
+                                    {% if featured_filter == 'true' %}<i class="ph-bold ph-check text-[10px]"></i>{% endif %}
+                                </div>
+                                Featured Products
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </aside>
+
+            <!-- =========================
+                 MAIN PRODUCT AREA
+            ========================== -->
+            <div class="w-full lg:w-3/4 flex flex-col relative z-20">
+                
+                <!-- Top Bar: Title, Active Filters & Sort -->
+                <!-- FIX: Added relative z-50 to this animated wrapper to elevate its stacking context above the product grid -->
+                <div class="mb-6 animate-slide-up relative z-50" style="animation-delay: 0.1s;">
+                    
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-4 border-b border-brand-sage/60 pb-4">
+                        <div>
+                            <h1 class="text-2xl md:text-3xl lg:text-4xl font-serif font-extrabold text-brand-dark">
+                                {% if selected_category_name %}{{ selected_category_name }}{% else %}All Products{% endif %}
+                            </h1>
+                            <p class="text-xs md:text-sm text-brand-earth font-medium mt-1">Showing {{ total_products }} result{{ total_products|pluralize }}</p>
+                        </div>
+
+                        <!-- Sort Dropdown -->
+                        <div class="relative group">
+                            <button class="flex items-center gap-2 px-4 py-2 bg-white border border-brand-sage rounded-xl text-sm font-bold text-brand-dark shadow-sm hover:border-brand-primary transition-colors">
+                                <i class="ph-bold ph-sort-ascending"></i> 
+                                Sort By
+                                <i class="ph-bold ph-caret-down text-xs ml-1"></i>
+                            </button>
+                            <!-- Dropdown Menu -->
+                            <div class="absolute right-0 top-full mt-2 w-48 bg-white border border-brand-sage rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-2 z-[60]">
+                                <a href="{% url 'shop-filter' %}?q={{ search_query|urlencode }}&category={{ selected_category }}&min_price={{ min_price }}&max_price={{ max_price }}&stock={{ stock_filter }}&featured={{ featured_filter }}&sort=newest" class="block px-4 py-2 text-sm {% if selected_sort == 'newest' %}bg-brand-sage/40 text-brand-primary font-bold{% else %}text-brand-dark hover:bg-brand-cream{% endif %}">Newest</a>
+                                <a href="{% url 'shop-filter' %}?q={{ search_query|urlencode }}&category={{ selected_category }}&min_price={{ min_price }}&max_price={{ max_price }}&stock={{ stock_filter }}&featured={{ featured_filter }}&sort=price_low" class="block px-4 py-2 text-sm {% if selected_sort == 'price_low' %}bg-brand-sage/40 text-brand-primary font-bold{% else %}text-brand-dark hover:bg-brand-cream{% endif %}">Price: Low to High</a>
+                                <a href="{% url 'shop-filter' %}?q={{ search_query|urlencode }}&category={{ selected_category }}&min_price={{ min_price }}&max_price={{ max_price }}&stock={{ stock_filter }}&featured={{ featured_filter }}&sort=price_high" class="block px-4 py-2 text-sm {% if selected_sort == 'price_high' %}bg-brand-sage/40 text-brand-primary font-bold{% else %}text-brand-dark hover:bg-brand-cream{% endif %}">Price: High to Low</a>
+                                <a href="{% url 'shop-filter' %}?q={{ search_query|urlencode }}&category={{ selected_category }}&min_price={{ min_price }}&max_price={{ max_price }}&stock={{ stock_filter }}&featured={{ featured_filter }}&sort=name_az" class="block px-4 py-2 text-sm {% if selected_sort == 'name_az' %}bg-brand-sage/40 text-brand-primary font-bold{% else %}text-brand-dark hover:bg-brand-cream{% endif %}">Name: A-Z</a>
+                                <a href="{% url 'shop-filter' %}?q={{ search_query|urlencode }}&category={{ selected_category }}&min_price={{ min_price }}&max_price={{ max_price }}&stock={{ stock_filter }}&featured={{ featured_filter }}&sort=name_za" class="block px-4 py-2 text-sm {% if selected_sort == 'name_za' %}bg-brand-sage/40 text-brand-primary font-bold{% else %}text-brand-dark hover:bg-brand-cream{% endif %}">Name: Z-A</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Active Filters Tags -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        {% if search_query or selected_category_name or min_price or max_price or stock_filter == "in_stock" or featured_filter == "true" %}
+                            <span class="text-[10px] sm:text-xs font-bold text-brand-earth/80 uppercase tracking-widest mr-1">Active:</span>
+                        {% endif %}
+
+                        {% if search_query %}
+                            <span class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 bg-white border border-brand-sage rounded-full text-[10px] sm:text-xs font-medium text-brand-dark shadow-sm">
+                                Search: <strong>"{{ search_query }}"</strong>
+                            </span>
+                        {% endif %}
+                        
+                        {% if selected_category_name %}
+                            <span class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 bg-white border border-brand-sage rounded-full text-[10px] sm:text-xs font-medium text-brand-dark shadow-sm">
+                                Category: <strong>{{ selected_category_name }}</strong>
+                            </span>
+                        {% endif %}
+
+                        {% if min_price or max_price %}
+                            <span class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 bg-white border border-brand-sage rounded-full text-[10px] sm:text-xs font-medium text-brand-dark shadow-sm">
+                                Price: 
+                                <strong>
+                                    {% if min_price %}₹{{ min_price }}{% else %}₹0{% endif %} 
+                                    - 
+                                    {% if max_price %}₹{{ max_price }}{% else %}Max{% endif %}
+                                </strong>
+                            </span>
+                        {% endif %}
+
+                        {% if stock_filter == "in_stock" %}
+                            <span class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 bg-green-50 border border-green-200 rounded-full text-[10px] sm:text-xs font-medium text-green-700 shadow-sm">
+                                <i class="ph-bold ph-check text-green-600"></i> In Stock
+                            </span>
+                        {% endif %}
+
+                        {% if featured_filter == "true" %}
+                            <span class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 bg-brand-gold/10 border border-brand-gold/30 rounded-full text-[10px] sm:text-xs font-medium text-brand-dark shadow-sm">
+                                <i class="ph-fill ph-star text-brand-gold"></i> Featured
+                            </span>
+                        {% endif %}
+
+                        {% if search_query or selected_category_name or min_price or max_price or stock_filter == "in_stock" or featured_filter == "true" %}
+                            <a href="{% url 'shop' %}" class="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 bg-red-50 text-red-600 hover:bg-red-100 rounded-full text-[10px] sm:text-xs font-bold transition-colors shadow-sm ml-auto sm:ml-0">
+                                <i class="ph-bold ph-x"></i> Clear All
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Product Grid -->
+                <!-- Set z-index lower than dropdown container -->
+                <section class="animate-slide-up relative z-0" style="animation-delay: 0.2s;">
+                    {% if products %}
+                        <!-- Grid: 2 cols mobile, 3 tablet, 4 desktop to make cards slightly smaller -->
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
+                            {% for product in products %}
+                                <!-- Slightly reduced border-radius and padding for a tighter, smaller card -->
+                             
+
+
+                                <article class="glass-card rounded-2xl overflow-hidden flex flex-col group hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(20,92,58,0.1)] transition-all duration-300 border border-brand-sage/60 relative bg-white z-0">
+
+    <!-- Wishlist Heart Icon -->
+    <a href="#" class="absolute top-2 right-2 md:top-3 md:right-3 z-20 w-7 h-7 md:w-8 md:h-8 bg-white/90 backdrop-blur rounded-full flex items-center justify-center text-brand-earth/50 hover:text-red-500 hover:bg-white shadow-sm border border-brand-sage/50 transition-all group/heart" aria-label="Add to wishlist">
+        <i class="ph-fill ph-heart text-sm md:text-base transition-transform group-hover/heart:scale-110"></i>
+    </a>
+
+    <!-- Product Link wraps image + details -->
+    <a href="{% url 'product-detail' product.slug %}" class="flex flex-col flex-grow relative z-10" aria-label="View {{ product.name }} details">
+
+        <!-- Product Image Area -->
+        <div class="relative w-full aspect-square border-b border-brand-sage/30 overflow-hidden bg-brand-cream/10 flex items-center justify-center p-4 sm:p-5">
+            {% if product.discount_percentage > 0 %}
+                <div class="absolute top-2 left-2 z-10 bg-brand-gold text-brand-dark text-[0.55rem] sm:text-[0.65rem] font-bold px-1.5 py-0.5 rounded shadow-sm">
+                    {{ product.discount_percentage|floatformat:0 }}% OFF
+                </div>
+            {% endif %}
+
+            {% if product.main_image %}
+                <img src="{{ product.get_image_url }}" alt="{{ product.name }}" loading="lazy" class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500 pointer-events-none">
+            {% else %}
+                <i class="ph-fill ph-image text-3xl md:text-4xl text-brand-earth/30"></i>
+            {% endif %}
+
+            {% if not product.is_in_stock %}
+                <div class="absolute inset-0 bg-white/60 backdrop-blur-[2px] flex flex-col items-center justify-center z-10 pointer-events-none">
+                    <span class="px-3 py-1.5 bg-red-50 text-red-600 font-bold rounded-lg text-[0.65rem] sm:text-xs shadow-sm border border-red-100">Out of Stock</span>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Product Details -->
+        <div class="p-3 sm:p-4 flex flex-col flex-grow bg-brand-milk/30">
+            <small class="text-brand-primary text-[0.55rem] sm:text-[0.6rem] font-bold uppercase tracking-widest block">
+                {{ product.category.name }}
+            </small>
+            <h3 class="text-sm sm:text-base font-serif font-bold text-brand-dark leading-tight mb-2 group-hover:text-brand-primary transition-colors line-clamp-2">
+                {{ product.name }}
+            </h3>
+            <div class="flex items-center gap-1.5 flex-wrap">
+                <strong class="text-sm sm:text-base md:text-lg font-bold text-brand-dark leading-none">₹{{ product.selling_price|floatformat:2 }}</strong>
+                {% if product.discount_percentage > 0 %}
+                    <del class="text-[0.65rem] sm:text-xs text-red-500 font-bold leading-none">₹{{ product.price|floatformat:2 }}</del>
+                {% endif %}
+            </div>
+            <p class="text-[0.6rem] sm:text-[0.65rem] text-brand-earth/80 font-medium mt-1">Per {{ product.get_unit_display }}</p>
+        </div>
+    </a>
+
+    <!-- Add to Cart Button (outside product link so it’s clickable separately) -->
+    <div class="p-3 sm:p-4 relative z-20">
+        {% if product.is_in_stock %}
+         <form method="POST" action="{% url 'cart-add' product.product_id %}" class="flex flex-col sm:flex-row gap-4 items-start sm:items-end">
+                                {% csrf_token %}
+                                <input
+        type="hidden"
+        name="quantity"
+        value="1"
+        min="1"
+        max="{{ product.stock_quantity }}"
+        step="1"
+        required
+    >
+    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+            <button type="submit" data-product-id="{{ product.product_id }}" class="w-full flex items-center justify-center py-1.5 sm:py-2 bg-brand-cream border border-brand-sage hover:bg-brand-primary hover:text-white hover:border-brand-primary text-brand-dark rounded-lg text-[0.7rem] sm:text-xs font-bold transition-colors shadow-sm gap-1">
+                <i class="ph-bold ph-plus"></i> Add
+            </button>
+        </form>
+        {% else %}
+            <button type="button" disabled class="w-full flex items-center justify-center py-1.5 sm:py-2 bg-brand-sage/50 border border-brand-sage/50 text-brand-earth/50 rounded-lg text-[0.7rem] sm:text-xs font-bold cursor-not-allowed">
+                Sold Out
+            </button>
+        {% endif %}
+    </div>
+</article>
+
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <!-- Empty State -->
+                        <div class="flex flex-col items-center justify-center py-16 md:py-20 text-center glass-card rounded-2xl md:rounded-[2rem] border-t-4 border-brand-gold shadow-lg">
+                            <div class="w-16 h-16 md:w-20 md:h-20 bg-brand-sage rounded-full flex items-center justify-center mb-4 md:mb-6 border border-brand-sage shadow-inner">
+                                <i class="ph-fill ph-magnifying-glass text-3xl md:text-4xl text-brand-primary"></i>
+                            </div>
+                            <h3 class="text-xl md:text-2xl font-serif font-bold text-brand-dark mb-2">No products found</h3>
+                            <p class="text-sm md:text-base text-brand-earth mb-6 max-w-md px-4">We couldn't find any products matching your current filters. Try adjusting your search or clear filters to see more.</p>
+                            <a href="{% url 'shop' %}" class="inline-flex items-center justify-center px-6 py-2.5 bg-brand-primary hover:bg-brand-dark text-white rounded-xl text-sm font-bold shadow-md transition-colors">
+                                Clear All Filters
+                            </a>
+                        </div>
+                    {% endif %}
+                </section>
+            </div>
+
+
+            
+        </div>
+         <!-- =========================
+                 FEATURED PRODUCTS
+            ========================== -->
+            {% comment %} <section class="mb-16 animate-slide-up" style="animation-delay: 0.2s;">
+                <div class="flex items-center gap-3 mb-6 md:mb-8">
+                    <i class="ph-fill ph-star text-brand-gold text-xl md:text-2xl"></i>
+                    <h2 class="text-xl md:text-3xl font-serif font-bold text-brand-dark">Featured Products</h2>
+                    <div class="h-[1px] flex-grow bg-brand-sage/60 ml-4 hidden sm:block"></div>
+                </div>
+
+                {% if featured_products %}
+                    <!-- Updated Grid: 2 cols on mobile (grid-cols-2), 3 on md, 4 on lg -->
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6 md:gap-8">
+                        {% for product in featured_products %}
+                            <article class="glass-card rounded-2xl md:rounded-[2rem] overflow-hidden flex flex-col group hover:-translate-y-1.5 hover:shadow-[0_8px_40px_rgba(20,92,58,0.08)] transition-all duration-300 border border-brand-primary/20 shadow-md relative">
+                                
+                                <!-- Absolute link spanning the whole card for easy click-through -->
+                                <a href="{% url 'product-detail' product.slug %}" class="absolute inset-0 z-0" aria-label="View {{ product.name }} details"></a>
+
+                                <!-- Featured Badge -->
+                                <div class="absolute -top-1 -right-1 z-10 pointer-events-none">
+                                    <svg class="w-8 h-8 md:w-10 md:h-10" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M0 0H40V40L0 0Z" fill="#d4af37"/>
+                                        <path d="M22 10L25 15L31 16L27 21L28 27L22 25L16 27L17 21L13 16L19 15L22 10Z" fill="white"/>
+                                    </svg>
+                                </div>
+
+                                <!-- Product Image Area -->
+                                <div class="relative w-full aspect-square md:aspect-[4/3] bg-white border-b border-brand-sage/30 overflow-hidden p-2 sm:p-4">
+                                    {% if product.discount_percentage > 0 %}
+                                        <div class="absolute top-2 left-2 md:top-4 md:left-4 z-10 bg-brand-primary text-white text-[0.6rem] md:text-xs font-bold px-2 py-0.5 md:py-1 rounded shadow-sm">
+                                            {{ product.discount_percentage|floatformat:0 }}% OFF
+                                        </div>
+                                    {% endif %}
+
+                                    {% if product.main_image %}
+                                        <!-- Using object-contain to ensure image is never cut off -->
+                                        <img src="{{ product.get_image_url }}" alt="{{ product.name }}" loading="lazy" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 pointer-events-none">
+                                    {% else %}
+                                        <div class="w-full h-full flex flex-col items-center justify-center bg-brand-cream text-brand-earth/40">
+                                            <i class="ph-fill ph-image text-3xl md:text-5xl mb-2"></i>
+                                            <span class="text-[0.6rem] md:text-xs font-bold uppercase tracking-widest">No Image</span>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if not product.is_in_stock %}
+                                        <div class="absolute inset-0 bg-white/70 backdrop-blur-[2px] flex flex-col items-center justify-center z-10 pointer-events-none">
+                                            <span class="px-2 md:px-4 py-1 md:py-2 bg-red-50 text-red-600 font-bold rounded-lg md:rounded-xl text-[0.65rem] md:text-sm shadow-sm border border-red-200">Out of Stock</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Product Details -->
+                                <div class="p-3 md:p-5 flex flex-col flex-grow bg-brand-milk/50">
+                                    <small class="text-brand-primary text-[0.55rem] md:text-[0.65rem] font-bold uppercase tracking-widest mb-1 block">
+                                        {{ product.category.name }}
+                                    </small>
+                                    
+                                    <h3 class="text-sm sm:text-base md:text-lg font-serif font-bold text-brand-dark leading-tight mb-2 group-hover:text-brand-primary transition-colors line-clamp-2">
+                                        {{ product.name }}
+                                    </h3>
+
+                                    <!-- Price and Stock Area -->
+                                    <div class="mt-auto pt-2">
+                                        <div class="flex flex-col mb-3">
+                                            <div class="flex items-center gap-1.5 flex-wrap">
+                                                <strong class="text-sm sm:text-base md:text-xl font-bold text-brand-dark">₹{{ product.selling_price|floatformat:2 }}</strong>
+                                                {% if product.discount_percentage > 0 %}
+                                                    <!-- Discount Price in Red as requested -->
+                                                    <del class="text-[0.65rem] sm:text-xs md:text-sm text-red-500 font-bold">₹{{ product.price|floatformat:2 }}</del>
+                                                {% endif %}
+                                            </div>
+                                            <p class="text-[0.6rem] md:text-xs text-brand-earth font-medium mt-0.5">Per {{ product.get_unit_display }}</p>
+                                        </div>
+
+                                        <!-- Action Buttons - Needs relative & z-10 to be clickable above the card link overlay -->
+                                        <div class="relative z-10">
+                                            {% if product.is_in_stock %}
+                                                <button type="button" data-product-id="{{ product.product_id }}" class="w-full flex items-center justify-center py-2 md:py-2.5 bg-brand-primary hover:bg-brand-dark text-white rounded-lg md:rounded-xl text-[0.7rem] md:text-sm font-bold transition-colors shadow-sm gap-1 md:gap-1.5">
+                                                    <i class="ph-bold ph-plus"></i> Add
+                                                </button>
+                                            {% else %}
+                                                <button type="button" disabled class="w-full flex items-center justify-center py-2 md:py-2.5 bg-brand-sage/50 border border-brand-sage/50 text-brand-earth/50 rounded-lg md:rounded-xl text-[0.7rem] md:text-sm font-bold cursor-not-allowed">
+                                                    Sold Out
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="glass-card rounded-2xl p-8 text-center border border-brand-sage/50">
+                        <div class="w-16 h-16 bg-brand-sage rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="ph-fill ph-star-half text-2xl text-brand-earth/50"></i>
+                        </div>
+                        <p class="text-brand-earth font-medium text-sm md:text-base">No featured products available at the moment.</p>
+                    </div>
+                {% endif %}
+            </section> {% endcomment %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark text-brand-cream pt-16 pb-6 mt-auto border-t-4 border-brand-gold relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 mb-12">
+                <!-- Part 1: Brand Info -->
+                <div class="lg:col-span-1 flex flex-col items-start">
+                    <a href="{% url "shop" %}" class="flex items-center gap-3 mb-4 group">
+                        <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden">
+                            <img  src="{% static 'images/Logo.jpeg' %}" alt="Rajanna Dairy Farm Logo" class="w-[90%] h-[90%] object-contain mix-blend-multiply" onerror="this.src='https://placehold.co/100x100/145c3a/ffffff?text=Logo'">
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-serif text-xl font-bold tracking-wide text-brand-gold leading-tight">RAJANNA</span>
+                            <span class="font-sans text-[0.65rem] tracking-[0.2em] uppercase font-bold text-brand-cream/80">Dairy Farm</span>
+                        </div>
+                    </a>
+                    <p class="text-sm text-brand-cream/70 mb-6 leading-relaxed">
+                        Delivering pure, fresh, and natural dairy products straight from our farm to your home every morning.
+                    </p>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#1877F2] hover:text-white transition-all duration-300 hover:-translate-y-1"><i class="ph-fill ph-facebook-logo text-lg"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:text-white transition-all duration-300 hover:-translate-y-1" style="transition: all 0.3s;" onmouseover="this.style.background='linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)'" onmouseout="this.style.background='rgba(244, 244, 236, 0.1)'"><i class="ph-fill ph-instagram-logo text-lg"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#1DA1F2] hover:text-white transition-all duration-300 hover:-translate-y-1"><i class="ph-fill ph-twitter-logo text-lg"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-cream hover:bg-[#FF0000] hover:text-white transition-all duration-300 hover:-translate-y-1"><i class="ph-fill ph-youtube-logo text-lg"></i></a>
+                    </div>
+                </div>
+
+                <!-- Part 2: About -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-info text-brand-gold text-xl"></i> About</h3>
+                    <ul class="space-y-3">
+                        <li><a href="{% url "contactus" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Contact Us</a></li>
+                        <li><a href="{% url "aboutus" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> About Us</a></li>
+                        <li><a href="{% url "ourstory" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Our Story</a></li>
+                        <li><a href="{% url 'subscribe' %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Subscribe</a></li>
+                    </ul>
+                </div>
+
+                <!-- Part 3: Platform -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-squares-four text-brand-gold text-xl"></i> Platform</h3>
+                    <ul class="space-y-3">
+                        <li><a href="{% url "shop" %}" class="text-sm text-brand-gold hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold transition-colors"></i> Shop</a></li>
+                        <li><a href="#" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Services</a></li>
+                        <li><a href="#" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Offers</a></li>
+                    </ul>
+                </div>
+
+                <!-- Part 4: Help -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-question text-brand-gold text-xl"></i> Help</h3>
+                    <ul class="space-y-3">
+                        <li><a href="{% url "terms_conditions" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Terms & Conditions</a></li>
+                        <li><a href="{% url "privacy_policy" %}" class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors flex items-center gap-2 group"><i class="ph ph-caret-right text-xs text-brand-gold/0 group-hover:text-brand-gold transition-colors"></i> Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <!-- Part 5: Location -->
+                <div>
+                    <h3 class="text-lg font-serif font-bold text-white mb-5 flex items-center gap-2"><i class="ph-fill ph-map-pin line text-brand-gold text-xl"></i> Location</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i class="ph-fill ph-map-pin text-brand-gold mt-0.5 text-lg"></i>
+                            <span class="text-sm text-brand-cream/70 leading-relaxed">123 Green Pastures Lane,<br>Dairy District, HYD 500001</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="ph-fill ph-phone text-brand-gold text-lg"></i>
+                            <span class="text-sm text-brand-cream/70">+91 98765 43210</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="ph-fill ph-envelope-simple text-brand-gold text-lg"></i>
+                            <span class="text-sm text-brand-cream/70 hover:text-brand-gold transition-colors cursor-pointer">hello@rajannadairy.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Copyright Bar -->
+            <div class="border-t border-brand-cream/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-sm text-brand-cream/60">
+                    &copy; <span id="year"></span> Rajanna Dairy Farms. <span class="text-brand-gold font-medium">Farm to home</span>
+                </div>
+                <div class="text-xs text-brand-cream/40 flex flex-wrap justify-center md:justify-end gap-3 md:gap-6 font-medium tracking-wide uppercase">
+                    <span>Fresh Milk</span><span class="hidden sm:inline text-brand-cream/20">•</span>
+                    <span>Pure Dairy</span><span class="hidden sm:inline text-brand-cream/20">•</span>
+                    <span>Natural Products</span><span class="hidden sm:inline text-brand-cream/20">•</span>
+                    <span>Organic Farming</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================
+     DYNAMIC TOAST NOTIFICATIONS (DJANGO MESSAGES)
+============================================= -->
+{% if messages %}
+
+    <style>
+        /* Toast Entrance Animation */
+        @keyframes toastSlideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Progress Bar Draining Animation (3 seconds) */
+        @keyframes toastProgress {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+        
+        /* Toast Exit Animation */
+        @keyframes toastFadeOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        .animate-toast-slide-in {
+            animation: toastSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        
+        .animate-toast-progress {
+            /* 3s duration for the loading bar */
+            animation: toastProgress 3s linear forwards; 
+        }
+        
+        .animate-toast-fade-out {
+            animation: toastFadeOut 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+
+    <!-- Fixed Container at Top Right -->
+    <div id="toast-container" class="fixed top-24 right-4 sm:right-6 z-[9999] flex flex-col gap-3 w-full max-w-sm pointer-events-none px-4 sm:px-0">
+        
+        {% for message in messages %}
+            
+            <!-- Individual Toast Card -->
+            <div class="toast-message relative overflow-hidden bg-white/95 backdrop-blur-md shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-xl border-l-4 flex items-center justify-between p-4 transform transition-all duration-300 translate-x-full opacity-0 pointer-events-auto
+                {% if message.tags == 'error' %} border-red-500 text-red-600
+                {% elif message.tags == 'success' %} border-green-500 text-brand-primary
+                {% elif message.tags == 'warning' %} border-yellow-500 text-yellow-600
+                {% else %} border-blue-500 text-blue-600 {% endif %}"
+                role="alert">
+
+                <div class="flex items-center gap-3 z-10">
+                    <!-- Dynamic Icons based on tags -->
+                    {% if message.tags == 'error' %}
+                        <i class="ph-fill ph-warning-circle text-2xl"></i>
+                    {% elif message.tags == 'success' %}
+                        <i class="ph-fill ph-check-circle text-2xl"></i>
+                    {% elif message.tags == 'warning' %}
+                        <i class="ph-fill ph-warning text-2xl"></i>
+                    {% else %}
+                        <i class="ph-fill ph-info text-2xl"></i>
+                    {% endif %}
+
+                    <!-- Message Text -->
+                    <span class="text-sm font-bold text-brand-dark">{{ message }}</span>
+                </div>
+
+                <!-- Close Button -->
+                <button class="toast-close ml-4 text-brand-earth/50 hover:text-brand-dark focus:outline-none z-10 transition-colors" aria-label="Close">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+
+                <!-- 3-Second Loading/Progress Bar at bottom edge -->
+                <!-- Uses 'bg-current' to automatically match the parent's text color -->
+                <div class="absolute bottom-0 left-0 h-1 bg-current animate-toast-progress opacity-70"></div>
+                
+            </div>
+            
+        {% endfor %}
+        
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toasts = document.querySelectorAll('.toast-message');
+
+            toasts.forEach((toast, index) => {
+                // Stagger the entrance animation if there are multiple messages
+                setTimeout(() => {
+                    toast.classList.remove('translate-x-full', 'opacity-0');
+                    toast.classList.add('animate-toast-slide-in');
+
+                    // Auto dismiss exactly after 3 seconds (matching the progress bar CSS)
+                    const dismissTimeout = setTimeout(() => {
+                        dismissToast(toast);
+                    }, 3000);
+
+                    // Allow user to manually close it early
+                    const closeBtn = toast.querySelector('.toast-close');
+                    if (closeBtn) {
+                        closeBtn.addEventListener('click', () => {
+                            clearTimeout(dismissTimeout);
+                            dismissToast(toast);
+                        });
+                    }
+                }, index * 150); // 150ms delay between each toast popping up
+            });
+
+            function dismissToast(toastElement) {
+                // Swap entrance animation for exit animation
+                toastElement.classList.remove('animate-toast-slide-in');
+                toastElement.classList.add('animate-toast-fade-out');
+                
+                // Completely remove the element from the DOM after exit animation finishes
+                setTimeout(() => {
+                    toastElement.remove();
+                }, 400); // 400ms matches the CSS transition duration
+            }
+        });
+    </script>
+
+{% endif %}
+
+    <script>
+        // Set current year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Mobile Menu Toggle Logic
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileIcon = document.getElementById('mobile-menu-icon');
+
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileIcon.classList.replace('ph-x', 'ph-list');
+            } else {
+                mobileIcon.classList.replace('ph-list', 'ph-x');
+            }
+        });
+
+        // Mobile Filter Toggle Logic
+        const filterBtn = document.getElementById('mobile-filter-btn');
+        const filterContainer = document.getElementById('filter-container');
+        const filterIcon = document.getElementById('mobile-filter-icon');
+
+        if(filterBtn && filterContainer) {
+            filterBtn.addEventListener('click', () => {
+                filterContainer.classList.toggle('hidden');
+                if(filterContainer.classList.contains('hidden')) {
+                    filterIcon.style.transform = 'rotate(0deg)';
+                } else {
+                    filterIcon.style.transform = 'rotate(180deg)';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
