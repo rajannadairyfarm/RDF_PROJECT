@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 
 from pathlib import Path
 
-import os
+
 
 import os
 # from dotenv import load_dotenv
@@ -20,34 +20,170 @@ import os
 # load_dotenv()
 
 
+# from pathlib import Path
+# from dotenv import load_dotenv
+
+# BASE_DIR = Path(__file__).resolve().parent.parent
+# load_dotenv(BASE_DIR / ".env")
+
+
+
+
+
+import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 load_dotenv(BASE_DIR / ".env")
 
 
+# =========================================================
+# SECURITY
+# =========================================================
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+
+DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() == "true"
+
+RAILWAY_PUBLIC_DOMAIN = os.getenv("RAILWAY_PUBLIC_DOMAIN")
+
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+]
+
+if RAILWAY_PUBLIC_DOMAIN:
+    ALLOWED_HOSTS.append(RAILWAY_PUBLIC_DOMAIN)
+
+
+CSRF_TRUSTED_ORIGINS = []
+
+if RAILWAY_PUBLIC_DOMAIN:
+    CSRF_TRUSTED_ORIGINS.append(
+        f"https://{RAILWAY_PUBLIC_DOMAIN}"
+    )
+
+
+SECURE_PROXY_SSL_HEADER = (
+    "HTTP_X_FORWARDED_PROTO",
+    "https",
+)
+
+
+# =========================================================
+# DATABASE
+# =========================================================
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": os.getenv("MYSQLDATABASE", "rajanna_db"),
+        "USER": os.getenv("MYSQLUSER", "root"),
+        "PASSWORD": os.getenv("MYSQLPASSWORD", "root"),
+        "HOST": os.getenv("MYSQLHOST", "127.0.0.1"),
+        "PORT": os.getenv("MYSQLPORT", "3306"),
+        "OPTIONS": {
+            "charset": "utf8mb4",
+        },
+    }
+}
+
+
+# =========================================================
+# STATIC FILES
+# =========================================================
+
+STATIC_URL = "/static/"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+
+    "staticfiles": {
+        "BACKEND":
+            "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+
+# =========================================================
+# MEDIA
+# =========================================================
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 CLOUDINARY_URL = os.getenv("CLOUDINARY_URL")
+
+
+# =========================================================
+# EMAIL
+# =========================================================
+
+EMAIL_BACKEND = (
+    "django.core.mail.backends.smtp.EmailBackend"
+)
+
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+
+EMAIL_PORT = int(
+    os.getenv("EMAIL_PORT", "587")
+)
+
+EMAIL_USE_TLS = (
+    os.getenv("EMAIL_USE_TLS", "True").lower()
+    == "true"
+)
+
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+
+EMAIL_HOST_PASSWORD = os.getenv(
+    "EMAIL_HOST_PASSWORD"
+)
+
+DEFAULT_FROM_EMAIL = os.getenv(
+    "DEFAULT_FROM_EMAIL",
+    EMAIL_HOST_USER,
+)
+
+
+SITE_URL = os.getenv("SITE_URL")
+
+ADMIN_EMAIL = os.getenv("ADMIN_EMAIL")
+
+# CLOUDINARY_URL = os.getenv("CLOUDINARY_URL")
 
 # AUTH_USER_MODEL = "rdf_app.User"
 AUTH_USER_MODEL = 'rdf_app.User'
 
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+# SECRET_KEY = os.getenv("SECRET_KEY")
+
+
+# DEBUG = True #firstly its is true i changed it at payments time
+# DEBUG = os.environ.get("DJANGO_DEBUG", "False").lower() == "true"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = False
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -116,19 +252,19 @@ WSGI_APPLICATION = 'rdf_project.wsgi.application'
 
 
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": os.environ.get("MYSQLDATABASE", "rajanna_dairy_farm"),
-        "USER": os.environ.get("MYSQLUSER", "root"),
-        "PASSWORD": os.environ.get("MYSQLPASSWORD", ""),
-        "HOST": os.environ.get("MYSQLHOST", "127.0.0.1"),
-        "PORT": os.environ.get("MYSQLPORT", "3306"),
-        "OPTIONS": {
-            "charset": "utf8mb4",
-        },
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": os.environ.get("MYSQLDATABASE", "rajanna_db"),
+#         "USER": os.environ.get("MYSQLUSER", "root"),
+#         "PASSWORD": os.environ.get("MYSQLPASSWORD", "root"),
+#         "HOST": os.environ.get("MYSQLHOST", "127.0.0.1"),
+#         "PORT": os.environ.get("MYSQLPORT", "3306"),
+#         "OPTIONS": {
+#             "charset": "utf8mb4",
+#         },
+#     }
+# }
 
 
 # Password validation
@@ -171,22 +307,22 @@ LOGIN_URL = "/login/"
 
 
 # URL to access static files
-STATIC_URL = '/static/'
+# STATIC_URL = '/static/'
 
-# Directory where Django will collect static files
-STATICFILES_DIRS = [
-    BASE_DIR / "static",   # optional global static folder
-]
+# # Directory where Django will collect static files
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static",   # optional global static folder
+# ]
 
 # For production (collected files)
-STATIC_ROOT = BASE_DIR / "staticfiles"
+# STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
 import os
 
 # Media files (uploads)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Email
@@ -200,26 +336,24 @@ MAILERS = {
 
 
 
-DEFAULT_FROM_EMAIL=os.getenv("DEFAULT_FROM_EMAIL")
+# DEFAULT_FROM_EMAIL=os.getenv("DEFAULT_FROM_EMAIL")
 
 # EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 
-# DEBUG = True #firstly its is true i changed it at payments time
-DEBUG = os.environ.get("DJANGO_DEBUG", "False").lower() == "true"
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.getenv("EMAIL_HOST")
-EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS") == "True"
-EMAIL_PORT = int(os.getenv("EMAIL_PORT"))
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = os.getenv("EMAIL_HOST")
+# EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS") == "True"
+# EMAIL_PORT = int(os.getenv("EMAIL_PORT"))
+# EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+# DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 
 
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 7
 
-SITE_URL = os.getenv("SITE_URL")
-ADMIN_EMAIL = os.getenv("ADMIN_EMAIL")
+# SITE_URL = os.getenv("SITE_URL")
+# ADMIN_EMAIL = os.getenv("ADMIN_EMAIL")
 
 
 # for producation..............
@@ -229,9 +363,32 @@ ADMIN_EMAIL = os.getenv("ADMIN_EMAIL")
 # SESSION_COOKIE_HTTPONLY = True
 # SECURE_SSL_REDIRECT = True
 
+# STORAGES = {
+#     "default": {
+#         "BACKEND": "django.core.files.storage.FileSystemStorage",
+#     },
+#     "staticfiles": {
+#         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+#     },
+# }
 
 
 
+# ============================================================
+# PRODUCTION SECURITY
+# ============================================================
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+    SECURE_HSTS_SECONDS = 3600
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+    SECURE_HSTS_PRELOAD = False
 
 
 
@@ -440,6 +597,9 @@ JAZZMIN_SETTINGS = {
     "show_ui_builder": False,
 
 }
+
+
+
 
 
 
