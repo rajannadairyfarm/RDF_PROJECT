@@ -14,7 +14,7 @@ from rdf_app.models import (
 )
 
 from rdf_app.utils import send_milk_bill_email
-from rdf_app.utils import send_milk_bill_email
+# from rdf_app.utils import send_milk_bill_email
 
 class Command(BaseCommand):
     help = "Generate monthly milk bills from delivered milk records."
@@ -135,11 +135,59 @@ class Command(BaseCommand):
                 .first()
             )
 
+            # if existing_bill:
+
+            #     if not existing_bill.email_sent:
+            #         try:
+            #             send_milk_bill_email(existing_bill)
+
+            #             existing_bill.email_sent = True
+            #             existing_bill.email_sent_at = timezone.now()
+
+            #             existing_bill.save(
+            #                 update_fields=[
+            #                     "email_sent",
+            #                     "email_sent_at",
+            #                     "updated_at",
+            #                 ]
+            #             )
+
+            #             self.stdout.write(
+            #                 self.style.SUCCESS(
+            #                     f"Email retry successful: "
+            #                     f"{subscription.user.email}"
+            #                 )
+            #             )
+
+            #         except Exception as e:
+
+            #             self.stdout.write(
+            #                 self.style.ERROR(
+            #                     f"Email retry failed for "
+            #                     f"{subscription.subscription_number}: {e}"
+            #                 )
+            #             )
+
+            #     else:
+            #         self.stdout.write(
+            #             self.style.WARNING(
+            #                 f"Bill already exists and email already sent: "
+            #                 f"{subscription.subscription_number}"
+            #             )
+            #         )
+
+            #     skipped_count += 1
+                # continue
+            
             if existing_bill:
 
                 if not existing_bill.email_sent:
-                    try:
-                        send_milk_bill_email(existing_bill)
+
+                    result = send_milk_bill_email(
+                        existing_bill
+                    )
+
+                    if result.get("success"):
 
                         existing_bill.email_sent = True
                         existing_bill.email_sent_at = timezone.now()
@@ -159,16 +207,18 @@ class Command(BaseCommand):
                             )
                         )
 
-                    except Exception as e:
+                    else:
 
                         self.stdout.write(
                             self.style.ERROR(
                                 f"Email retry failed for "
-                                f"{subscription.subscription_number}: {e}"
+                                f"{subscription.subscription_number}: "
+                                f"{result.get('error', 'Unknown error')}"
                             )
                         )
 
                 else:
+
                     self.stdout.write(
                         self.style.WARNING(
                             f"Bill already exists and email already sent: "

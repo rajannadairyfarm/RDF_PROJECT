@@ -102,26 +102,47 @@ class Command(BaseCommand):
                     )
 
                     continue
-
-                # Calculate delivery amount
+                
+                
+                
+                
                 total_amount = (
-                    item.price_per_unit * item.quantity
+                    item.price_per_unit
+                    * item.quantity
                 ).quantize(
                     Decimal("0.01")
                 )
 
-                # Create delivery
                 with transaction.atomic():
 
-                    MilkDelivery.objects.create(
-                        subscription=subscription,
-                        subscription_item=item,
-                        delivery_date=today,
-                        quantity=item.quantity,
-                        unit_price=item.price_per_unit,
-                        total_amount=total_amount,
-                        status="scheduled",
+                    delivery, created = (
+                        MilkDelivery.objects.get_or_create(
+                            subscription_item=item,
+                            delivery_date=today,
+                            defaults={
+                                "subscription": subscription,
+                                "quantity": item.quantity,
+                                "unit_price": item.price_per_unit,
+                                "total_amount": total_amount,
+                                "status": "scheduled",
+                            }
+                        )
                     )
+
+                if not created:
+
+                    existing_count += 1
+
+                    self.stdout.write(
+                        self.style.WARNING(
+                            f"Already exists: "
+                            f"{subscription.subscription_number} "
+                            f"- {today}"
+                        )
+                    )
+
+                    continue
+
 
                 created_count += 1
 
@@ -134,6 +155,38 @@ class Command(BaseCommand):
                         f"Rs.{total_amount}"
                     )
                 )
+
+                # # Calculate delivery amount
+                # total_amount = (
+                #     item.price_per_unit * item.quantity
+                # ).quantize(
+                #     Decimal("0.01")
+                # )
+
+                # # Create delivery
+                # with transaction.atomic():
+
+                #     MilkDelivery.objects.create(
+                #         subscription=subscription,
+                #         subscription_item=item,
+                #         delivery_date=today,
+                #         quantity=item.quantity,
+                #         unit_price=item.price_per_unit,
+                #         total_amount=total_amount,
+                #         status="scheduled",
+                #     )
+
+                # created_count += 1
+
+                # self.stdout.write(
+                #     self.style.SUCCESS(
+                #         f"Created delivery: "
+                #         f"{subscription.subscription_number} | "
+                #         f"{item.product.name} | "
+                #         f"Qty: {item.quantity} | "
+                #         f"Rs.{total_amount}"
+                #     )
+                # )
 
         self.stdout.write("")
 
