@@ -1,0 +1,267 @@
+{% load i18n %}
+
+<nav class="rdf-sidebar" id="rdf-sidebar">
+
+    <!-- Overview -->
+    <div class="rdf-sidebar-section">
+        <div class="rdf-sidebar-label">
+            Overview
+        </div>
+
+        <a
+            href="{% url 'admin:index' %}"
+            class="rdf-sidebar-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}"
+        >
+            <span class="rdf-sidebar-icon">
+                <i class="ph-bold ph-house"></i>
+            </span>
+            <span>Dashboard</span>
+        </a>
+    </div>
+
+
+    <!-- Catalog -->
+    <div class="rdf-sidebar-section">
+        <button
+            type="button"
+            class="rdf-sidebar-group-toggle"
+            data-target="rdf-catalog-menu"
+        >
+            <span>Catalog</span>
+            <span class="rdf-toggle-arrow">⌄</span>
+        </button>
+
+        <div class="rdf-sidebar-group" id="rdf-catalog-menu">
+
+            <a
+                href="{% url 'admin:rdf_app_category_changelist' %}"
+                class="rdf-sidebar-link {% if 'category' in request.resolver_match.url_name %}active{% endif %}"
+            >
+                <span class="rdf-sidebar-icon">
+                    <i class="ph-bold ph-folders"></i>
+                </span>
+                <span>Categories</span>
+            </a>
+
+            <a
+                href="{% url 'admin:rdf_app_product_changelist' %}"
+                class="rdf-sidebar-link {% if 'product' in request.resolver_match.url_name %}active{% endif %}"
+            >
+                <span class="rdf-sidebar-icon">
+                    <i class="ph-bold ph-package"></i>
+                </span>
+                <span>Products</span>
+            </a>
+
+        </div>
+    </div>
+
+
+    <!-- Orders -->
+    <div class="rdf-sidebar-section">
+        <button
+            type="button"
+            class="rdf-sidebar-group-toggle"
+            data-target="rdf-orders-menu"
+        >
+            <span>Orders</span>
+            <span class="rdf-toggle-arrow">⌄</span>
+        </button>
+
+        <div class="rdf-sidebar-group" id="rdf-orders-menu">
+
+            <a
+                href="{% url 'admin:rdf_app_order_changelist' %}"
+                class="rdf-sidebar-link {% if 'order' in request.resolver_match.url_name %}active{% endif %}"
+            >
+                <span class="rdf-sidebar-icon">
+                    <i class="ph-bold ph-shopping-cart"></i>
+                </span>
+                <span>Orders</span>
+            </a>
+
+        </div>
+    </div>
+
+
+    <!-- Customers -->
+    <div class="rdf-sidebar-section">
+        <button
+            type="button"
+            class="rdf-sidebar-group-toggle"
+            data-target="rdf-customers-menu"
+        >
+            <span>Customers</span>
+            <span class="rdf-toggle-arrow">⌄</span>
+        </button>
+
+        <div class="rdf-sidebar-group" id="rdf-customers-menu">
+
+            <a
+                href="{% url 'admin:rdf_app_user_changelist' %}"
+                class="rdf-sidebar-link {% if 'rdf_app_user_' in request.resolver_match.url_name %}active{% endif %}"
+            >
+                <span class="rdf-sidebar-icon">
+                    <i class="ph-bold ph-users"></i>
+                </span>
+                <span>Users</span>
+            </a>
+
+            <a
+                href="{% url 'admin:rdf_app_userprofile_changelist' %}"
+                class="rdf-sidebar-link {% if 'userprofile' in request.resolver_match.url_name %}active{% endif %}"
+            >
+                <span class="rdf-sidebar-icon">
+                    <i class="ph-bold ph-user-circle"></i>
+                </span>
+                <span>Profiles</span>
+            </a>
+
+            <a
+                href="{% url 'admin:rdf_app_address_changelist' %}"
+                class="rdf-sidebar-link {% if 'address' in request.resolver_match.url_name %}active{% endif %}"
+            >
+                <span class="rdf-sidebar-icon">
+                    <i class="ph-bold ph-map-pin"></i>
+                </span>
+                <span>Addresses</span>
+            </a>
+
+            <a
+                href="{% url 'admin:rdf_app_subscriber_changelist' %}"
+                class="rdf-sidebar-link {% if 'subscriber' in request.resolver_match.url_name %}active{% endif %}"
+            >
+                <span class="rdf-sidebar-icon">
+                    <i class="ph-bold ph-envelope-simple"></i>
+                </span>
+                <span>Subscribers</span>
+            </a>
+
+        </div>
+    </div>
+
+
+    <!-- Shopping -->
+    <div class="rdf-sidebar-section">
+        <button
+            type="button"
+            class="rdf-sidebar-group-toggle"
+            data-target="rdf-shopping-menu"
+        >
+            <span>Shopping</span>
+            <span class="rdf-toggle-arrow">⌄</span>
+        </button>
+
+        <div class="rdf-sidebar-group" id="rdf-shopping-menu">
+
+            <a
+                href="{% url 'admin:rdf_app_cart_changelist' %}"
+                class="rdf-sidebar-link {% if 'rdf_app_cart_' in request.resolver_match.url_name %}active{% endif %}"
+            >
+                <span class="rdf-sidebar-icon">
+                    <i class="ph-bold ph-shopping-bag"></i>
+                </span>
+                <span>Carts</span>
+            </a>
+
+            <a
+                href="{% url 'admin:rdf_app_cartitem_changelist' %}"
+                class="rdf-sidebar-link {% if 'cartitem' in request.resolver_match.url_name %}active{% endif %}"
+            >
+                <span class="rdf-sidebar-icon">
+                    <i class="ph-bold ph-basket"></i>
+                </span>
+                <span>Cart Items</span>
+            </a>
+
+        </div>
+    </div>
+
+
+    <!-- Milk Operations -->
+    <div class="rdf-sidebar-section">
+        <button
+            type="button"
+            class="rdf-sidebar-group-toggle"
+            data-target="rdf-milk-menu"
+        >
+            <span>Milk Operations</span>
+            <span class="rdf-toggle-arrow">⌄</span>
+        </button>
+
+        <div class="rdf-sidebar-group" id="rdf-milk-menu">
+
+            <a
+                href="{% url 'admin:milk-operations-dashboard' %}"
+                class="rdf-sidebar-link {% if request.resolver_match.url_name == 'milk-operations-dashboard' %}active{% endif %}"
+            >
+                <span class="rdf-sidebar-icon">
+                    <i class="ph-bold ph-chart-line-up"></i>
+                </span>
+                <span>Operations Dashboard</span>
+            </a>
+
+            <a
+                href="{% url 'admin:rdf_app_milksubscription_changelist' %}"
+                class="rdf-sidebar-link {% if 'milksubscription_' in request.resolver_match.url_name %}active{% endif %}"
+            >
+                <span class="rdf-sidebar-icon">
+                    <i class="ph-bold ph-drop"></i>
+                </span>
+                <span>Subscriptions</span>
+            </a>
+
+            <a
+                href="{% url 'admin:rdf_app_milksubscriptionitem_changelist' %}"
+                class="rdf-sidebar-link {% if 'milksubscriptionitem' in request.resolver_match.url_name %}active{% endif %}"
+            >
+                <span class="rdf-sidebar-icon">
+                    <i class="ph-bold ph-list-checks"></i>
+                </span>
+                <span>Subscription Items</span>
+            </a>
+
+            <a
+                href="{% url 'admin:rdf_app_milkdelivery_changelist' %}"
+                class="rdf-sidebar-link {% if 'milkdelivery' in request.resolver_match.url_name %}active{% endif %}"
+            >
+                <span class="rdf-sidebar-icon">
+                    <i class="ph-bold ph-truck"></i>
+                </span>
+                <span>Deliveries</span>
+            </a>
+
+            <a
+                href="{% url 'admin:rdf_app_milkbill_changelist' %}"
+                class="rdf-sidebar-link {% if 'milkbill' in request.resolver_match.url_name %}active{% endif %}"
+            >
+                <span class="rdf-sidebar-icon">
+                    <i class="ph-bold ph-receipt"></i>
+                </span>
+                <span>Milk Bills</span>
+            </a>
+
+        </div>
+    </div>
+
+
+    <!-- Website -->
+    <div class="rdf-sidebar-section">
+        <div class="rdf-sidebar-label">
+            Website
+        </div>
+
+        <a
+            href="/"
+            target="_blank"
+            rel="noopener"
+            class="rdf-sidebar-link"
+        >
+            <span class="rdf-sidebar-icon">
+                <i class="ph-bold ph-globe"></i>
+            </span>
+            <span>View Website</span>
+        </a>
+    </div>
+
+</nav>

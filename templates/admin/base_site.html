@@ -1,0 +1,39 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}
+    {% if subtitle %}{{ subtitle }} | {% endif %}
+    {{ title }} | Rajanna Dairy Farm
+{% endblock %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'admin/css/rdf-admin.css' %}">
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="{% static 'admin/js/rdf-admin.js' %}" defer></script>
+{% endblock %}
+
+{% block branding %}
+    <div class="rdf-brand">
+        <div class="rdf-brand-logo">
+            RDF
+        </div>
+
+        <div class="rdf-brand-info">
+            <div class="rdf-brand-title">
+                Rajanna Dairy Farm
+            </div>
+
+            <div class="rdf-brand-subtitle">
+                Administration
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

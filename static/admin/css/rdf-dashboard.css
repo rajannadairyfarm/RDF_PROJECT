@@ -1,0 +1,569 @@
+/* =========================================================
+   RDF ADMIN DASHBOARD
+   Clean dashboard-specific styles
+   ========================================================= */
+
+.rdf-dashboard {
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+.rdf-dashboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    margin-bottom: 26px;
+}
+
+.rdf-dashboard-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.rdf-dashboard-heading-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #176b45,
+            #218c5f
+        );
+
+    color: #ffffff;
+    font-size: 23px;
+
+    box-shadow:
+        0 5px 14px rgba(23, 107, 69, 0.18);
+}
+
+.rdf-dashboard-heading h1 {
+    margin: 0;
+
+    color: #26372e;
+
+    font-size: 26px;
+    font-weight: 760;
+}
+
+.rdf-dashboard-heading p {
+    margin: 4px 0 0;
+
+    color: #7b8981;
+
+    font-size: 13px;
+}
+
+/* =========================================================
+   GRID
+   ========================================================= */
+.rdf-grid {
+    display: grid;
+    gap: 18px;
+
+    margin-bottom: 22px;
+}
+
+.rdf-grid-4 {
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+}
+
+.rdf-grid-3 {
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+}
+
+.rdf-grid-2 {
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+}
+
+/* =========================================================
+   STAT CARDS
+   ========================================================= */
+.rdf-stat-card {
+    position: relative;
+    overflow: hidden;
+
+    min-height: 135px;
+    padding: 20px;
+
+    border: 1px solid #e4ebe7;
+    border-radius: 14px;
+
+    background: #ffffff;
+    color: #26372e;
+
+    box-shadow:
+        0 4px 15px rgba(25, 68, 47, 0.055);
+
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.rdf-stat-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 9px 24px rgba(25, 68, 47, 0.09);
+}
+
+.rdf-stat-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.rdf-stat-label {
+    color: #718078;
+
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+}
+
+.rdf-stat-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    font-size: 20px;
+}
+
+.rdf-icon-green {
+    background: #e3f4eb;
+    color: #218c5f;
+}
+
+.rdf-icon-blue {
+    background: #e8f1fb;
+    color: #3578c7;
+}
+
+.rdf-icon-purple {
+    background: #f0eafa;
+    color: #7c3aed;
+}
+
+.rdf-icon-gold {
+    background: #fff5d9;
+    color: #d49b00;
+}
+
+.rdf-icon-red {
+    background: #fde7e7;
+    color: #dc3545;
+}
+
+.rdf-stat-value {
+    margin-top: 14px;
+
+    color: #26372e;
+
+    font-size: 29px;
+    font-weight: 780;
+    line-height: 1;
+}
+
+.rdf-stat-subtitle {
+    margin-top: 8px;
+
+    color: #87938d;
+
+    font-size: 12px;
+}
+
+.rdf-stat-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    margin-top: 12px;
+
+    color: #176b45 !important;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-decoration: none !important;
+}
+
+/* =========================================================
+   PANELS
+   ========================================================= */
+.rdf-panel {
+    overflow: hidden;
+
+    border: 1px solid #e4ebe7;
+    border-radius: 14px;
+
+    background: #ffffff;
+    color: #26372e;
+
+    box-shadow:
+        0 4px 15px rgba(25, 68, 47, 0.05);
+}
+
+.rdf-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding: 15px 18px;
+
+    background: #ffffff;
+    border-bottom: 1px solid #edf1ef;
+}
+
+.rdf-panel-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin: 0;
+
+    color: #31453a;
+
+    font-size: 14px;
+    font-weight: 720;
+}
+
+.rdf-panel-title i {
+    color: #176b45;
+    font-size: 18px;
+}
+
+.rdf-panel-body {
+    padding: 18px;
+    background: #ffffff;
+}
+
+.rdf-panel-footer {
+    padding: 12px 18px;
+
+    border-top: 1px solid #edf1ef;
+
+    background: #fafcfb;
+
+    text-align: right;
+}
+
+/* =========================================================
+   MINI KPIs
+   ========================================================= */
+.rdf-mini-stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 14px;
+}
+
+.rdf-mini-stat {
+    padding: 16px;
+
+    border: 1px solid #e8eeeb;
+    border-radius: 11px;
+
+    background: #fbfdfc;
+    color: #27392f;
+}
+
+.rdf-mini-label {
+    color: #7f8d85;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.55px;
+    text-transform: uppercase;
+}
+
+.rdf-mini-value {
+    margin-top: 7px;
+
+    color: #27392f;
+
+    font-size: 22px;
+    font-weight: 760;
+}
+
+/* =========================================================
+   DASHBOARD TABLES
+   Explicit row colors so tables are always readable.
+   ========================================================= */
+.rdf-table-wrap {
+    overflow-x: auto;
+    background: #ffffff;
+}
+
+.rdf-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    background: #ffffff;
+    color: #3a4c42;
+}
+
+.rdf-table thead,
+.rdf-table thead tr {
+    background: #edf3f0;
+}
+
+.rdf-table th {
+    padding: 10px 13px;
+
+    background: #edf3f0 !important;
+    color: #53645b !important;
+
+    border-bottom: 1px solid #dbe5df;
+
+    font-size: 10px;
+    font-weight: 750;
+    letter-spacing: 0.45px;
+    text-align: left;
+    text-transform: uppercase;
+
+    white-space: nowrap;
+}
+
+.rdf-table tbody tr {
+    background: #ffffff !important;
+}
+
+.rdf-table tbody tr:nth-child(even) {
+    background: #f8fbf9 !important;
+}
+
+.rdf-table tbody tr:hover {
+    background: #eaf5ef !important;
+}
+
+.rdf-table td {
+    padding: 12px 13px;
+
+    background: transparent !important;
+    color: #3a4c42 !important;
+
+    border-bottom: 1px solid #eef2f0;
+
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+.rdf-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.rdf-table a {
+    color: #176b45 !important;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.rdf-table a:hover {
+    color: #0f5737 !important;
+}
+
+/* =========================================================
+   BADGES
+   ========================================================= */
+.rdf-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 4px 8px;
+
+    border-radius: 999px;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.rdf-badge-success {
+    background: #e4f5eb;
+    color: #187748;
+}
+
+.rdf-badge-warning {
+    background: #fff4d7;
+    color: #9b7000;
+}
+
+.rdf-badge-danger {
+    background: #fde7e7;
+    color: #b83232;
+}
+
+.rdf-badge-info {
+    background: #e6f0fb;
+    color: #326aa8;
+}
+
+/* =========================================================
+   INVENTORY LIST
+   ========================================================= */
+.rdf-alert-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    background: #ffffff;
+}
+
+.rdf-alert-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding: 13px 16px;
+
+    background: #ffffff;
+
+    border-bottom: 1px solid #edf1ef;
+}
+
+.rdf-alert-item:nth-child(even) {
+    background: #f8fbf9;
+}
+
+.rdf-alert-item:hover {
+    background: #eef7f2;
+}
+
+.rdf-alert-item:last-child {
+    border-bottom: 0;
+}
+
+.rdf-alert-name {
+    color: #176b45 !important;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.rdf-alert-meta {
+    margin-top: 3px;
+
+    color: #86928c;
+
+    font-size: 11px;
+}
+
+.rdf-stock-low {
+    color: #d98b00;
+    font-weight: 750;
+}
+
+.rdf-stock-out {
+    color: #c53d3d;
+    font-weight: 750;
+}
+
+/* =========================================================
+   QUICK ACTIONS
+   ========================================================= */
+.rdf-quick-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.rdf-quick-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 9px 13px;
+
+    border: 1px solid #dce9e2;
+    border-radius: 8px;
+
+    background: #edf7f2;
+    color: #176b45 !important;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-decoration: none !important;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        transform 0.15s ease;
+}
+
+.rdf-quick-action:hover {
+    background: #dcefe5;
+    border-color: #c8dfd2;
+    transform: translateY(-1px);
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+.rdf-empty {
+    padding: 24px;
+
+    background: #ffffff !important;
+    color: #8a9690 !important;
+
+    font-size: 12px;
+    text-align: center;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 1100px) {
+    .rdf-grid-4 {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 800px) {
+    .rdf-grid-3,
+    .rdf-grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .rdf-grid-4 {
+        grid-template-columns: 1fr;
+    }
+
+    .rdf-dashboard-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .rdf-mini-stats {
+        grid-template-columns: 1fr;
+    }
+}

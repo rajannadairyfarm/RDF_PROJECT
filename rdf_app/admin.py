@@ -83,7 +83,15 @@ class StockStatusFilter(admin.SimpleListFilter):
 # COMMON ADMIN SETTINGS
 # ============================================================
 
+
 admin.site.empty_value_display = "—"
+
+admin.site.enable_nav_sidebar = True
+
+admin.site.site_header = "Rajanna Dairy Farm"
+admin.site.site_title = "RDF Admin"
+admin.site.index_title = "Administration Dashboard"
+admin.site.site_url = "/"
 
 
 # ============================================================
@@ -192,16 +200,38 @@ class UserAdmin(admin.ModelAdmin):
         "deactivate_users",
     )
 
-    @admin.display(description="Photo")
+    # @admin.display(description="Photo")
+    # def image_preview(self, obj):
+    #     if obj.image:
+    #         return format_html(
+    #             '<img src="{}" width="45" height="45" '
+    #             'style="object-fit:cover;border-radius:50%;" />',
+    #             obj.image.url,
+    #         )
+
+    #     return "—"
+    
+    @admin.display(description="Image")
     def image_preview(self, obj):
-        if obj.image:
+
+        if not obj.image:
             return format_html(
-                '<img src="{}" width="45" height="45" '
-                'style="object-fit:cover;border-radius:50%;" />',
-                obj.image.url,
+                '<div class="rdf-image-placeholder">'
+                '<i class="ph-bold ph-image"></i>'
+                '</div>'
             )
 
-        return "—"
+        return format_html(
+            '''
+            <img
+                src="{}"
+                class="rdf-admin-thumb"
+                alt="{}"
+            />
+            ''',
+            obj.image.url,
+            obj.full_name
+        )
 
     @admin.action(description="Activate selected users")
     def activate_users(self, request, queryset):
@@ -451,16 +481,39 @@ class CategoryAdmin(admin.ModelAdmin):
             )
         )
 
+    # @admin.display(description="Image")
+    # def image_preview(self, obj):
+    #     if obj.image:
+    #         return format_html(
+    #             '<img src="{}" width="50" height="50" '
+    #             'style="object-fit:cover;border-radius:8px;" />',
+    #             obj.image.url,
+    #         )
+
+    #     return "—"
+    
+    
     @admin.display(description="Image")
     def image_preview(self, obj):
-        if obj.image:
+
+        if not obj.image:
             return format_html(
-                '<img src="{}" width="50" height="50" '
-                'style="object-fit:cover;border-radius:8px;" />',
-                obj.image.url,
+                '<div class="rdf-image-placeholder">'
+                '<i class="ph-bold ph-image"></i>'
+                '</div>'
             )
 
-        return "—"
+        return format_html(
+            '''
+            <img
+                src="{}"
+                class="rdf-admin-thumb"
+                alt="{}"
+            />
+            ''',
+            obj.image.url,
+            obj.name
+        )
 
     @admin.display(description="Products", ordering="admin_product_count")
     def product_count(self, obj):
@@ -675,16 +728,38 @@ class ProductAdmin(admin.ModelAdmin):
     "mark_out_of_stock",
 )
 
+    # @admin.display(description="Image")
+    # def image_preview(self, obj):
+    #     if obj.main_image:
+    #         return format_html(
+    #             '<img src="{}" width="50" height="50" '
+    #             'style="object-fit:cover;border-radius:8px;" />',
+    #             obj.main_image.url,
+    #         )
+
+    #     return "—"
+    
     @admin.display(description="Image")
     def image_preview(self, obj):
-        if obj.main_image:
+
+        if not obj.main_image:
             return format_html(
-                '<img src="{}" width="50" height="50" '
-                'style="object-fit:cover;border-radius:8px;" />',
-                obj.main_image.url,
+                '<div class="rdf-image-placeholder">'
+                '<i class="ph-bold ph-image"></i>'
+                '</div>'
             )
 
-        return "—"
+        return format_html(
+            '''
+            <img
+                src="{}"
+                class="rdf-admin-thumb"
+                alt="{}"
+            />
+            ''',
+            obj.main_image.url,
+            obj.name
+        )
 
     
     @admin.display(description="SEO Title")
@@ -697,34 +772,85 @@ class ProductAdmin(admin.ModelAdmin):
         return obj.seo_description or "—"
 
 
+    # @admin.display(description="Selling Price")
+    # def selling_price_display(self, obj):
+    #     if obj.selling_price is not None:
+    #         return f"₹{obj.selling_price}"
+    #     return "—"
+    
     @admin.display(description="Selling Price")
     def selling_price_display(self, obj):
-        if obj.selling_price is not None:
-            return f"₹{obj.selling_price}"
-        return "—"
-    
+
+        if obj.selling_price is None:
+            return "—"
+
+        return format_html(
+            '<strong class="rdf-price">₹{}</strong>',
+            obj.selling_price
+        )
+
+
     @admin.display(description="Stock")
     def stock_status(self, obj):
 
         if not obj.is_active:
             return format_html(
-                '<strong>Inactive</strong>'
+                '<span class="rdf-badge rdf-badge-neutral">'
+                'Inactive'
+                '</span>'
             )
 
         if obj.stock_quantity <= 0:
             return format_html(
-                '<strong>Out of Stock</strong>'
+                '<span class="rdf-badge rdf-badge-danger">'
+                'Out of Stock'
+                '</span>'
             )
 
         if obj.stock_quantity <= obj.low_stock_threshold:
             return format_html(
-                '<strong>Low Stock</strong>'
+                '<span class="rdf-badge rdf-badge-warning">'
+                'Low Stock'
+                '</span>'
             )
 
         return format_html(
-            '<strong>In Stock</strong>'
+            '<span class="rdf-badge rdf-badge-success">'
+            'In Stock'
+            '</span>'
+        )
+    
+        
+    @admin.display(description="Active")
+    def active_badge(self, obj):
+
+        if obj.is_active:
+            return format_html(
+                '<span class="rdf-badge rdf-badge-success">'
+                'Active'
+                '</span>'
+            )
+
+        return format_html(
+            '<span class="rdf-badge rdf-badge-neutral">'
+            'Inactive'
+            '</span>'
         )
 
+
+    @admin.display(description="Featured")
+    def featured_badge(self, obj):
+
+        if obj.is_featured:
+            return format_html(
+                '<span class="rdf-badge rdf-badge-purple">'
+                'Featured'
+                '</span>'
+            )
+
+        return "—"
+    
+    
     @admin.action(description="Activate selected products")
     def activate_products(self, request, queryset):
         queryset.update(is_active=True)
@@ -890,7 +1016,8 @@ class OrderAdmin(admin.ModelAdmin):
         "total_amount",
         "payment_method",
         "payment_status",
-        "status",
+        # "status",
+        "status_badge",
         "created_at",
     )
 
@@ -1024,6 +1151,54 @@ class OrderAdmin(admin.ModelAdmin):
         "mark_out_for_delivery",
         "mark_delivered",
     )
+    
+    
+    @admin.display(description="Status", ordering="status")
+    def status_badge(self, obj):
+
+        status = obj.status
+
+        mapping = {
+            "pending": (
+                "rdf-badge-warning",
+                "Pending",
+            ),
+            "confirmed": (
+                "rdf-badge-info",
+                "Confirmed",
+            ),
+            "processing": (
+                "rdf-badge-purple",
+                "Processing",
+            ),
+            "shipped": (
+                "rdf-badge-blue",
+                "Shipped",
+            ),
+            "out_for_delivery": (
+                "rdf-badge-blue",
+                "Out for Delivery",
+            ),
+            "delivered": (
+                "rdf-badge-success",
+                "Delivered",
+            ),
+            "cancelled": (
+                "rdf-badge-danger",
+                "Cancelled",
+            ),
+        }
+
+        css_class, label = mapping.get(
+            status,
+            ("rdf-badge-neutral", obj.get_status_display())
+        )
+
+        return format_html(
+            '<span class="rdf-badge {}">{}</span>',
+            css_class,
+            label
+        )
 
     @admin.display(description="Customer", ordering="full_name")
     def customer_name(self, obj):

@@ -1,0 +1,59 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+{% block bodyclass %}login rdf-login-page{% endblock %}
+
+{% block nav-sidebar %}{% endblock %}
+
+{% block content %}
+<div class="rdf-login-shell">
+    <div class="rdf-login-card">
+
+        <div class="rdf-login-brand">
+            <div class="rdf-login-logo">
+                RDF
+            </div>
+
+            <div>
+                <h1>Rajanna Dairy Farm</h1>
+                <p>Administration Portal</p>
+            </div>
+        </div>
+
+        {% if form.errors %}
+            <div class="rdf-login-error">
+                Please enter the correct username/email and password.
+            </div>
+        {% endif %}
+
+        <form action="{{ app_path }}" method="post" id="login-form">
+            {% csrf_token %}
+
+            <div class="rdf-login-field">
+                <label for="{{ form.username.id_for_label }}">
+                    Username / Email
+                </label>
+                {{ form.username }}
+            </div>
+
+            <div class="rdf-login-field">
+                <label for="{{ form.password.id_for_label }}">
+                    Password
+                </label>
+                {{ form.password }}
+            </div>
+
+            <input type="hidden" name="next" value="{{ next }}">
+
+            <button type="submit" class="rdf-login-button">
+                <i class="ph-bold ph-sign-in"></i>
+                Sign in
+            </button>
+        </form>
+
+        <div class="rdf-login-footer">
+            Secure access for authorized administrators only
+        </div>
+
+    </div>
+</div>
+{% endblock %}

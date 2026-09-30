@@ -46,8 +46,9 @@ load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() == "true"
+# DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() == "true"
 
+DEBUG = True
 RAILWAY_PUBLIC_DOMAIN = os.getenv("RAILWAY_PUBLIC_DOMAIN")
 
 ALLOWED_HOSTS = [

@@ -1,0 +1,1644 @@
+/* =========================================================
+   RAJANNA DAIRY FARM ADMIN
+   Clean production theme for native Django Admin
+   ========================================================= */
+
+/* =========================================================
+   THEME TOKENS
+   ========================================================= */
+:root {
+    --rdf-primary: #176b45;
+    --rdf-primary-dark: #0f5737;
+    --rdf-secondary: #218c5f;
+    --rdf-accent: #f3b33d;
+
+    --rdf-bg: #f4f7f5;
+    --rdf-surface: #ffffff;
+    --rdf-surface-soft: #f8fbf9;
+    --rdf-surface-muted: #f1f5f3;
+
+    --rdf-text: #26372e;
+    --rdf-text-soft: #52645a;
+    --rdf-text-muted: #7d8a83;
+
+    --rdf-border: #e2e9e5;
+    --rdf-border-strong: #d5dfda;
+
+    --rdf-success-bg: #e4f5eb;
+    --rdf-success: #187748;
+
+    --rdf-warning-bg: #fff4d7;
+    --rdf-warning: #946900;
+
+    --rdf-danger-bg: #fde7e7;
+    --rdf-danger: #b83232;
+
+    --rdf-info-bg: #e6f0fb;
+    --rdf-info: #326aa8;
+
+    --rdf-purple-bg: #efe8fb;
+    --rdf-purple: #7441bc;
+
+    --rdf-shadow-sm: 0 2px 8px rgba(24, 68, 45, 0.05);
+    --rdf-shadow-md: 0 6px 18px rgba(24, 68, 45, 0.08);
+
+    /* Django admin variables */
+    --primary: var(--rdf-primary);
+    --secondary: var(--rdf-secondary);
+    --accent: var(--rdf-accent);
+    --primary-fg: #ffffff;
+
+    --body-fg: var(--rdf-text);
+    --body-bg: var(--rdf-bg);
+    --body-quiet-color: var(--rdf-text-muted);
+    --body-loud-color: var(--rdf-text);
+
+    --header-color: #ffffff;
+    --header-branding-color: #ffffff;
+    --header-bg: var(--rdf-primary-dark);
+    --header-link-color: #ffffff;
+
+    --breadcrumbs-fg: var(--rdf-text-soft);
+    --breadcrumbs-link-fg: var(--rdf-primary);
+    --breadcrumbs-bg: #ffffff;
+
+    --link-fg: var(--rdf-primary);
+    --link-hover-color: var(--rdf-primary-dark);
+    --link-selected-fg: var(--rdf-primary-dark);
+
+    --hairline-color: var(--rdf-border);
+    --border-color: var(--rdf-border-strong);
+
+    --error-fg: var(--rdf-danger);
+
+    --message-success-bg: var(--rdf-success-bg);
+    --message-warning-bg: var(--rdf-warning-bg);
+    --message-error-bg: var(--rdf-danger-bg);
+
+    --darkened-bg: var(--rdf-surface-muted);
+    --selected-bg: #e7f2ec;
+    --selected-row: #edf7f2;
+
+    --button-fg: #ffffff;
+    --button-bg: var(--rdf-primary);
+    --button-hover-bg: var(--rdf-primary-dark);
+
+    --default-button-bg: var(--rdf-secondary);
+    --default-button-hover-bg: var(--rdf-primary);
+
+    --close-button-bg: #6f7d75;
+    --close-button-hover-bg: #59645e;
+
+    --delete-button-bg: #c44343;
+    --delete-button-hover-bg: #a73434;
+}
+
+/* Keep the custom admin consistently light even when OS/browser prefers dark mode. */
+html[data-theme="dark"],
+html[data-theme="auto"] {
+    --body-fg: var(--rdf-text);
+    --body-bg: var(--rdf-bg);
+    --body-quiet-color: var(--rdf-text-muted);
+    --body-loud-color: var(--rdf-text);
+
+    --darkened-bg: var(--rdf-surface-muted);
+    --selected-bg: #e7f2ec;
+    --selected-row: #edf7f2;
+
+    --hairline-color: var(--rdf-border);
+    --border-color: var(--rdf-border-strong);
+
+    --link-fg: var(--rdf-primary);
+    --link-hover-color: var(--rdf-primary-dark);
+    --link-selected-fg: var(--rdf-primary-dark);
+}
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+html,
+body {
+    background: var(--rdf-bg);
+}
+
+body {
+    color: var(--rdf-text);
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+}
+
+a:link,
+a:visited {
+    color: var(--rdf-primary);
+}
+
+a:hover {
+    color: var(--rdf-primary-dark);
+}
+
+#container {
+    background: var(--rdf-bg);
+}
+
+.main,
+.main > #content-start {
+    background: var(--rdf-bg);
+}
+
+/* =========================================================
+   HEADER / BRANDING
+   ========================================================= */
+#header {
+    min-height: 72px;
+    box-sizing: border-box;
+    padding: 0 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0d4d31 0%,
+            #176b45 52%,
+            #218c5f 100%
+        );
+
+    box-shadow: 0 4px 16px rgba(14, 62, 40, 0.16);
+
+    position: relative;
+    z-index: 20;
+}
+
+.rdf-brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.rdf-brand-logo {
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+    background: #ffffff;
+    color: var(--rdf-primary);
+
+    font-size: 15px;
+    font-weight: 850;
+    letter-spacing: 0.5px;
+
+    box-shadow: 0 4px 13px rgba(0, 0, 0, 0.16);
+}
+
+.rdf-brand-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.rdf-brand-title {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 750;
+    line-height: 1.2;
+}
+
+.rdf-brand-subtitle {
+    margin-top: 3px;
+    color: rgba(255, 255, 255, 0.74);
+    font-size: 11px;
+    letter-spacing: 0.4px;
+}
+
+/* =========================================================
+   USER TOOLS / LOGOUT
+   ========================================================= */
+#user-tools {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    color: rgba(255, 255, 255, 0.84);
+    font-size: 12px;
+}
+
+#user-tools strong {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+#user-tools a,
+#logout-form button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    padding: 7px 10px;
+
+    border: 0;
+    border-radius: 7px;
+
+    background: transparent;
+    color: #ffffff !important;
+
+    font-family: inherit;
+    font-size: 12px;
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
+#user-tools a:hover,
+#logout-form button:hover {
+    background: rgba(255, 255, 255, 0.14);
+}
+
+#logout-form {
+    display: inline;
+}
+
+/* =========================================================
+   BREADCRUMBS
+   ========================================================= */
+div.breadcrumbs {
+    min-height: 20px;
+    padding: 12px 28px;
+
+    background: #ffffff;
+    color: var(--rdf-text-muted);
+
+    border-bottom: 1px solid var(--rdf-border);
+    box-shadow: 0 2px 7px rgba(22, 57, 41, 0.025);
+
+    font-size: 12px;
+}
+
+div.breadcrumbs a {
+    color: var(--rdf-primary) !important;
+    font-weight: 600;
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+#nav-sidebar {
+    width: 265px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff 0%,
+            #f8fbf9 100%
+        );
+
+    border-right: 1px solid var(--rdf-border);
+    box-shadow: 4px 0 18px rgba(25, 65, 45, 0.05);
+
+    position: sticky;
+    top: 0;
+
+    max-height: calc(100vh - 72px);
+    overflow-y: auto;
+}
+
+#nav-filter {
+    display: none;
+}
+
+.main.shifted > #nav-sidebar {
+    margin-left: 0;
+}
+
+.rdf-sidebar {
+    padding: 18px 12px 34px;
+}
+
+.rdf-sidebar-section {
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eef2f0;
+}
+
+.rdf-sidebar-section:last-child {
+    border-bottom: 0;
+}
+
+.rdf-sidebar-label,
+.rdf-sidebar-group-toggle {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 7px 12px;
+
+    border: 0;
+    background: transparent;
+
+    color: #8a9690;
+
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 750;
+    letter-spacing: 1.15px;
+    text-transform: uppercase;
+}
+
+.rdf-sidebar-group-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.rdf-sidebar-group-toggle:hover {
+    color: var(--rdf-primary);
+}
+
+.rdf-toggle-arrow {
+    font-size: 15px;
+    transition: transform 0.2s ease;
+}
+
+.rdf-sidebar-group-toggle.collapsed .rdf-toggle-arrow {
+    transform: rotate(-90deg);
+}
+
+.rdf-sidebar-group {
+    max-height: 700px;
+    overflow: hidden;
+    opacity: 1;
+
+    transition:
+        max-height 0.25s ease,
+        opacity 0.2s ease;
+}
+
+.rdf-sidebar-group.collapsed {
+    max-height: 0;
+    opacity: 0;
+}
+
+.rdf-sidebar-link {
+    position: relative;
+
+    min-height: 44px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    box-sizing: border-box;
+
+    padding: 9px 12px;
+    margin-bottom: 3px;
+
+    border-radius: 9px;
+
+    color: #42524a !important;
+    text-decoration: none !important;
+
+    font-size: 13px;
+    font-weight: 550;
+
+    transition:
+        background 0.16s ease,
+        color 0.16s ease,
+        transform 0.16s ease,
+        box-shadow 0.16s ease;
+}
+
+.rdf-sidebar-link:hover {
+    background: #edf7f2;
+    color: var(--rdf-primary) !important;
+    transform: translateX(2px);
+}
+
+.rdf-sidebar-icon {
+    width: 30px;
+    height: 30px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 8px;
+
+    background: #f0f5f2;
+    color: #5a6d63;
+
+    font-size: 17px;
+
+    transition:
+        background 0.16s ease,
+        color 0.16s ease,
+        transform 0.16s ease;
+}
+
+.rdf-sidebar-link:hover .rdf-sidebar-icon {
+    background: #dcefe5;
+    color: var(--rdf-primary);
+}
+
+.rdf-sidebar-link.active {
+    background:
+        linear-gradient(
+            135deg,
+            var(--rdf-primary),
+            var(--rdf-secondary)
+        );
+
+    color: #ffffff !important;
+    font-weight: 700;
+
+    box-shadow: 0 5px 14px rgba(23, 107, 69, 0.19);
+}
+
+.rdf-sidebar-link.active .rdf-sidebar-icon {
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+    transform: scale(1.04);
+}
+
+.rdf-sidebar-link.active::before {
+    display: none;
+}
+
+#nav-sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+#nav-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#nav-sidebar::-webkit-scrollbar-thumb {
+    background: #ccd9d2;
+    border-radius: 20px;
+}
+
+.toggle-nav-sidebar {
+    background: #ffffff;
+    color: var(--rdf-primary);
+    border-right: 1px solid var(--rdf-border);
+}
+
+.toggle-nav-sidebar:hover {
+    background: #edf7f2;
+}
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+#content {
+    max-width: 1500px;
+    box-sizing: border-box;
+
+    padding: 28px 30px;
+    margin: 0 auto;
+}
+
+#content h1 {
+    margin-bottom: 22px;
+
+    color: #263b30;
+
+    font-size: 25px;
+    font-weight: 730;
+    letter-spacing: -0.3px;
+}
+
+/* =========================================================
+   MODULES / CARDS
+   ========================================================= */
+.module,
+.custom-module,
+.inline-group {
+    background: var(--rdf-surface);
+    border: 1px solid var(--rdf-border);
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    box-shadow: var(--rdf-shadow-sm);
+}
+
+.module,
+.custom-module {
+    margin-bottom: 22px;
+}
+
+.module h2,
+.module caption,
+.inline-group h2,
+.custom-module h2 {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 13px 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--rdf-primary),
+            var(--rdf-secondary)
+        );
+
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.15px;
+}
+
+/* Keep inline forms and fieldset bodies light */
+.module,
+.module table,
+.inline-group,
+.inline-related,
+fieldset.module,
+.form-row {
+    color: var(--rdf-text);
+}
+
+.inline-related,
+fieldset.module {
+    background: #ffffff;
+}
+
+/* =========================================================
+   FORMS
+   ========================================================= */
+.form-row {
+    padding: 15px 18px;
+    border-bottom: 1px solid #eef2f0;
+    background: #ffffff;
+}
+
+.form-row:last-child {
+    border-bottom: 0;
+}
+
+label {
+    color: #4e5f56;
+    font-weight: 600;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="url"],
+input[type="tel"],
+input[type="search"],
+input[type="date"],
+input[type="time"],
+textarea,
+select {
+    box-sizing: border-box;
+
+    padding: 9px 11px;
+
+    border: 1px solid var(--rdf-border-strong);
+    border-radius: 7px;
+
+    background: #ffffff !important;
+    color: var(--rdf-text) !important;
+
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--rdf-secondary);
+
+    box-shadow:
+        0 0 0 3px rgba(33, 140, 95, 0.11);
+}
+
+/* Django autocomplete / select2 */
+.select2-container--admin-autocomplete .select2-selection--single,
+.select2-container--admin-autocomplete .select2-selection--multiple {
+    background: #ffffff !important;
+    border: 1px solid var(--rdf-border-strong) !important;
+    border-radius: 7px !important;
+    color: var(--rdf-text) !important;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input,
+a.button {
+    border: 0;
+    border-radius: 7px;
+
+    padding: 9px 15px;
+
+    background: var(--rdf-primary);
+    color: #ffffff !important;
+
+    font-weight: 650;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+a.button:hover {
+    background: var(--rdf-primary-dark);
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 4px 11px rgba(23, 107, 69, 0.18);
+}
+
+input.default,
+.submit-row input.default {
+    background: var(--rdf-secondary);
+}
+
+.deletelink,
+.submit-row .deletelink {
+    background: var(--delete-button-bg) !important;
+    color: #ffffff !important;
+    border-radius: 7px !important;
+}
+
+/* =========================================================
+   CHANGE LIST CONTAINER
+   ========================================================= */
+#changelist {
+    background: #ffffff;
+
+    border: 1px solid var(--rdf-border);
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    box-shadow: var(--rdf-shadow-sm);
+}
+
+#changelist .changelist-form-container {
+    background: #ffffff;
+}
+
+#changelist .results {
+    overflow: auto;
+    max-height: calc(100vh - 260px);
+    background: #ffffff;
+}
+
+/* =========================================================
+   TABLES - EXPLICIT LIGHT ROW COLORS
+   This section prevents Django dark-theme row backgrounds
+   from leaking into the custom admin.
+   ========================================================= */
+#changelist table,
+.results table,
+.module table,
+.inline-group table,
+table {
+    background: #ffffff;
+    color: var(--rdf-text);
+    border-collapse: collapse;
+}
+
+#changelist table thead th,
+.results table thead th,
+.module table thead th,
+.inline-group table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+
+    padding: 10px 12px;
+
+    background: #edf3f0 !important;
+    color: #4e6056 !important;
+
+    border-bottom: 1px solid #dbe5df;
+
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 0.42px;
+    text-transform: uppercase;
+
+    box-shadow: 0 1px 0 #dfe7e3;
+}
+
+#changelist table thead th a,
+.results table thead th a,
+.module table thead th a {
+    color: #42544a !important;
+}
+
+#changelist table tbody tr,
+.results table tbody tr,
+.module table tbody tr,
+.inline-group table tbody tr,
+tr.row1,
+tr.row2 {
+    background: #ffffff !important;
+    color: var(--rdf-text) !important;
+
+    transition:
+        background 0.12s ease,
+        box-shadow 0.12s ease;
+}
+
+#changelist table tbody tr:nth-child(even),
+.results table tbody tr:nth-child(even),
+.module table tbody tr:nth-child(even),
+.inline-group table tbody tr:nth-child(even),
+tr.row2 {
+    background: #f8fbf9 !important;
+}
+
+#changelist table tbody tr:hover,
+.results table tbody tr:hover,
+.module table tbody tr:hover,
+.inline-group table tbody tr:hover,
+tr.row1:hover,
+tr.row2:hover {
+    background: #eaf5ef !important;
+}
+
+#changelist table tbody td,
+#changelist table tbody th,
+.results table tbody td,
+.results table tbody th,
+.module table tbody td,
+.module table tbody th,
+.inline-group table tbody td,
+.inline-group table tbody th {
+    padding: 10px 11px;
+
+    background: transparent !important;
+    color: var(--rdf-text) !important;
+
+    vertical-align: middle;
+
+    border-bottom: 1px solid #e9efec;
+}
+
+#changelist table tbody td a,
+#changelist table tbody th a,
+.results table tbody td a,
+.results table tbody th a,
+.module table tbody td a,
+.module table tbody th a {
+    color: var(--rdf-primary) !important;
+}
+
+#changelist table tbody tr.selected,
+#changelist table tbody tr.selected td,
+#changelist table tbody tr.selected th {
+    background: #e5f2eb !important;
+}
+
+/* Boolean icons / cells */
+#changelist table img,
+.results table img {
+    vertical-align: middle;
+}
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+#changelist-search {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    padding: 13px 14px;
+
+    background: #ffffff;
+
+    border-bottom: 1px solid #edf1ef;
+}
+
+#searchbar {
+    min-width: 300px;
+    min-height: 38px;
+    border-radius: 8px !important;
+}
+
+#changelist-search input[type="submit"] {
+    min-height: 38px;
+}
+
+/* =========================================================
+   BULK ACTIONS
+   ========================================================= */
+.actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    padding: 12px 14px;
+
+    background: #f8fbf9;
+
+    border-bottom: 1px solid #e7edea;
+}
+
+.actions select {
+    min-height: 36px;
+    border-radius: 7px;
+}
+
+.actions button {
+    min-height: 36px;
+    padding: 7px 12px;
+
+    border: 0;
+    border-radius: 7px;
+
+    background: var(--rdf-primary);
+    color: #ffffff;
+
+    font-weight: 650;
+    cursor: pointer;
+}
+
+.actions button:hover {
+    background: var(--rdf-primary-dark);
+}
+
+/* =========================================================
+   FILTER SIDEBAR
+   ========================================================= */
+#changelist-filter {
+    background: #ffffff;
+
+    border-left: 1px solid var(--rdf-border);
+
+    color: var(--rdf-text);
+}
+
+#changelist-filter h2 {
+    margin: 0;
+    padding: 13px 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--rdf-primary),
+            var(--rdf-secondary)
+        );
+
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+#changelist-filter h3 {
+    padding: 12px 14px 6px;
+
+    color: #405148;
+
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 0.45px;
+    text-transform: uppercase;
+}
+
+#changelist-filter ul {
+    padding: 0 14px 12px;
+}
+
+#changelist-filter li {
+    margin-bottom: 5px;
+}
+
+#changelist-filter li a {
+    color: #617068 !important;
+}
+
+#changelist-filter li.selected a {
+    color: var(--rdf-primary) !important;
+    font-weight: 700;
+}
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+.paginator {
+    padding: 14px;
+
+    background: #ffffff;
+
+    border-top: 1px solid #edf1ef;
+
+    color: #6f7e76;
+    font-size: 12px;
+}
+
+.paginator a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 28px;
+    height: 28px;
+
+    margin: 0 2px;
+
+    border-radius: 6px;
+
+    background: #edf7f2;
+    color: var(--rdf-primary) !important;
+
+    text-decoration: none;
+}
+
+.paginator a:hover {
+    background: #dcefe5;
+}
+
+/* =========================================================
+   OBJECT TOOLS
+   ========================================================= */
+.object-tools {
+    display: flex;
+    gap: 8px;
+}
+
+.object-tools a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 8px 12px;
+
+    border-radius: 7px;
+
+    background: var(--rdf-primary);
+    color: #ffffff !important;
+
+    font-weight: 650;
+    text-decoration: none;
+}
+
+.object-tools a:hover {
+    background: var(--rdf-primary-dark);
+}
+
+/* =========================================================
+   FORM SAVE BAR
+   ========================================================= */
+.submit-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    padding: 14px;
+
+    border: 1px solid var(--rdf-border);
+    border-radius: 10px;
+
+    background: #f8fbf9 !important;
+
+    box-shadow: none;
+}
+
+.submit-row p {
+    margin: 0;
+}
+
+/* =========================================================
+   MESSAGES
+   ========================================================= */
+ul.messagelist {
+    padding: 12px 24px 0;
+}
+
+ul.messagelist li {
+    margin-bottom: 10px;
+    padding: 12px 14px;
+
+    border: 1px solid transparent;
+    border-radius: 9px;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+ul.messagelist li.success {
+    background: var(--rdf-success-bg);
+    border-color: #c6e8d5;
+    color: var(--rdf-success);
+}
+
+ul.messagelist li.warning {
+    background: var(--rdf-warning-bg);
+    border-color: #f3dfac;
+    color: var(--rdf-warning);
+}
+
+ul.messagelist li.error {
+    background: var(--rdf-danger-bg);
+    border-color: #f1c8c8;
+    color: var(--rdf-danger);
+}
+
+/* =========================================================
+   BADGES / PRICES / THUMBNAILS
+   ========================================================= */
+.rdf-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 22px;
+    padding: 3px 8px;
+
+    border-radius: 999px;
+
+    font-size: 10px;
+    font-weight: 750;
+    line-height: 1;
+}
+
+.rdf-badge-success {
+    background: var(--rdf-success-bg);
+    color: var(--rdf-success);
+}
+
+.rdf-badge-warning {
+    background: var(--rdf-warning-bg);
+    color: var(--rdf-warning);
+}
+
+.rdf-badge-danger {
+    background: var(--rdf-danger-bg);
+    color: var(--rdf-danger);
+}
+
+.rdf-badge-info,
+.rdf-badge-blue {
+    background: var(--rdf-info-bg);
+    color: var(--rdf-info);
+}
+
+.rdf-badge-purple {
+    background: var(--rdf-purple-bg);
+    color: var(--rdf-purple);
+}
+
+.rdf-badge-neutral {
+    background: #edf1ef;
+    color: #66736c;
+}
+
+.rdf-price {
+    color: var(--rdf-primary);
+    font-weight: 750;
+}
+
+.rdf-admin-thumb {
+    width: 46px;
+    height: 46px;
+
+    object-fit: cover;
+
+    border: 1px solid #e1e8e4;
+    border-radius: 9px;
+
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.06);
+}
+
+.rdf-image-placeholder {
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: #f0f4f2;
+    color: #8b9891;
+
+    font-size: 18px;
+}
+
+/* =========================================================
+   LOGIN PAGE
+   ========================================================= */
+.rdf-login-page {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(33, 140, 95, 0.18),
+            transparent 40%
+        ),
+        linear-gradient(
+            135deg,
+            #0c3f29,
+            #176b45 45%,
+            #218c5f
+        );
+}
+
+.rdf-login-page #header,
+.rdf-login-page .breadcrumbs,
+.rdf-login-page #nav-sidebar {
+    display: none !important;
+}
+
+.rdf-login-page #container {
+    min-height: 100vh;
+    background: transparent;
+}
+
+.rdf-login-page #content {
+    max-width: none;
+    padding: 0;
+    margin: 0;
+}
+
+.rdf-login-shell {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+}
+
+.rdf-login-card {
+    width: 100%;
+    max-width: 430px;
+
+    padding: 34px;
+
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, 0.985);
+
+    box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.24);
+}
+
+.rdf-login-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    margin-bottom: 28px;
+}
+
+.rdf-login-logo {
+    width: 54px;
+    height: 54px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--rdf-primary),
+            var(--rdf-secondary)
+        );
+
+    color: #ffffff;
+
+    font-size: 17px;
+    font-weight: 850;
+
+    box-shadow:
+        0 5px 14px rgba(23, 107, 69, 0.22);
+}
+
+.rdf-login-brand h1 {
+    margin: 0;
+
+    color: var(--rdf-text);
+
+    font-size: 21px;
+    font-weight: 760;
+}
+
+.rdf-login-brand p {
+    margin: 4px 0 0;
+
+    color: var(--rdf-text-muted);
+    font-size: 12px;
+}
+
+.rdf-login-field {
+    margin-bottom: 18px;
+}
+
+.rdf-login-field label {
+    display: block;
+    margin-bottom: 7px;
+
+    color: #43554b;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.rdf-login-field input {
+    width: 100%;
+    min-height: 45px;
+
+    box-sizing: border-box;
+
+    padding: 10px 12px;
+
+    border: 1px solid #d6dfda;
+    border-radius: 9px;
+
+    background: #fbfdfc !important;
+    color: var(--rdf-text) !important;
+
+    font-size: 14px;
+}
+
+.rdf-login-field input:focus {
+    border-color: var(--rdf-secondary);
+
+    box-shadow:
+        0 0 0 3px rgba(33, 140, 95, 0.12);
+
+    outline: none;
+}
+
+.rdf-login-button {
+    width: 100%;
+    min-height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    border: 0;
+    border-radius: 9px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--rdf-primary),
+            var(--rdf-secondary)
+        );
+
+    color: #ffffff;
+
+    font-weight: 750;
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.rdf-login-button:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 7px 16px rgba(23, 107, 69, 0.2);
+}
+
+.rdf-login-error {
+    margin-bottom: 18px;
+    padding: 11px 13px;
+
+    border-radius: 8px;
+
+    background: var(--rdf-danger-bg);
+    color: #ad3030;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.rdf-login-footer {
+    margin-top: 22px;
+
+    color: #8d9993;
+
+    font-size: 11px;
+    text-align: center;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 900px) {
+    #changelist {
+        overflow-x: auto;
+    }
+
+    #changelist .results {
+        max-height: none;
+    }
+
+    #changelist table {
+        min-width: 900px;
+    }
+
+    #searchbar {
+        min-width: 220px;
+        width: 100%;
+    }
+
+    .actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 767px) {
+    #header {
+        min-height: 64px;
+        padding: 9px 14px;
+    }
+
+    .rdf-brand-logo {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+    }
+
+    .rdf-brand-title {
+        font-size: 15px;
+    }
+
+    .rdf-brand-subtitle {
+        display: none;
+    }
+
+    #user-tools {
+        font-size: 10px;
+        gap: 2px;
+    }
+
+    #user-tools a,
+    #logout-form button {
+        padding: 5px 6px;
+    }
+
+    #nav-sidebar {
+        width: 250px;
+        max-width: 85vw;
+    }
+
+    #content {
+        padding: 18px 14px;
+    }
+
+    div.breadcrumbs {
+        padding: 10px 14px;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .rdf-sidebar-link {
+        min-height: 42px;
+        font-size: 12px;
+    }
+
+    .rdf-sidebar-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 16px;
+    }
+
+    .object-tools {
+        flex-wrap: wrap;
+    }
+}
+
+/* =========================================================
+   DESKTOP LAYOUT FIX
+   Keeps sidebar visible at normal browser zoom and prevents
+   wide changelist tables from pushing it off-screen.
+   ========================================================= */
+
+@media (min-width: 768px) {
+
+    /* Stable two-column admin layout */
+    .main {
+        display: flex !important;
+        align-items: stretch;
+        width: 100%;
+        min-width: 0;
+    }
+
+    /* Always keep the custom sidebar visible on desktop/tablet */
+    #nav-sidebar {
+        display: block !important;
+
+        flex: 0 0 265px;
+        width: 265px !important;
+        min-width: 265px !important;
+        max-width: 265px !important;
+
+        margin-left: 0 !important;
+
+        position: sticky;
+        top: 0;
+
+        align-self: flex-start;
+
+        height: calc(100vh - 72px);
+        max-height: calc(100vh - 72px);
+
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    /* Override Django's collapsed/sidebar-shift rules */
+    .main.shifted > #nav-sidebar,
+    .main > #nav-sidebar {
+        margin-left: 0 !important;
+    }
+
+    /*
+     * The native sidebar toggle is no longer needed on
+     * desktop because our sidebar stays permanently visible.
+     */
+    .toggle-nav-sidebar {
+        display: none !important;
+    }
+
+    /* Critical: allow the content column to shrink */
+    .main > #content-start {
+        flex: 1 1 auto;
+        width: auto;
+        min-width: 0;
+
+        overflow: hidden;
+
+        background: var(--rdf-bg);
+    }
+
+    #content {
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+
+        box-sizing: border-box;
+    }
+
+    #content-main {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    /* Changelist should never enlarge the entire page */
+    #changelist,
+    #changelist-form,
+    #changelist .changelist-form-container {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Scroll only the table itself when many columns exist */
+    #changelist .results {
+        width: 100%;
+        max-width: 100%;
+
+        overflow-x: auto !important;
+        overflow-y: auto;
+
+        box-sizing: border-box;
+    }
+
+    #changelist .results table {
+        width: max-content;
+        min-width: 100%;
+    }
+
+    /*
+     * Search/actions/pagination stay inside the content
+     * instead of expanding the whole admin layout.
+     */
+    #changelist-search,
+    .actions,
+    .paginator {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Filter sidebar remains inside the content column */
+    #changelist-filter {
+        flex: 0 0 220px;
+        min-width: 200px;
+        max-width: 240px;
+
+        box-sizing: border-box;
+    }
+}
+
+
+/* =========================================================
+   MEDIUM DESKTOP / SMALL LAPTOP
+   ========================================================= */
+
+@media (min-width: 768px) and (max-width: 1200px) {
+
+    #nav-sidebar {
+        flex-basis: 230px;
+        width: 230px !important;
+        min-width: 230px !important;
+        max-width: 230px !important;
+    }
+
+    .rdf-sidebar {
+        padding-left: 9px;
+        padding-right: 9px;
+    }
+
+    .rdf-sidebar-link {
+        gap: 9px;
+        padding-left: 9px;
+        padding-right: 9px;
+    }
+
+    #content {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    #changelist-filter {
+        flex-basis: 200px;
+        min-width: 180px;
+        max-width: 210px;
+    }
+}
+
+
+/* =========================================================
+   TRUE MOBILE
+   Sidebar may collapse only on phones.
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+    .toggle-nav-sidebar {
+        display: block !important;
+    }
+
+    #nav-sidebar {
+        width: 250px !important;
+        min-width: 250px !important;
+        max-width: 85vw !important;
+    }
+
+    /*
+     * Tables remain horizontally scrollable without forcing
+     * the whole page wider than the phone screen.
+     */
+    #changelist,
+    #changelist-form,
+    #content-main {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    #changelist .results {
+        overflow-x: auto !important;
+        max-width: 100%;
+    }
+}
