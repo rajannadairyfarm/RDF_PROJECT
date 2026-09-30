@@ -892,10 +892,10 @@ class ProductAdmin(admin.ModelAdmin):
                 initial["category"] = first_category.pk
 
         return initial
-    
-    
+        
     def save_model(self, request, obj, form, change):
 
+        # Save the product first.
         super().save_model(
             request,
             obj,
@@ -903,64 +903,160 @@ class ProductAdmin(admin.ModelAdmin):
             change
         )
 
-        if not change:
+        # Only announce newly-created products.
+        if change:
+            return
 
-            from django.urls import reverse
-            from .utils import send_new_product_announcement
+        from django.urls import reverse
+        from .utils import send_new_product_announcement
 
-            try:
+        try:
 
-                product_path = reverse(
-                    "product-detail",
-                    args=[obj.product_id]
-                )
+            product_path = reverse(
+                "product-detail",
+                args=[obj.product_id]
+            )
 
-                product_url = request.build_absolute_uri(
-                    product_path
-                )
-                print("product url==",product_url)
+            product_url = request.build_absolute_uri(
+                product_path
+            )
 
-                result = send_new_product_announcement(
-                    product=obj,
-                    product_url=product_url
-                )
+            print(
+                "PRODUCT URL ==",
+                product_url
+            )
 
-                if result["failed"] == 0:
+            result = send_new_product_announcement(
+                product=obj,
+                product_url=product_url
+            )
 
-                    self.message_user(
-                        request,
-                        (
-                            f"Product '{obj.name}' created successfully. "
-                            f"Announcement sent to "
-                            f"{result['sent']} recipients."
-                        ),
-                        level=messages.SUCCESS
-                    )
+            print(
+                "PRODUCT ANNOUNCEMENT RESULT ==",
+                result
+            )
 
-                else:
-
-                    self.message_user(
-                        request,
-                        (
-                            f"Product '{obj.name}' created successfully. "
-                            f"Announcement: "
-                            f"{result['sent']} sent, "
-                            f"{result['failed']} failed."
-                        ),
-                        level=messages.WARNING
-                    )
-
-            except Exception as exc:
+            if result["failed"] == 0:
 
                 self.message_user(
                     request,
                     (
-                        f"Product '{obj.name}' was created, "
-                        f"but the announcement could not be sent. "
-                        f"Error: {exc}"
+                        f"Product '{obj.name}' created successfully. "
+                        f"Announcement sent to "
+                        f"{result['sent']} recipient(s)."
                     ),
-                    level=messages.ERROR
+                    level=messages.SUCCESS
                 )
+
+            elif result["sent"] > 0:
+
+                self.message_user(
+                    request,
+                    (
+                        f"Product '{obj.name}' created successfully. "
+                        f"Announcement: "
+                        f"{result['sent']} sent, "
+                        f"{result['failed']} failed."
+                    ),
+                    level=messages.WARNING
+                )
+
+            else:
+
+                self.message_user(
+                    request,
+                    (
+                        f"Product '{obj.name}' created successfully, "
+                        f"but announcement emails could not be sent."
+                    ),
+                    level=messages.WARNING
+                )
+
+        except Exception as exc:
+
+            print(
+                "PRODUCT ANNOUNCEMENT ERROR ==",
+                repr(exc)
+            )
+
+            # IMPORTANT:
+            # Product has already been saved.
+            # Never fail the admin request because email failed.
+            self.message_user(
+                request,
+                (
+                    f"Product '{obj.name}' was created successfully, "
+                    f"but the announcement could not be sent."
+                ),
+                level=messages.WARNING
+            )
+    # def save_model(self, request, obj, form, change):
+
+    #     super().save_model(
+    #         request,
+    #         obj,
+    #         form,
+    #         change
+    #     )
+
+    #     if not change:
+
+    #         from django.urls import reverse
+    #         from .utils import send_new_product_announcement
+
+    #         try:
+
+    #             product_path = reverse(
+    #                 "product-detail",
+    #                 args=[obj.product_id]
+    #             )
+
+    #             product_url = request.build_absolute_uri(
+    #                 product_path
+    #             )
+    #             print("product url==",product_url)
+
+    #             result = send_new_product_announcement(
+    #                 product=obj,
+    #                 product_url=product_url
+    #             )
+
+    #             if result["failed"] == 0:
+
+    #                 self.message_user(
+    #                     request,
+    #                     (
+    #                         f"Product '{obj.name}' created successfully. "
+    #                         f"Announcement sent to "
+    #                         f"{result['sent']} recipients."
+    #                     ),
+    #                     level=messages.SUCCESS
+    #                 )
+
+    #             else:
+
+    #                 self.message_user(
+    #                     request,
+    #                     (
+    #                         f"Product '{obj.name}' created successfully. "
+    #                         f"Announcement: "
+    #                         f"{result['sent']} sent, "
+    #                         f"{result['failed']} failed."
+    #                     ),
+    #                     level=messages.WARNING
+    #                 )
+
+    #         except Exception as exc:
+
+    #             self.message_user(
+    #                 request,
+    #                 (
+    #                     f"Product '{obj.name}' was created, "
+    #                     f"but the announcement could not be sent. "
+    #                     f"Error: {exc}"
+    #                 ),
+    #                 level=messages.ERROR
+    #             )
 
 
 # ============================================================

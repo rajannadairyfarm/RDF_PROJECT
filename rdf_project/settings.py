@@ -46,9 +46,9 @@ load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() == "true"
+# DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() == "true"
 
-# DEBUG = True
+DEBUG = True
 RAILWAY_PUBLIC_DOMAIN = os.getenv("RAILWAY_PUBLIC_DOMAIN")
 
 ALLOWED_HOSTS = [
@@ -170,8 +170,28 @@ AUTH_USER_MODEL = 'rdf_app.User'
 
 
 
-RESEND_API_KEY = os.getenv("RESEND_API_KEY")
+# RESEND_API_KEY = os.getenv("RESEND_API_KEY")
+RESEND_API_KEY = os.getenv(
+    "RESEND_API_KEY"
+)
 
+RESEND_FROM_EMAIL = os.getenv(
+    "RESEND_FROM_EMAIL",
+    "Rajanna Dairy Farm <onboarding@resend.dev>"
+)
+
+RESEND_TEST_MODE = (
+    os.getenv(
+        "RESEND_TEST_MODE",
+        "True"
+    ).lower()
+    == "true"
+)
+
+ADMIN_EMAIL = os.getenv(
+    "ADMIN_EMAIL",
+    "rajannadairyfarm@gmail.com"
+)
 
 
 
