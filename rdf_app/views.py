@@ -2365,58 +2365,176 @@ def user_profile(request):
     )
     
     
+# @login_required(login_url="login")
+# @require_http_methods(["GET", "POST"])
+# def profile(request):
+
+#     profile, created = UserProfile.objects.get_or_create(
+#         user=request.user
+#     )
+
+#     if request.method == "POST":
+
+#         form = UserProfileForm(
+#             request.POST,
+#             instance=profile
+#         )
+
+#         image = request.FILES.get("image")
+
+#         if form.is_valid():
+
+#             if image:
+
+#                 is_valid, error_message = (
+#                     validate_profile_image(image)
+#                 )
+
+#                 if not is_valid:
+
+#                     messages.error(
+#                         request,
+#                         error_message
+#                     )
+
+#                 else:
+
+#                     with transaction.atomic():
+
+#                         form.save()
+
+#                         request.user.address = (
+#                             request.POST.get(
+#                                 "address",
+#                                 ""
+#                             ).strip()
+#                         )
+
+#                         request.user.image = image
+
+#                         request.user.save(
+#                             update_fields=[
+#                                 "address",
+#                                 "image"
+#                             ]
+#                         )
+
+#                     messages.success(
+#                         request,
+#                         "Your profile has been updated successfully."
+#                     )
+
+#                     return redirect("profile")
+
+#             else:
+
+#                 with transaction.atomic():
+
+#                     form.save()
+
+#                     request.user.address = (
+#                         request.POST.get(
+#                             "address",
+#                             ""
+#                         ).strip()
+#                     )
+
+#                     request.user.save(
+#                         update_fields=["address"]
+#                     )
+
+#                 messages.success(
+#                     request,
+#                     "Your profile has been updated successfully."
+#                 )
+
+#                 return redirect("profile")
+
+#     else:
+
+#         form = UserProfileForm(
+#             instance=profile
+#         )
+
+#     context = {
+#         "form": form,
+#         "profile": profile,
+#         "completion_percentage": (
+#             profile.completion_percentage()
+#         ),
+#         "missing_fields": (
+#             profile.missing_fields()
+#         ),
+#     }
+
+#     return render(
+#         request,
+#         "profile.html",
+#         context
+#     )
+
+
 @login_required(login_url="login")
 @require_http_methods(["GET", "POST"])
 def profile(request):
-
-    profile, created = UserProfile.objects.get_or_create(
-        user=request.user
-    )
-
-    if request.method == "POST":
-
-        form = UserProfileForm(
-            request.POST,
-            instance=profile
+    try:
+        profile, created = UserProfile.objects.get_or_create(
+            user=request.user
         )
 
-        image = request.FILES.get("image")
+        if request.method == "POST":
+            form = UserProfileForm(
+                request.POST,
+                instance=profile
+            )
 
-        if form.is_valid():
+            image = request.FILES.get("image")
 
-            if image:
+            if form.is_valid():
+                if image:
+                    is_valid, error_message = validate_profile_image(image)
 
-                is_valid, error_message = (
-                    validate_profile_image(image)
-                )
+                    if not is_valid:
+                        messages.error(
+                            request,
+                            error_message
+                        )
+                    else:
+                        with transaction.atomic():
+                            form.save()
 
-                if not is_valid:
-
-                    messages.error(
-                        request,
-                        error_message
-                    )
-
-                else:
-
-                    with transaction.atomic():
-
-                        form.save()
-
-                        request.user.address = (
-                            request.POST.get(
+                            request.user.address = request.POST.get(
                                 "address",
                                 ""
                             ).strip()
+
+                            request.user.image = image
+
+                            request.user.save(
+                                update_fields=[
+                                    "address",
+                                    "image"
+                                ]
+                            )
+
+                        messages.success(
+                            request,
+                            "Your profile has been updated successfully."
                         )
 
-                        request.user.image = image
+                        return redirect("profile")
+
+                else:
+                    with transaction.atomic():
+                        form.save()
+
+                        request.user.address = request.POST.get(
+                            "address",
+                            ""
+                        ).strip()
 
                         request.user.save(
-                            update_fields=[
-                                "address",
-                                "image"
-                            ]
+                            update_fields=["address"]
                         )
 
                     messages.success(
@@ -2426,54 +2544,27 @@ def profile(request):
 
                     return redirect("profile")
 
-            else:
+        else:
+            form = UserProfileForm(
+                instance=profile
+            )
 
-                with transaction.atomic():
+        context = {
+            "form": form,
+            "profile": profile,
+            "completion_percentage": profile.completion_percentage(),
+            "missing_fields": profile.missing_fields(),
+        }
 
-                    form.save()
-
-                    request.user.address = (
-                        request.POST.get(
-                            "address",
-                            ""
-                        ).strip()
-                    )
-
-                    request.user.save(
-                        update_fields=["address"]
-                    )
-
-                messages.success(
-                    request,
-                    "Your profile has been updated successfully."
-                )
-
-                return redirect("profile")
-
-    else:
-
-        form = UserProfileForm(
-            instance=profile
+        return render(
+            request,
+            "profile.html",
+            context
         )
 
-    context = {
-        "form": form,
-        "profile": profile,
-        "completion_percentage": (
-            profile.completion_percentage()
-        ),
-        "missing_fields": (
-            profile.missing_fields()
-        ),
-    }
-
-    return render(
-        request,
-        "profile.html",
-        context
-    )
-
-
+    except Exception as e:
+        print("PROFILE ERROR:", repr(e))
+        raise
 
 
 from .models import (
