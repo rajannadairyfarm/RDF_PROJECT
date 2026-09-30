@@ -193,7 +193,7 @@ RESEND_API_KEY = os.getenv("RESEND_API_KEY")
 # Application definition
 
 INSTALLED_APPS = [
-    "jazzmin",
+    # "jazzmin",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -393,214 +393,236 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = 3600
     SECURE_HSTS_INCLUDE_SUBDOMAINS = False
     SECURE_HSTS_PRELOAD = False
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
 
-
-
-JAZZMIN_SETTINGS = {
-
-    # ============================================================
-    # CUSTOM JS
-    # ============================================================
-
-    "custom_js": None,
-
-    # ============================================================
-    # BRANDING
-    # ============================================================
-
-    "site_title": "RDF Admin",
-
-    "site_header": "Rajanna Dairy Farm",
-
-    "site_brand": "Rajanna Dairy Farm",
-
-    "welcome_sign": (
-        "Welcome to Rajanna Dairy Farm Administration"
-    ),
-
-    "copyright": "Rajanna Dairy Farm",
-
-    # ============================================================
-    # LOGIN
-    # ============================================================
-
-    "login_logo": None,
-
-    "login_logo_dark": None,
-
-    "site_logo": None,
-
-    "site_icon": None,
-
-    # ============================================================
-    # SIDEBAR
-    # ============================================================
-
-    "show_sidebar": True,
-
-    "navigation_expanded": True,
-
-    "hide_apps": [],
-
-    "hide_models": [],
-
-    # ============================================================
-    # SIDEBAR ORDER
-    # ============================================================
-
-    "order_with_respect_to": [
-
-        # Core catalog
-        "rdf_app.category",
-        "rdf_app.product",
-
-        # Orders
-        "rdf_app.order",
-        "rdf_app.orderitem",
-
-        # Shopping
-        "rdf_app.cart",
-        "rdf_app.cartitem",
-
-        # Customers
-        "rdf_app.user",
-        "rdf_app.userprofile",
-        "rdf_app.address",
-
-    ],
-
-    # ============================================================
-    # SIDEBAR ICONS
-    # ============================================================
-
-    "icons": {
-
-        # Main application
-        "rdf_app": "fas fa-store",
-
-        # Catalog
-        "rdf_app.category":
-            "fas fa-layer-group",
-
-        "rdf_app.product":
-            "fas fa-box-open",
-
-        # Orders
-        "rdf_app.order":
-            "fas fa-shopping-bag",
-
-        "rdf_app.orderitem":
-            "fas fa-receipt",
-
-        # Cart
-        "rdf_app.cart":
-            "fas fa-shopping-cart",
-
-        "rdf_app.cartitem":
-            "fas fa-cart-plus",
-
-        # Customers
-        "rdf_app.user":
-            "fas fa-users",
-
-        "rdf_app.userprofile":
-            "fas fa-user-circle",
-
-        "rdf_app.address":
-            "fas fa-map-marker-alt",
-
-        # Django authentication
-        "auth":
-            "fas fa-user-shield",
-
-        "auth.group":
-            "fas fa-users-cog",
-
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
     },
 
-    # ============================================================
-    # TOP MENU
-    # ============================================================
-
-    "topmenu_links": [
-
-        {
-            "name": "Dashboard",
-            "url": "admin:index",
-            "permissions": [
-                "rdf_app.view_user"
-            ],
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
         },
 
-        {
-            "name": "Shop",
-            "url": "/shop/",
-            "new_window": False,
+        "django.request": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": False,
         },
-
-        {
-            "name": "Orders",
-            "url": "/admin/rdf_app/order/",
-            "permissions": [
-                "rdf_app.view_order"
-            ],
-        },
-
-    ],
-
-    # ============================================================
-    # SEARCH
-    # ============================================================
-
-    "search_model": [
-
-        "rdf_app.User",
-
-        "rdf_app.Product",
-
-        "rdf_app.Category",
-
-        "rdf_app.Order",
-
-    ],
-
-    # ============================================================
-    # UI BEHAVIOR
-    # ============================================================
-
-    "related_modal_active": True,
-
-    "show_ui_builder": False,
-
-    "changeform_format": "horizontal_tabs",
-
-    "changeform_format_overrides": {
-
-        "rdf_app.product": "collapsible",
-
-        "rdf_app.category": "collapsible",
-
-        "rdf_app.order": "horizontal_tabs",
-
-        "rdf_app.user": "horizontal_tabs",
-
     },
-
-    # ============================================================
-    # LANGUAGE / UI
-    # ============================================================
-
-    "language_chooser": False,
-
-    "custom_css": None,
-
-    # ============================================================
-    # MODALS / POPUPS
-    # ============================================================
-
-    "show_ui_builder": False,
-
 }
+
+
+# JAZZMIN_SETTINGS = {
+
+#     # ============================================================
+#     # CUSTOM JS
+#     # ============================================================
+
+#     "custom_js": None,
+
+#     # ============================================================
+#     # BRANDING
+#     # ============================================================
+
+#     "site_title": "RDF Admin",
+
+#     "site_header": "Rajanna Dairy Farm",
+
+#     "site_brand": "Rajanna Dairy Farm",
+
+#     "welcome_sign": (
+#         "Welcome to Rajanna Dairy Farm Administration"
+#     ),
+
+#     "copyright": "Rajanna Dairy Farm",
+
+#     # ============================================================
+#     # LOGIN
+#     # ============================================================
+
+#     "login_logo": None,
+
+#     "login_logo_dark": None,
+
+#     "site_logo": None,
+
+#     "site_icon": None,
+
+#     # ============================================================
+#     # SIDEBAR
+#     # ============================================================
+
+#     "show_sidebar": True,
+
+#     "navigation_expanded": True,
+
+#     "hide_apps": [],
+
+#     "hide_models": [],
+
+#     # ============================================================
+#     # SIDEBAR ORDER
+#     # ============================================================
+
+#     "order_with_respect_to": [
+
+#         # Core catalog
+#         "rdf_app.category",
+#         "rdf_app.product",
+
+#         # Orders
+#         "rdf_app.order",
+#         "rdf_app.orderitem",
+
+#         # Shopping
+#         "rdf_app.cart",
+#         "rdf_app.cartitem",
+
+#         # Customers
+#         "rdf_app.user",
+#         "rdf_app.userprofile",
+#         "rdf_app.address",
+
+#     ],
+
+#     # ============================================================
+#     # SIDEBAR ICONS
+#     # ============================================================
+
+#     "icons": {
+
+#         # Main application
+#         "rdf_app": "fas fa-store",
+
+#         # Catalog
+#         "rdf_app.category":
+#             "fas fa-layer-group",
+
+#         "rdf_app.product":
+#             "fas fa-box-open",
+
+#         # Orders
+#         "rdf_app.order":
+#             "fas fa-shopping-bag",
+
+#         "rdf_app.orderitem":
+#             "fas fa-receipt",
+
+#         # Cart
+#         "rdf_app.cart":
+#             "fas fa-shopping-cart",
+
+#         "rdf_app.cartitem":
+#             "fas fa-cart-plus",
+
+#         # Customers
+#         "rdf_app.user":
+#             "fas fa-users",
+
+#         "rdf_app.userprofile":
+#             "fas fa-user-circle",
+
+#         "rdf_app.address":
+#             "fas fa-map-marker-alt",
+
+#         # Django authentication
+#         "auth":
+#             "fas fa-user-shield",
+
+#         "auth.group":
+#             "fas fa-users-cog",
+
+#     },
+
+#     # ============================================================
+#     # TOP MENU
+#     # ============================================================
+
+#     "topmenu_links": [
+
+#         {
+#             "name": "Dashboard",
+#             "url": "admin:index",
+#             "permissions": [
+#                 "rdf_app.view_user"
+#             ],
+#         },
+
+#         {
+#             "name": "Shop",
+#             "url": "/shop/",
+#             "new_window": False,
+#         },
+
+#         {
+#             "name": "Orders",
+#             "url": "/admin/rdf_app/order/",
+#             "permissions": [
+#                 "rdf_app.view_order"
+#             ],
+#         },
+
+#     ],
+
+#     # ============================================================
+#     # SEARCH
+#     # ============================================================
+
+#     "search_model": [
+
+#         "rdf_app.User",
+
+#         "rdf_app.Product",
+
+#         "rdf_app.Category",
+
+#         "rdf_app.Order",
+
+#     ],
+
+#     # ============================================================
+#     # UI BEHAVIOR
+#     # ============================================================
+
+#     "related_modal_active": True,
+
+#     "show_ui_builder": False,
+
+#     "changeform_format": "horizontal_tabs",
+
+#     "changeform_format_overrides": {
+
+#         "rdf_app.product": "collapsible",
+
+#         "rdf_app.category": "collapsible",
+
+#         "rdf_app.order": "horizontal_tabs",
+
+#         "rdf_app.user": "horizontal_tabs",
+
+#     },
+
+#     # ============================================================
+#     # LANGUAGE / UI
+#     # ============================================================
+
+#     "language_chooser": False,
+
+#     "custom_css": None,
+
+#     # ============================================================
+#     # MODALS / POPUPS
+#     # ============================================================
+
+#     "show_ui_builder": False,
+
+# }
 
 
 
