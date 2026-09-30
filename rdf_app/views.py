@@ -210,122 +210,12 @@ def contactus(request):
         # Email to Rajanna Dairy Farm
         # -------------------------
 
-#         try:
+        try:
             
 
-#             # -------------------------
-#             # Admin email
-#             # -------------------------
-#             admin_html = f"""
-#             <h2>New Contact Us Message</h2>
-#             <p><strong>Full Name:</strong> {full_name}</p>
-#             <p><strong>Email:</strong> {email}</p>
-#             <p><strong>Phone Number:</strong> {phone_number}</p>
-#             <p><strong>Subject:</strong> {subject}</p>
-#             <p><strong>Message:</strong><br>{message}</p>
-#             """
-
-#             resend.Emails.send({
-#                 "from": "Rajanna Dairy Farm <rajannadairyfarm@gmail.com>",
-#                 "to": [settings.DEFAULT_FROM_EMAIL],
-#                 "subject": f"Contact Us: {subject}",
-#                 "html": admin_html,
-#                 "reply_to": [email],
-#             })
-
-#             # -------------------------
-#             # Customer confirmation email
-#             # -------------------------
-#             customer_html = f"""
-#             <p>Dear {full_name},</p>
-
-#             <p>Thank you for contacting <strong>Rajanna Dairy Farm</strong>.</p>
-
-#             <p>We have received your message successfully.<br>
-#             Our team will review your message and contact you soon.</p>
-
-#             <p>Thank you for choosing Rajanna Dairy Farm.</p>
-
-#             <p>Regards,<br>
-#             Rajanna Dairy Farm</p>
-#             """
-
-#             resend.Emails.send({
-#                 "from": "Rajanna Dairy Farm <rajannadairyfarm@gmail.com>",
-#                 "to": [email],
-#                 "subject": "We received your message - Rajanna Dairy Farm",
-#                 "html": customer_html,
-#             })
-
-
-# #             admin_email = EmailMessage(
-# #                 subject=f"Contact Us: {subject}",
-# #                 body=f"""
-# # New Contact Us Message
-
-# # Full Name:
-# # {full_name}
-
-# # Email:
-# # {email}
-
-# # Phone Number:
-# # {phone_number}
-
-# # Subject:
-# # {subject}
-
-# # Message:
-# # {message}
-# # """,
-# #                 from_email=settings.DEFAULT_FROM_EMAIL,
-# #                 to=[settings.DEFAULT_FROM_EMAIL],
-# #                 reply_to=[email],
-# #             )
-
-# #             admin_email.send(fail_silently=False)
-
-# #             # -------------------------
-# #             # Confirmation email
-# #             # -------------------------
-
-# #             customer_email = EmailMessage(
-# #                 subject="We received your message - Rajanna Dairy Farm",
-# #                 body=f"""
-# # Dear {full_name},
-
-# # Thank you for contacting Rajanna Dairy Farm.
-
-# # We have received your message successfully.
-
-# # Our team will review your message and contact you soon.
-
-# # Thank you for choosing Rajanna Dairy Farm.
-
-# # Regards,
-# # Rajanna Dairy Farm
-# # """,
-# #                 from_email=settings.DEFAULT_FROM_EMAIL,
-# #                 to=[email],
-# #             )
-
-# #             customer_email.send(fail_silently=False)
-
-#             messages.success(
-#                 request,
-#                 "Your message has been sent successfully. "
-#                 "We will contact you soon."
-#             )
-
-#         except Exception:
-#             messages.error(
-#                 request,
-#                 "Unable to send your message right now. "
-#                 "Please try again later."
-#             )
-
-
-        try:
+            # -------------------------
+            # Admin email
+            # -------------------------
             admin_html = f"""
             <h2>New Contact Us Message</h2>
             <p><strong>Full Name:</strong> {full_name}</p>
@@ -335,43 +225,91 @@ def contactus(request):
             <p><strong>Message:</strong><br>{message}</p>
             """
 
-            admin_result = resend.Emails.send({
-                "from": "Rajanna Dairy Farm <onboarding@resend.dev>",
+            resend.Emails.send({
+                "from": "Rajanna Dairy Farm <rajannadairyfarm@gmail.com>",
                 "to": [settings.DEFAULT_FROM_EMAIL],
                 "subject": f"Contact Us: {subject}",
                 "html": admin_html,
-                "reply_to": email,
+                "reply_to": [email],
             })
 
-            print("ADMIN EMAIL RESULT:", admin_result)
-
+            # -------------------------
+            # Customer confirmation email
+            # -------------------------
             customer_html = f"""
             <p>Dear {full_name},</p>
 
-            <p>Thank you for contacting
-            <strong>Rajanna Dairy Farm</strong>.</p>
+            <p>Thank you for contacting <strong>Rajanna Dairy Farm</strong>.</p>
 
-            <p>
-                We have received your message successfully.<br>
-                Our team will review your message and contact you soon.
-            </p>
+            <p>We have received your message successfully.<br>
+            Our team will review your message and contact you soon.</p>
 
             <p>Thank you for choosing Rajanna Dairy Farm.</p>
 
-            <p>
-                Regards,<br>
-                Rajanna Dairy Farm
-            </p>
+            <p>Regards,<br>
+            Rajanna Dairy Farm</p>
             """
 
-            customer_result = resend.Emails.send({
-                "from": "Rajanna Dairy Farm <onboarding@resend.dev>",
+            resend.Emails.send({
+                "from": "Rajanna Dairy Farm <rajannadairyfarm@gmail.com>",
                 "to": [email],
                 "subject": "We received your message - Rajanna Dairy Farm",
                 "html": customer_html,
             })
 
-            print("CUSTOMER EMAIL RESULT:", customer_result)
+
+#             admin_email = EmailMessage(
+#                 subject=f"Contact Us: {subject}",
+#                 body=f"""
+# New Contact Us Message
+
+# Full Name:
+# {full_name}
+
+# Email:
+# {email}
+
+# Phone Number:
+# {phone_number}
+
+# Subject:
+# {subject}
+
+# Message:
+# {message}
+# """,
+#                 from_email=settings.DEFAULT_FROM_EMAIL,
+#                 to=[settings.DEFAULT_FROM_EMAIL],
+#                 reply_to=[email],
+#             )
+
+#             admin_email.send(fail_silently=False)
+
+#             # -------------------------
+#             # Confirmation email
+#             # -------------------------
+
+#             customer_email = EmailMessage(
+#                 subject="We received your message - Rajanna Dairy Farm",
+#                 body=f"""
+# Dear {full_name},
+
+# Thank you for contacting Rajanna Dairy Farm.
+
+# We have received your message successfully.
+
+# Our team will review your message and contact you soon.
+
+# Thank you for choosing Rajanna Dairy Farm.
+
+# Regards,
+# Rajanna Dairy Farm
+# """,
+#                 from_email=settings.DEFAULT_FROM_EMAIL,
+#                 to=[email],
+#             )
+
+#             customer_email.send(fail_silently=False)
 
             messages.success(
                 request,
@@ -379,9 +317,7 @@ def contactus(request):
                 "We will contact you soon."
             )
 
-        except Exception as e:
-            print("CONTACT EMAIL ERROR:", repr(e))
-
+        except Exception:
             messages.error(
                 request,
                 "Unable to send your message right now. "
